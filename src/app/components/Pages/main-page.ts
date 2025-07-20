@@ -1,0 +1,25 @@
+import { Component, inject } from '@angular/core';
+
+import { Router } from '@angular/router'; import { LucideAngularModule, User, Briefcase, GraduationCap, ArrowRight, Users, Shield, Award } from 'lucide-angular';
+
+@Component({
+  selector: 'app-main',
+  standalone: true,
+  imports: [LucideAngularModule],
+  templateUrl: './main-page.html',
+  styleUrl: './main-page.css'
+})
+export class MainPage {
+  user = User;
+  briefcase = Briefcase;
+  graduationcap = GraduationCap;
+  arrowRight = ArrowRight;
+  users = Users;
+  shield = Shield;
+  award = Award;
+  router = inject(Router);
+
+  go(path: string) {
+    this.router.navigate([path]);
+  }
+}

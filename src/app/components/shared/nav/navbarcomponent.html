@@ -1,0 +1,103 @@
+<nav class="bg-military-navy text-white py-4 sticky top-0 z-50 shadow-md">
+  <div class="container mx-auto px-4">
+    <div class="flex justify-between items-center">
+      <a routerLink="/" class="flex items-center space-x-3">
+        <img
+          src="/images/logo/c5iLogo.png"
+          alt="C5i Logo"
+          class="h-16 w-16"
+        />
+        <span class="text-xl font-bold text-military-gold">Sistema de Asignación y Traslado de Personal
+          <br/> <span class="text-xl font-bold text-military-gold">(SAT-C5i)</span>
+        </span>
+      </a>
+
+      <!-- Desktop Navigation -->
+      <div class="hidden md:flex items-center space-x-6">
+        <a routerLink="/" class="hover:text-military-gold transition-colors">{{ t('nav.home') }}</a>
+        <a routerLink="/jobs" class="hover:text-military-gold transition-colors">{{ t('nav.jobs') }}</a>
+        <a routerLink="/profile" class="hover:text-military-gold transition-colors">{{ t('nav.profile') }}</a>
+
+        <div class="flex items-center space-x-2">
+          <lucide-angular [img]="Globe" class="h-4 w-4"></lucide-angular>
+          <!-- <select [(ngModel)]="currentLanguage" (change)="onLanguageChange($event)" class="w-[80px] bg-transparent border border-military-gold text-white rounded px-2 py-1">
+            <option value="es">ES</option>
+            <option value="en">EN</option>
+            <option value="fr">FR</option>
+          </select> -->
+
+          <select
+    [(ngModel)]="currentLanguage"
+    (change)="onLanguageChange($event)"
+    class="w-[80px] bg-white text-black border border-military-gold rounded px-2 py-1 focus:outline-none focus:ring-2 focus:ring-military-gold transition-colors"
+  >
+    <option
+      class="text-black bg-white hover:bg-military-gold"
+      value="es"
+    >
+      ES
+    </option>
+    <option
+      class="text-black bg-white hover:bg-military-gold"
+      value="en"
+    >
+      EN
+    </option>
+    <option
+      class="text-black bg-white hover:bg-military-gold"
+      value="fr"
+    >
+      FR
+    </option>
+  </select>
+
+        </div>
+
+        <div class="flex space-x-2">
+          <a routerLink="/login" class="border border-military-gold text-military-gold hover:text-black hover:bg-military-gold px-4 py-2 rounded"> {{ t('nav.login') }} </a>
+          <a routerLink="/register" class="bg-military-gold text-black hover:bg-amber-500 px-4 py-2 rounded"> {{ t('nav.register') }} </a>
+          <button class="text-white hover:text-military-gold p-2">
+            <lucide-angular [img]="logout" class="h-4 w-4"></lucide-angular>
+          </button>
+        </div>
+      </div>
+
+      <!-- Mobile menu button -->
+      <div class="md:hidden">
+        <button (click)="isMenuOpen = !isMenuOpen" class="text-white hover:text-military-gold p-2">
+          <lucide-angular [img]="isMenuOpen ? X : Menu" class="h-6 w-6"></lucide-angular>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile Navigation -->
+    <div *ngIf="isMenuOpen" class="md:hidden mt-4 pb-4 animate-fade-in">
+      <div class="flex flex-col space-y-4">
+        <a routerLink="/" (click)="go('/')" class="px-3 py-2 rounded hover:bg-military-green transition-colors">{{ t('nav.home') }}</a>
+        <a routerLink="/jobs" (click)="go('/jobs')" class="px-3 py-2 rounded hover:bg-military-green transition-colors">{{ t('nav.jobs') }}</a>
+        <a routerLink="/profile" (click)="go('/profile')" class="px-3 py-2 rounded hover:bg-military-green transition-colors">{{ t('nav.profile') }}</a>
+
+        <div class="px-3 py-2">
+          <select [(ngModel)]="currentLanguage" (change)="onLanguageChange($event)" class="w-full bg-transparent border border-military-gold text-white rounded px-2 py-1">
+            <option value="es">Español</option>
+            <option value="en">English</option>
+            <option value="fr">Français</option>
+          </select>
+        </div>
+
+        <div class="flex flex-col space-y-2">
+          <a routerLink="/login" (click)="go('/login')" class="border border-military-gold text-military-gold justify-center hover:text-black hover:bg-military-gold w-full px-4 py-2 rounded text-center">
+            {{ t('nav.login') }}
+          </a>
+          <a routerLink="/register" (click)="go('/register')" class="bg-military-gold text-black hover:bg-amber-500 justify-center w-full px-4 py-2 rounded text-center">
+            {{ t('nav.register') }}
+          </a>
+          <button class="text-white hover:text-military-gold justify-center w-full px-4 py-2 flex items-center gap-2">
+            <lucide-angular [img]="logout" class="h-4 w-4"></lucide-angular>
+            {{ t('nav.logout') }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</nav>

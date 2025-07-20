@@ -1,0 +1,183 @@
+
+<!-- Sección Hero con fondo completo -->
+<section class="w-full bg-hero-gradient text-white py-20">
+  <div class="max-w-7xl mx-auto px-4 md:px-6">
+    <div class="flex flex-col md:flex-row items-center">
+
+      <!-- Columna de texto -->
+      <div class="md:w-1/2 mb-12 md:mb-0">
+        <h1 class="text-4xl md:text-5xl font-bold mb-6 leading-tight">
+          Sistema de Asignaciones y Traslados para el C5i (SAT-C5i)
+        </h1>
+        <p class="text-lg mb-8">
+          Conectamos talentos militares con oportunidades. Una plataforma moderna y objetiva que permite alinear el personal correcto con las necesidades del servicio.
+        </p>
+        <div class="flex flex-wrap gap-4">
+          <a
+            routerLink="/register"
+            class="px-6 py-3 rounded bg-military-gold text-black font-semibold hover:bg-amber-500 transition-colors"
+          >
+            Crear Cuenta
+          </a>
+          <a
+            routerLink="/jobs"
+            class="px-6 py-3 rounded border border-white text-white hover:bg-white hover:text-military-navy transition-colors"
+          >
+            Ver Vacantes
+          </a>
+        </div>
+      </div>
+
+      <!-- Columna de imagen -->
+      <div class="md:w-1/2 flex justify-center">
+        <!-- <img
+          src="/images/portadaMide.png"
+          alt="Ministerio de Defensa"
+          class="rounded-lg shadow-xl max-w-full h-auto"
+        /> -->
+        <!-- <img
+  src="/images/portadaMide.png"
+  alt="Ministerio de Defensa"
+  class="rounded-lg shadow-xl w-full md:w-[700px] lg:w-[900px] h-auto"
+/> -->
+<img
+  src="/images/portadaMide.webp"
+  alt="Ministerio de Defensa"
+  width="700"
+  height="467"
+  class="rounded-lg shadow-xl w-full md:w-[700px] h-auto"
+/>
+
+
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<section class="bg-white py-16">
+  <div class="max-w-7xl mx-auto px-4 md:px-6">
+    <h2 class="text-3xl font-bold text-center mb-12 text-military-navy">¿Cómo Funciona?</h2>
+
+    <div class="grid md:grid-cols-3 gap-8">
+      <!-- Crea tu Perfil -->
+      <a routerLink="/register" class="block">
+        <div class="flex flex-col items-center text-center p-6 card-military hover:shadow-lg transition-shadow cursor-pointer">
+          <div class="bg-military-navy rounded-full p-4 mb-4">
+            <lucide-angular [img]="user" class="h-8 w-8 text-military-gold"></lucide-angular>
+          </div>
+          <h3 class="text-xl font-bold mb-2">Crea tu Perfil</h3>
+          <p class="text-gray-600">
+            Destaca tu experiencia militar, formación y habilidades para aumentar tus oportunidades.
+          </p>
+        </div>
+      </a>
+
+      <!-- Explora Vacantes -->
+      <a routerLink="/jobs" class="block">
+        <div class="flex flex-col items-center text-center p-6 card-military hover:shadow-lg transition-shadow cursor-pointer">
+          <div class="bg-military-navy rounded-full p-4 mb-4">
+            <lucide-angular [img]="briefcase" class="h-8 w-8 text-military-gold"></lucide-angular>
+          </div>
+          <h3 class="text-xl font-bold mb-2">Explora Vacantes</h3>
+          <p class="text-gray-600">
+            Encuentra oportunidades que valoran tu experiencia militar y aplica fácilmente.
+          </p>
+        </div>
+      </a>
+
+      <!-- Publica Vacantes -->
+      <a routerLink="/create-job" class="block">
+        <div class="flex flex-col items-center text-center p-6 card-military hover:shadow-lg transition-shadow cursor-pointer">
+          <div class="bg-military-navy rounded-full p-4 mb-4">
+            <lucide-angular [img]="graduationcap" class="h-8 w-8 text-military-gold"></lucide-angular>
+          </div>
+          <h3 class="text-xl font-bold mb-2">Publica Vacantes</h3>
+          <p class="text-gray-600">
+            Instituciones pueden publicar vacantes específicas para perfiles militares.
+          </p>
+        </div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<section class="bg-gray-100 py-16">
+  <div class="max-w-7xl mx-auto px-4 md:px-6">
+
+    <!-- Título y enlace -->
+    <div class="flex justify-between items-center mb-8">
+      <h2 class="text-3xl font-bold text-military-navy">SAT-C5i en Números</h2>
+      <a
+        routerLink="/jobs"
+        class="flex items-center text-military-navy hover:text-military-green font-medium transition-colors"
+      >
+        Ver vacantes
+        <lucide-angular [img]="arrowRight" class="ml-2 h-4 w-4"></lucide-angular>
+      </a>
+    </div>
+
+    <!-- Cuadros estadísticos -->
+    <div class="grid md:grid-cols-4 gap-8">
+
+      <div class="bg-white p-6 rounded-lg shadow-md text-center">
+        <div class="flex justify-center mb-4">
+          <div class="bg-military-navy rounded-full p-3">
+            <lucide-angular [img]="users" class="h-6 w-6 text-military-gold"></lucide-angular>
+          </div>
+        </div>
+        <h3 class="text-2xl font-bold text-military-navy mb-2">2,500+</h3>
+        <p class="text-gray-600">Militares Registrados</p>
+      </div>
+
+      <div class="bg-white p-6 rounded-lg shadow-md text-center">
+        <div class="flex justify-center mb-4">
+          <div class="bg-military-navy rounded-full p-3">
+            <lucide-angular [img]="briefcase" class="h-6 w-6 text-military-gold"></lucide-angular>
+          </div>
+        </div>
+        <h3 class="text-2xl font-bold text-military-navy mb-2">350+</h3>
+        <p class="text-gray-600">Vacantes Activas</p>
+      </div>
+
+      <div class="bg-white p-6 rounded-lg shadow-md text-center">
+        <div class="flex justify-center mb-4">
+          <div class="bg-military-navy rounded-full p-3">
+            <lucide-angular [img]="shield" class="h-6 w-6 text-military-gold"></lucide-angular>
+          </div>
+        </div>
+        <h3 class="text-2xl font-bold text-military-navy mb-2">45+</h3>
+        <p class="text-gray-600">Instituciones Aliadas</p>
+      </div>
+
+      <div class="bg-white p-6 rounded-lg shadow-md text-center">
+        <div class="flex justify-center mb-4">
+          <div class="bg-military-navy rounded-full p-3">
+            <lucide-angular [img]="award" class="h-6 w-6 text-military-gold"></lucide-angular>
+          </div>
+        </div>
+        <h3 class="text-2xl font-bold text-military-navy mb-2">1,200+</h3>
+        <p class="text-gray-600">Asignaciones Exitosas</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="bg-military-navy text-white py-16 text-center">
+  <div class="max-w-7xl mx-auto px-4 md:px-6">
+    <h2 class="text-3xl md:text-4xl font-bold mb-6">
+      ¿Listo para avanzar en tu carrera militar?
+    </h2>
+
+    <p class="text-xl mb-8 max-w-2xl mx-auto">
+      Únete a miles de profesionales militares que ya encontraron la oportunidad perfecta para su experiencia.
+    </p>
+
+    <a
+      routerLink="/register"
+      class="inline-block px-6 py-3 text-lg font-semibold bg-military-gold text-black rounded hover:bg-amber-500 transition-colors"
+    >
+      Registrarse Ahora
+    </a>
+  </div>
+</section>
