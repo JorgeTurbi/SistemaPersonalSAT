@@ -1,0 +1,33 @@
+<!-- job-detail-view.component.html -->
+ <div class="container mx-auto px-4 py-8">
+
+  <!-- Volver -->
+<div class="flex items-center mb-4 gap-4">
+  <button (click)="goDetails()" class="flex items-center border border-gray-400 text-black px-4 py-2 rounded hover:bg-military-gold transition">
+    <lucide-angular [img]="ArrowLeft" class="w-4 h-4 mr-2"></lucide-angular>
+    Volver a Vacantes
+  </button>
+  <h1 class="text-2xl font-bold">Detalles de la Vacante</h1>
+</div>
+
+
+ <app-jobcard-detail class="w-full"
+  [title]="job.title"
+  [company]="job.company"
+  [location]="job.location"
+  [type]="job.type"
+  [salary]="job.salary"
+  [teamSize]="job.teamSize"
+  [experience]="job.experience"
+  [postedDate]="job.posted"
+  [description]="job.description"
+  [responsibilities]="job.responsibilities"
+  [qualifications]="job.qualifications"
+  [benefits]="job.benefits"
+  [contactEmail]="job.contactEmail"
+  [contactPhone]="job.contactPhone"
+
+ >
+
+
+</app-jobcard-detail></div>

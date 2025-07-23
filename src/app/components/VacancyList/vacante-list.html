@@ -1,0 +1,26 @@
+<!-- job-list.component.html -->
+<div class="mt-4">
+  <h2 class="text-2xl font-bold mb-6 text-military-navy">Vacantes C5i - Fuerzas Armadas</h2>
+
+  <div class="bg-blue-50 border-l-4 border-military-navy p-4 mb-6">
+    <p class="text-sm text-gray-700">
+      <strong>
+        Centro de Comando, Control, Comunicaciones, Computadoras, Ciberseguridad e Inteligencia (C5i)
+      </strong><br />
+      Instancia de coordinación y ejecución de operaciones conjuntas, combinadas e interagenciales de las Fuerzas Armadas de la República Dominicana.
+    </p>
+  </div>
+
+  <div class="space-y-4">
+    <app-job-card
+      *ngFor="let job of jobsData"
+      [id]="job.id"
+      [title]="job.title"
+      [company]="job.company"
+      [location]="job.location"
+      [type]="job.type"
+      [requirements]="job.requirements"
+      [postedDate]="job.postedDate"
+    ></app-job-card>
+  </div>
+</div>

@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ViewEncapsulation } from '@angular/core';
 
 import { Router } from '@angular/router'; import { LucideAngularModule, User, Briefcase, GraduationCap, ArrowRight, Users, Shield, Award } from 'lucide-angular';
 
@@ -7,7 +7,8 @@ import { Router } from '@angular/router'; import { LucideAngularModule, User, Br
   standalone: true,
   imports: [LucideAngularModule],
   templateUrl: './main-page.html',
-  styleUrl: './main-page.css'
+  styleUrl: './main-page.css',
+  encapsulation: ViewEncapsulation.None, // opcional
 })
 export class MainPage {
   user = User;

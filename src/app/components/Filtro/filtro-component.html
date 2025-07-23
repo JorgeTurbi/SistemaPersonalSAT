@@ -1,0 +1,104 @@
+  <!-- Filtros -->
+  <div class="bg-white rounded-lg shadow p-6">
+    <h3 class="text-lg font-semibold mb-4 flex items-center text-military-navy">
+      <lucide-angular [img]="Filter" class="h-5 w-5 mr-2" />
+      Filtros de Búsqueda
+    </h3>
+
+    <div class="grid gap-4">
+      <!-- Buscador -->
+      <div class="col-span-full">
+        <div class="relative">
+          <lucide-angular
+            [img]="Search"
+            class="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400"
+          />
+          <input
+            type="text"
+            [(ngModel)]="searchTerm"
+            placeholder="Buscar por título, institución, provincia..."
+            class="pl-10 pr-4 py-2 w-full border border-gray-300 rounded focus:ring-2 focus:ring-military-gold"
+          />
+        </div>
+      </div>
+
+      <!-- Fila de filtros -->
+      <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+        <!-- Tipo de Empleo -->
+        <div>
+          <label class="block text-sm font-medium mb-1">Tipo de Empleo</label>
+          <div class="relative">
+            <lucide-angular [img]="Briefcase" class="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+            <select
+              [(ngModel)]="typeFilter"
+              class="w-full border rounded pl-10 pr-3 py-2 focus:ring-2 focus:ring-military-gold"
+            >
+              <option value="all">Todos los tipos</option>
+              <option value="full-time">Tiempo Completo</option>
+              <option value="part-time">Tiempo Parcial</option>
+              <option value="contract">Contrato</option>
+              <option value="temporary">Temporal</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Provincia -->
+        <div>
+          <label class="block text-sm font-medium mb-1">Provincia</label>
+          <div class="relative">
+            <lucide-angular [img]="MapPin" class="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+            <select
+              [(ngModel)]="locationFilter"
+              class="w-full border rounded pl-10 pr-3 py-2 focus:ring-2 focus:ring-military-gold"
+            >
+              <option value="all">Todas las provincias</option>
+              <option *ngFor="let p of provincias" [value]="p.value">{{ p.label }}</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Institución -->
+        <div>
+          <label class="block text-sm font-medium mb-1">Institución</label>
+          <div class="relative">
+            <lucide-angular [img]="Building" class="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+            <select
+              [(ngModel)]="institutionFilter"
+              class="w-full border rounded pl-10 pr-3 py-2 focus:ring-2 focus:ring-military-gold"
+            >
+              <option value="all">Todas las instituciones</option>
+              <option *ngFor="let i of instituciones" [value]="i.value">{{ i.label }}</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Categoría -->
+        <div>
+          <label class="block text-sm font-medium mb-1">Categoría de Puesto</label>
+          <select
+            [(ngModel)]="positionFilter"
+            class="w-full border rounded px-3 py-2 focus:ring-2 focus:ring-military-gold"
+          >
+            <option value="all">Todas las categorías</option>
+            <option *ngFor="let c of categorias" [value]="c.value">{{ c.label }}</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Botones -->
+      <div class="flex flex-wrap gap-4 pt-4">
+        <button
+          (click)="resetFilters()"
+          class="border px-5 py-2 rounded text-gray-800 hover:bg-gray-100 transition"
+        >
+          Limpiar Filtros
+        </button>
+        <button
+          (click)="applyFilters()"
+          class="bg-military-navy text-white hover:bg-military-green px-5 py-2 rounded font-medium shadow"
+        >
+          Aplicar Filtros
+        </button>
+      </div>
+    </div>
+  </div>

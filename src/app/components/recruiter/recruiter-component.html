@@ -1,0 +1,161 @@
+<div class="container mx-auto px-4 py-8">
+  <!-- Header -->
+  <div class="flex flex-col md:flex-row justify-between items-start mb-8">
+    <div>
+      <h1 class="text-3xl font-bold text-[#001F3F] mb-2">Aplicaciones para la Vacante</h1>
+      <h2 class="text-xl text-gray-600 mb-1">{{ jobTitle }}</h2>
+      <p class="text-gray-500">{{ jobCompany }}</p>
+    </div>
+    <button (click)="handleExportPDF()" class="bg-[#D4AF37] text-black hover:bg-amber-500 px-4 py-2 rounded flex items-center">
+      <lucide-angular [img]="FileDown" class="h-4 w-4 mr-2"></lucide-angular>
+      Exportar Reporte PDF
+    </button>
+  </div>
+
+  <!-- Stats Cards -->
+  <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+    <div class="rounded-lg border bg-white text-gray-900 shadow-sm p-6">
+      <div class="flex items-center">
+         <lucide-angular [img]="Users" class="h-8 w-8 text-[#001F3F]"></lucide-angular>
+
+        <div class="ml-4">
+          <p class="text-sm font-medium text-gray-600">Total Aplicaciones</p>
+          <p class="text-2xl font-bold">{{ applicants().length }}</p>
+        </div>
+      </div>
+    </div>
+    <div class="rounded-lg border bg-white text-gray-900 shadow-sm p-6">
+      <div class="flex items-center">
+        <lucide-angular [img]="TrendingUp" class="h-8 w-8 text-green-600"></lucide-angular>
+        <div class="ml-4">
+          <p class="text-sm font-medium text-gray-600">Match Promedio</p>
+          <p class="text-2xl font-bold">{{ avgMatchPercentage() }}%</p>
+        </div>
+      </div>
+    </div>
+    <div class="rounded-lg border bg-white text-gray-900 shadow-sm p-6">
+      <div class="flex items-center">
+         <lucide-angular [img]="Eye" class="h-8 w-8 text-blue-600"></lucide-angular>
+        <div class="ml-4">
+          <p class="text-sm font-medium text-gray-600">En Entrevista</p>
+          <p class="text-2xl font-bold">{{ interviewCount() }}</p>
+        </div>
+      </div>
+    </div>
+    <div class="rounded-lg border bg-white text-gray-900 shadow-sm p-6">
+      <div class="flex items-center">
+               <lucide-angular [img]="Filter" class="h-8 w-8 text-green-600"></lucide-angular>
+        <div class="ml-4">
+          <p class="text-sm font-medium text-gray-600">Seleccionados</p>
+          <p class="text-2xl font-bold">{{ selectedCount() }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Filters -->
+  <div class="rounded-lg border bg-white text-gray-900 shadow-sm p-6 mb-8">
+    <h3 class="text-2xl font-semibold mb-4">Filtros y Ordenamiento</h3>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div>
+        <label class="block text-sm font-medium mb-1">Ordenar por</label>
+        <select [(ngModel)]="sortBy" class="w-full border rounded px-3 py-2">
+          <option value="match">% de Match</option>
+          <option value="date">Fecha de Aplicación</option>
+          <option value="name">Nombre</option>
+        </select>
+      </div>
+      <div>
+        <label class="block text-sm font-medium mb-1">Orden</label>
+        <select [(ngModel)]="sortOrder" class="w-full border rounded px-3 py-2">
+          <option value="desc">Descendente</option>
+          <option value="asc">Ascendente</option>
+        </select>
+      </div>
+      <div>
+        <label class="block text-sm font-medium mb-1">Filtrar por Estado</label>
+        <select [(ngModel)]="statusFilter" class="w-full border rounded px-3 py-2">
+          <option value="all">Todos los estados</option>
+          <option value="pending">Pendiente</option>
+          <option value="reviewed">Revisado</option>
+          <option value="interview">Entrevista</option>
+          <option value="selected">Seleccionado</option>
+          <option value="rejected">Rechazado</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <!-- Applicants Table -->
+  <div class="overflow-x-auto bg-white rounded-lg shadow">
+    <table class="min-w-full divide-y divide-gray-200">
+      <thead class="bg-[#001F3F] text-white">
+        <tr>
+          <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Candidato</th>
+          <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Especialidad</th>
+          <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Match</th>
+          <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Aplicó</th>
+          <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Estado</th>
+          <th class="px-6 py-3 text-right text-xs font-medium uppercase tracking-wider">Acciones</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-gray-200">
+        <tr *ngFor="let app of paginated_Applicants">
+          <td class="px-6 py-4 whitespace-nowrap">
+            <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-full bg-gray-200 overflow-hidden">
+                <img *ngIf="app.profileImage" [src]="app.profileImage" class="w-full h-full object-cover rounded-full" />
+                <div *ngIf="!app.profileImage" class="w-full h-full flex items-center justify-center text-sm font-bold">
+                  {{ getInitials(app.name) }}
+                </div>
+              </div>
+                <div>
+                <div class="text-sm font-medium text-gray-900">{{ app.name }}</div>
+                <div class="text-sm text-gray-500">
+                  {{ app.rank || 'Rango no definido' }}
+                  <span *ngIf="app.specialization"> &bull; {{ app.specialization }}</span>
+                </div>
+              </div>
+            </div>
+          </td>
+          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{{ app.specialization }}</td>
+          <td class="px-6 py-4 whitespace-nowrap">
+            <div class="w-full bg-gray-200 rounded-full h-4">
+              <div [ngClass]="getMatchColor(app.matchPercentage)" class="h-4 rounded-full text-xs text-white text-center" [style.width.%]="app.matchPercentage">
+                {{ app.matchPercentage }}%
+              </div>
+            </div>
+          </td>
+          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{{ app.appliedDate }}</td>
+          <td class="px-6 py-4 whitespace-nowrap">
+            <span [ngClass]="getStatusBadge(app.status).color" class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full">
+              {{ getStatusBadge(app.status).label }}
+            </span>
+          </td>
+          <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+            <button (click)="handleExportProfilePDF(app.name)" class="text-blue-600 hover:text-blue-900 flex items-center gap-1">
+
+                      <lucide-angular [img]="Eye" class="w-4 h-4"></lucide-angular>
+              Ver Perfil
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+<!-- Paginación -->
+    <div class="flex flex-col md:flex-row justify-between items-center px-6 py-4 bg-white border-t">
+      <div class="mb-2 md:mb-0">
+        <label for="perPage" class="text-sm text-gray-600 mr-2">Mostrar:</label>
+        <select id="perPage" [(ngModel)]="itemsPerPage" (change)="updatePagination()" class="px-2 py-1 border rounded">
+          <option *ngFor="let option of perPageOptions" [value]="option">{{ option }}</option>
+        </select>
+        <span class="ml-2 text-sm text-gray-600">por página</span>
+      </div>
+      <div class="flex items-center gap-4">
+        <button (click)="goToPreviousPage()" [disabled]="currentPage === 1" class="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300 disabled:opacity-50">Anterior</button>
+        <span class="text-sm text-gray-600">Página {{ total_pages === 0 ? 0 : currentPage }} de {{ total_pages }}</span>
+        <button (click)="goToNextPage()" [disabled]="currentPage === total_pages || total_pages === 0" class="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300 disabled:opacity-50">Siguiente</button>
+      </div>
+    </div>
+  </div>
+</div>

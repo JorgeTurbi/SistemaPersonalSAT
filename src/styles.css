@@ -95,6 +95,9 @@
   }
 }
 
+a {
+  cursor: pointer !important;
+}
 @layer base {
   * {
     @apply border-border;

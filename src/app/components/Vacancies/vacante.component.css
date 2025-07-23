@@ -1,0 +1,9 @@
+::ng-deep .p-dialog.custom-dialog-position {
+  top: 5rem !important;
+  position: absolute !important;
+  transform: none !important;
+}
+
+::ng-deep .p-dialog .p-dialog-header {
+  padding-top: 2rem !important;
+}

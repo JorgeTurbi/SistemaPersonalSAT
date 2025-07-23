@@ -1,20 +1,21 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject } from '@angular/core';
+import { Component, inject, ViewEncapsulation } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { LucideAngularModule, Languages, Bell, Sun, Moon, X, Menu, Briefcase,LanguagesIcon,Globe,LogOut } from 'lucide-angular';
+import { Router, RouterModule } from '@angular/router';
+import { LucideAngularModule, Languages, Bell, Sun, Moon, X, Menu, Briefcase, LanguagesIcon, Globe, LogOut } from 'lucide-angular';
 import { ToastModule } from 'primeng/toast';
-import { LanguageService } from '../../Services/language-service-';
 import { MessageService } from 'primeng/api';
-import { Router } from '@angular/router';
+
 
 
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [ CommonModule, LucideAngularModule, ToastModule,FormsModule],
+  imports: [CommonModule, LucideAngularModule, ToastModule, FormsModule,RouterModule],
   templateUrl: './navbarcomponent.html',
   styleUrls: ['./navbarcomponent.css'],
-  providers: [MessageService]
+  providers: [MessageService],
+  encapsulation: ViewEncapsulation.None, // opcional
 })
 export class Navbarcomponent {
 
@@ -25,9 +26,9 @@ export class Navbarcomponent {
   X = X;
   Menu = Menu;
   Briefcase = Briefcase;
-  Language= LanguagesIcon;
-  Globe= Globe;
-  logout= LogOut;
+  Language = LanguagesIcon;
+  Globe = Globe;
+  logout = LogOut;
 
   // private notifications = inject(MessageService);
   // langService = inject(LanguageService);
@@ -77,9 +78,9 @@ export class Navbarcomponent {
   //   this.mobileOpen = false;
   // }
 
-isMenuOpen = false;
+  isMenuOpen = false;
   currentLanguage = 'es';
-  router= inject(Router);
+  router = inject(Router);
 
   t(key: string): string {
     // Aquí puedes integrar ngx-translate o tu función i18n personalizada
@@ -93,12 +94,12 @@ isMenuOpen = false;
     };
     return translations[key] || key;
   }
-onLanguageChange(event: Event) {
-  const target = event.target as HTMLSelectElement;
-  if (target?.value) {
-    this.setLanguage(target.value);
+  onLanguageChange(event: Event) {
+    const target = event.target as HTMLSelectElement;
+    if (target?.value) {
+      this.setLanguage(target.value);
+    }
   }
-}
   setLanguage(lang: string) {
     this.currentLanguage = lang;
     // Aquí también actualizarías el contexto global o usarías un servicio de idiomas
