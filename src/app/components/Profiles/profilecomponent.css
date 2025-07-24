@@ -1,0 +1,42 @@
+/* src/app/profile/profile.component.css */
+
+/* Botones de tabs */
+nav button {
+  padding: 0.5rem 1rem;
+  border-bottom: 2px solid transparent;
+  transition: all 0.2s ease-in-out;
+}
+nav button:hover {
+  color: #001F3F;
+}
+nav button.text-black {
+  border-color: #D4AF37;
+  font-weight: 600;
+}
+
+/* Avatares e imágenes de perfil */
+img.rounded-full {
+  object-fit: cover;
+  object-position: center;
+}
+
+/* Secciones */
+h3 {
+  font-weight: 600;
+  color: #001F3F;
+}
+
+/* Etiquetas de habilidad */
+.badge {
+  display: inline-block;
+  background-color: #f3f4f6;
+  color: #111827;
+  padding: 0.25rem 0.75rem;
+  font-size: 0.75rem;
+  border-radius: 9999px;
+}
+
+/* Línea entre secciones */
+hr {
+  border-color: #e5e7eb;
+}

@@ -1,0 +1,336 @@
+<!-- src/app/profile/profile.component.html -->
+<div class="container mx-auto px-4 py-8">
+  <!-- Encabezado -->
+  <div class="flex justify-between items-center mb-6">
+    <h1 class="text-3xl font-bold text-[#001F3F]">Mi Perfil</h1>
+    <!-- <button (click)="abrirEditor()"
+      class="bg-[#D4AF37] hover:bg-amber-500 text-black px-4 py-2 rounded flex items-center gap-2 text-sm font-semibold"
+    >
+      ✏️ Editar Perfil
+    </button> -->
+    <button (click)="abrirEditor()"
+  class="bg-[#D4AF37] hover:bg-amber-500 text-black px-4 py-2 rounded flex items-center gap-2 text-sm font-semibold"
+>
+  <lucide-angular [img]="Plus" class="w-4 h-4"></lucide-angular>
+  Agregar Perfil
+</button>
+  </div>
+
+  <!-- Tabs -->
+  <div class="mb-6 border-b">
+    <nav class="flex space-x-6 text-sm font-medium text-gray-600">
+      <button [class.text-black]="activeTab === 'profile'" (click)="setTab('profile')">Perfil</button>
+      <button [class.text-black]="activeTab === 'applications'" (click)="setTab('applications')">Aplicaciones</button>
+      <button [class.text-black]="activeTab === 'documents'" (click)="setTab('documents')">Documentos</button>
+      <button [class.text-black]="activeTab === 'settings'" (click)="setTab('settings')">Configuración</button>
+    </nav>
+  </div>
+
+  <!-- Contenido del Tab: Perfil -->
+  <div *ngIf="activeTab === 'profile'" class="bg-white rounded-lg shadow overflow-hidden">
+    <div class="bg-[#001F3F] text-white p-6 flex items-center gap-4">
+      <img src="/images/Herrera.png" alt="Foto de perfil" class="h-20 w-20 rounded-full border-2 border-[#D4AF37]" />
+      <div>
+        <h2 class="text-2xl font-bold">Misael Zacarías G. Herrera Vásquez</h2>
+        <p>Capitán de Corbeta • Especialista en Operaciones Navales y Ciberseguridad</p>
+      </div>
+    </div>
+
+    <div class="p-6 space-y-6 text-sm">
+      <!-- Información Personal -->
+      <div>
+        <h3 class="text-lg font-semibold mb-2">📌 Información Personal</h3>
+        <div class="grid md:grid-cols-2 gap-4">
+          <p><strong>País/Nacionalidad:</strong> República Dominicana/Dominicano</p>
+          <p><strong>Fecha de Nacimiento:</strong> 03/03/1985</p>
+          <p><strong>Estado Civil:</strong> Casado</p>
+          <p><strong>Teléfono:</strong> 829-745-2199</p>
+          <p><strong>Correo:</strong> {{"misaelherrera03@gmail.com"}}</p>
+          <p><strong>Dirección:</strong> Santo Domingo, República Dominicana</p>
+        </div>
+      </div>
+
+      <!-- Experiencia -->
+      <div>
+        <h3 class="text-lg font-semibold mb-2">💼 Experiencia</h3>
+        <div class="space-y-4">
+          <div>
+            <div class="flex justify-between font-medium">
+              <p>Subdirector Auxiliar del Director del Estado Mayor Personal</p>
+              <span>2023 - Presente</span>
+            </div>
+            <p class="text-sm text-gray-600">Ministerio de Defensa</p>
+            <p class="text-gray-700">Supervisión y coordinación de actividades del personal del Estado Mayor...</p>
+          </div>
+          <div>
+            <div class="flex justify-between font-medium">
+              <p>Ayudante del Director del Estado Mayor Personal</p>
+              <span>2021 - 2023</span>
+            </div>
+            <p class="text-sm text-gray-600">Ministerio de Defensa</p>
+            <p class="text-gray-700">Gestión administrativa y operativa del personal...</p>
+          </div>
+          <div>
+            <div class="flex justify-between font-medium">
+              <p>Comandante de Lancha de Rescate HAMAL LR-151</p>
+              <span>2018 - 2021</span>
+            </div>
+            <p class="text-sm text-gray-600">Armada de República Dominicana</p>
+            <p class="text-gray-700">Comando y control de operaciones de rescate marítimo...</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Educación -->
+      <div>
+        <h3 class="text-lg font-semibold mb-2">🎓 Educación</h3>
+        <div class="space-y-4">
+          <div class="flex justify-between items-center">
+            <div>
+              <p class="font-medium">Maestría en Diplomacia y Derecho Internacional</p>
+              <p class="text-sm text-gray-600">Universidad de la Tercera Edad</p>
+            </div>
+            <div class="flex gap-2 items-center text-sm">
+              <span>2021 (En curso)</span>
+              <button class="text-blue-600 hover:underline">📄 PDF</button>
+            </div>
+          </div>
+          <div class="flex justify-between items-center">
+            <div>
+              <p class="font-medium">Licenciatura en Derecho (Magna Cum Laude)</p>
+              <p class="text-sm text-gray-600">Universidad del Caribe</p>
+            </div>
+            <div class="flex gap-2 items-center text-sm">
+              <span>2021</span>
+              <button class="text-blue-600 hover:underline">📄 PDF</button>
+            </div>
+          </div>
+          <div class="flex justify-between items-center">
+            <div>
+              <p class="font-medium">Licenciatura en Ciencias Navales (Magna Cum Laude)</p>
+              <p class="text-sm text-gray-600">Academia Naval, ARD</p>
+            </div>
+            <div class="flex gap-2 items-center text-sm">
+              <span>2006</span>
+              <button class="text-blue-600 hover:underline">📄 PDF</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Habilidades -->
+      <div>
+        <h3 class="text-lg font-semibold mb-2">🧠 Habilidades</h3>
+        <div class="flex flex-wrap gap-2 text-xs">
+          <span class="bg-gray-200 px-3 py-1 rounded-full">Liderazgo naval</span>
+          <span class="bg-gray-200 px-3 py-1 rounded-full">Operaciones marítimas</span>
+          <span class="bg-gray-200 px-3 py-1 rounded-full">Gestión de personal</span>
+          <span class="bg-gray-200 px-3 py-1 rounded-full">Derecho internacional</span>
+          <span class="bg-gray-200 px-3 py-1 rounded-full">Inglés y francés</span>
+          <span class="bg-gray-200 px-3 py-1 rounded-full">Microsoft Office</span>
+          <span class="bg-gray-200 px-3 py-1 rounded-full">Ciberseguridad</span>
+          <span class="bg-gray-200 px-3 py-1 rounded-full">Resolución de conflictos</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Aquí puedes implementar los otros tabs en el futuro -->
+
+  <!-- Contenido del Tab: Aplicaciones -->
+<div *ngIf="activeTab === 'applications'" class="space-y-4">
+  <h2 class="text-2xl font-bold text-[#001F3F]">Aplicaciones</h2>
+
+  <div class="space-y-4">
+    <div class="bg-white border border-gray-200 rounded-lg p-4 shadow-sm">
+      <div class="flex justify-between items-start mb-3">
+        <div>
+          <h3 class="text-lg font-semibold text-gray-900">Especialista en Ciberseguridad</h3>
+          <p class="text-sm text-gray-600">Dirección de Ciberseguridad C5i</p>
+          <div class="text-sm text-gray-500 flex items-center mt-1">
+            📍 Distrito Nacional, República Dominicana
+          </div>
+        </div>
+        <div class="text-right space-y-2">
+          <span class="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-medium">Entrevista</span>
+          <div class="flex gap-2 justify-end">
+            <button class="text-blue-600 text-sm hover:underline">👁 Ver Detalles</button>
+            <button class="text-blue-600 text-sm hover:underline">🔗 Ver vacante</button>
+          </div>
+        </div>
+      </div>
+      <div class="flex justify-between text-sm text-gray-500">
+        <div>📅 Aplicado: 15/05/2025</div>
+        <div class="text-green-600">📅 Entrevista: 22/05/2025</div>
+      </div>
+    </div>
+
+    <div class="bg-white border border-gray-200 rounded-lg p-4 shadow-sm">
+      <div class="flex justify-between items-start mb-3">
+        <div>
+          <h3 class="text-lg font-semibold text-gray-900">Analista de Inteligencia Militar</h3>
+          <p class="text-sm text-gray-600">Dirección de Inteligencia C5i</p>
+          <div class="text-sm text-gray-500 flex items-center mt-1">
+            📍 Distrito Nacional, República Dominicana
+          </div>
+        </div>
+        <div class="text-right space-y-2">
+          <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-medium">En revisión</span>
+          <div class="flex gap-2 justify-end">
+            <button class="text-blue-600 text-sm hover:underline">👁 Ver Detalles</button>
+            <button class="text-blue-600 text-sm hover:underline">🔗 Ver vacante</button>
+          </div>
+        </div>
+      </div>
+      <div class="flex justify-between text-sm text-gray-500">
+        <div>📅 Aplicado: 12/05/2025</div>
+      </div>
+    </div>
+
+    <div class="bg-white border border-gray-200 rounded-lg p-4 shadow-sm">
+      <div class="flex justify-between items-start mb-3">
+        <div>
+          <h3 class="text-lg font-semibold text-gray-900">Administrador de Base de Datos</h3>
+          <p class="text-sm text-gray-600">Dirección de Sistemas Computacionales C5i</p>
+          <div class="text-sm text-gray-500 flex items-center mt-1">
+            📍 Distrito Nacional, República Dominicana
+          </div>
+        </div>
+        <div class="text-right space-y-2">
+          <span class="bg-gray-100 text-gray-800 px-3 py-1 rounded-full text-sm font-medium">Aplicado</span>
+          <div class="flex gap-2 justify-end">
+            <button class="text-blue-600 text-sm hover:underline">👁 Ver Detalles</button>
+            <button class="text-blue-600 text-sm hover:underline">🔗 Ver vacante</button>
+          </div>
+        </div>
+      </div>
+      <div class="flex justify-between text-sm text-gray-500">
+        <div>📅 Aplicado: 08/05/2025</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Contenido del Tab: Documentos -->
+<div *ngIf="activeTab === 'documents'" class="space-y-6">
+  <h2 class="text-2xl font-bold text-[#001F3F]">Documentos</h2>
+
+  <!-- Subir nuevo documento -->
+  <div class="border border-dashed border-gray-300 rounded-lg p-6">
+    <h3 class="text-lg font-semibold mb-4">📤 Subir nuevo documento</h3>
+
+    <div class="grid md:grid-cols-2 gap-4 mb-4">
+      <div>
+        <label for="document-name" class="block text-sm font-medium mb-1">Nombre del documento</label>
+        <input type="text" id="document-name" class="w-full border-gray-300 rounded-md shadow-sm focus:ring focus:ring-[#D4AF37]" placeholder="Ej: Certificado de inglés" />
+      </div>
+      <div>
+        <label for="document-file" class="block text-sm font-medium mb-1">Archivo</label>
+        <input type="file" id="document-file" class="w-full" accept=".pdf,.doc,.jpg,.png" />
+      </div>
+    </div>
+
+    <button class="w-full bg-[#D4AF37] hover:bg-amber-500 text-black px-4 py-2 rounded font-semibold">
+      ➕ Agregar Documento
+    </button>
+  </div>
+
+  <!-- Lista de documentos subidos -->
+  <div class="space-y-4">
+    <h3 class="text-lg font-semibold">📚 Documentos Subidos</h3>
+
+    <div class="bg-white border border-gray-200 rounded-lg p-4 flex justify-between items-center">
+      <div>
+        <p class="font-medium">Licenciatura en Ciencias Navales</p>
+        <p class="text-sm text-gray-500">PDF • 2.3 MB • Subido: 10/05/2025</p>
+        <span class="inline-block mt-1 px-3 py-1 text-sm rounded-full bg-blue-100 text-blue-800">Diploma</span>
+      </div>
+      <div class="flex gap-2">
+        <button class="bg-white border px-3 py-1 rounded hover:bg-gray-100">⬇️</button>
+        <button class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600">🗑</button>
+      </div>
+    </div>
+
+    <div class="bg-white border border-gray-200 rounded-lg p-4 flex justify-between items-center">
+      <div>
+        <p class="font-medium">Certificado de Francés - Canadá</p>
+        <p class="text-sm text-gray-500">PDF • 1.1 MB • Subido: 08/05/2025</p>
+        <span class="inline-block mt-1 px-3 py-1 text-sm rounded-full bg-green-100 text-green-800">Certificado</span>
+      </div>
+      <div class="flex gap-2">
+        <button class="bg-white border px-3 py-1 rounded hover:bg-gray-100">⬇️</button>
+        <button class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600">🗑</button>
+      </div>
+    </div>
+
+    <div class="bg-white border border-gray-200 rounded-lg p-4 flex justify-between items-center">
+      <div>
+        <p class="font-medium">Curso de Ciberseguridad CISSP</p>
+        <p class="text-sm text-gray-500">PDF • 850 KB • Subido: 05/05/2025</p>
+        <span class="inline-block mt-1 px-3 py-1 text-sm rounded-full bg-green-100 text-green-800">Certificado</span>
+      </div>
+      <div class="flex gap-2">
+        <button class="bg-white border px-3 py-1 rounded hover:bg-gray-100">⬇️</button>
+        <button class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600">🗑</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Contenido del Tab: Configuración -->
+<div *ngIf="activeTab === 'settings'" class="space-y-6">
+  <h2 class="text-2xl font-bold text-[#001F3F]">Configuración</h2>
+
+  <!-- Idioma -->
+  <div class="border border-gray-200 rounded-lg p-6 bg-white">
+    <h3 class="text-lg font-semibold mb-4">🌐 Idioma</h3>
+    <select class="w-full border-gray-300 rounded-md shadow-sm focus:ring focus:ring-[#D4AF37]">
+      <option value="es">Español</option>
+      <option value="en">English</option>
+      <option value="fr">Français</option>
+    </select>
+  </div>
+
+  <!-- Notificaciones -->
+  <div class="border border-gray-200 rounded-lg p-6 bg-white">
+    <h3 class="text-lg font-semibold mb-4">🔔 Notificaciones</h3>
+    <div class="space-y-4">
+      <div class="flex justify-between items-center">
+        <label class="text-sm font-medium">Recibir notificaciones por correo</label>
+        <input type="checkbox" class="form-checkbox h-5 w-5 text-green-600" checked />
+      </div>
+      <div class="flex justify-between items-center">
+        <label class="text-sm font-medium">Alertas sobre nuevas vacantes</label>
+        <input type="checkbox" class="form-checkbox h-5 w-5 text-green-600" checked />
+      </div>
+    </div>
+  </div>
+
+  <!-- Privacidad -->
+  <div class="border border-gray-200 rounded-lg p-6 bg-white">
+    <h3 class="text-lg font-semibold mb-4">🔒 Privacidad</h3>
+    <div class="flex justify-between items-center">
+      <label class="text-sm font-medium">Mostrar mi perfil públicamente</label>
+      <input type="checkbox" class="form-checkbox h-5 w-5 text-green-600" checked />
+    </div>
+  </div>
+
+  <!-- Seguridad -->
+  <div class="border border-gray-200 rounded-lg p-6 bg-white">
+    <h3 class="text-lg font-semibold mb-4">🛡 Seguridad</h3>
+    <button class="w-full border border-gray-300 px-4 py-2 rounded-md hover:bg-gray-100 font-medium">
+      Cambiar Contraseña
+    </button>
+  </div>
+
+  <!-- Guardar -->
+  <div class="text-right">
+    <button class="bg-[#3A5311] hover:bg-green-700 text-white px-6 py-2 rounded font-semibold">
+      Guardar Cambios
+    </button>
+  </div>
+</div>
+
+
+</div>
+<app-editprofile [visible]="showEditDialog" (closed)="showEditDialog = false"></app-editprofile>

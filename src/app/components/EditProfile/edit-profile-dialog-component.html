@@ -1,0 +1,102 @@
+<!-- edit-profile-dialog.component.html -->
+<div class="card flex justify-center">
+
+<p-dialog
+  header="Agregar Perfil"
+  [(visible)]="visible"
+  [modal]="true"
+  [dismissableMask]="true"
+  [style]="{ width: '50rem' }"
+  [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }"
+  [maximizable]="true"
+  [contentStyle]="{ 'background-color': '#f9fafb', 'padding': '2rem', 'border-radius': '0.75rem' }"
+>
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" class="space-y-6">
+
+      <!-- Imagen de perfil -->
+      <div>
+        <label class="block text-sm font-medium mb-1">Foto de Perfil</label>
+        <div class="flex items-center space-x-4 mt-2">
+          <div class="w-24 h-24 rounded-full bg-gray-200 border flex items-center justify-center overflow-hidden">
+            <img *ngIf="form.value.profileImage" [src]="form.value.profileImage" alt="Foto" class="w-full h-full object-cover" />
+          </div>
+          <input type="file" accept="image/*" (change)="handleImageChange($event)" />
+        </div>
+      </div>
+
+      <!-- Nombre -->
+      <div>
+        <label for="name" class="block text-sm font-medium mb-1">Nombre Completo</label>
+        <input id="name" type="text" formControlName="name" class="w-full border border-gray-300 rounded-md px-3 py-2" />
+      </div>
+
+      <!-- Cédula -->
+      <div>
+        <label for="cedula" class="block text-sm font-medium mb-1">Cédula</label>
+        <input id="cedula" type="text" formControlName="cedula" class="w-full border border-gray-300 rounded-md px-3 py-2" />
+      </div>
+
+      <!-- Teléfono -->
+      <div>
+        <label for="phone" class="block text-sm font-medium mb-1">Teléfono</label>
+        <input id="phone" type="text" formControlName="phone" class="w-full border border-gray-300 rounded-md px-3 py-2" />
+      </div>
+
+      <!-- Correo -->
+      <div>
+        <label for="email" class="block text-sm font-medium mb-1">Correo Electrónico</label>
+        <input id="email" type="email" formControlName="email" class="w-full border border-gray-300 rounded-md px-3 py-2" />
+      </div>
+
+      <!-- Fecha de nacimiento -->
+      <div>
+        <label for="birthDate" class="block text-sm font-medium mb-1">Fecha de Nacimiento</label>
+        <input id="birthDate" type="date" formControlName="birthDate" class="w-full border border-gray-300 rounded-md px-3 py-2" />
+      </div>
+
+      <!-- Dirección -->
+      <div>
+        <label for="address" class="block text-sm font-medium mb-1">Dirección</label>
+        <input id="address" type="text" formControlName="address" class="w-full border border-gray-300 rounded-md px-3 py-2" />
+      </div>
+
+      <!-- Rango -->
+      <div>
+        <label for="rank" class="block text-sm font-medium mb-1">Rango</label>
+        <select id="rank" formControlName="rank" class="w-full border border-gray-300 rounded-md px-3 py-2">
+          <option value="">Selecciona un rango</option>
+          <option *ngFor="let rango of rangos" [value]="rango">{{ rango }}</option>
+        </select>
+      </div>
+
+      <!-- Especialización -->
+      <div>
+        <label for="specialization" class="block text-sm font-medium mb-1">Especialización</label>
+        <input id="specialization" type="text" formControlName="specialization" class="w-full border border-gray-300 rounded-md px-3 py-2" />
+      </div>
+
+      <!-- Biografía -->
+      <div>
+        <label for="bio" class="block text-sm font-medium mb-1">Biografía</label>
+        <textarea id="bio" rows="3" formControlName="bio" class="w-full border border-gray-300 rounded-md px-3 py-2"></textarea>
+      </div>
+
+      <!-- Contacto de Emergencia -->
+      <div>
+        <label for="emergencyContact" class="block text-sm font-medium mb-1">Contacto de Emergencia</label>
+        <input id="emergencyContact" type="text" formControlName="emergencyContact" class="w-full border border-gray-300 rounded-md px-3 py-2" />
+      </div>
+
+      <div>
+        <label for="emergencyPhone" class="block text-sm font-medium mb-1">Teléfono de Emergencia</label>
+        <input id="emergencyPhone" type="text" formControlName="emergencyPhone" class="w-full border border-gray-300 rounded-md px-3 py-2" />
+      </div>
+
+      <!-- Botones -->
+      <div class="flex justify-end space-x-2 pt-6">
+        <button type="button" pButton label="Cancelar" class="p-button-outlined" (click)="visible = false"></button>
+        <button type="submit" pButton label="Guardar Cambios" class="bg-[#3A5311] text-white px-4 py-2 rounded hover:bg-green-700">Guardar</button>
+      </div>
+    </form>
+  </p-dialog>
+</div>
