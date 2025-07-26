@@ -1,99 +1,158 @@
 <div class="min-h-screen flex items-center justify-center bg-gray-100">
+  <div
+    class="w-full max-w-md mx-auto bg-white shadow-md rounded-lg overflow-hidden card-military">
+    <form (submit)="submitForm($event)" class="p-6">
+      <h2 class="text-2xl font-semibold text-center mb-2">Crear una cuenta</h2>
+      <p class="text-center text-gray-500 mb-6">Ingresa tus datos para
+        registrarte</p>
 
-<div class="w-full max-w-md mx-auto bg-white shadow-md rounded-lg overflow-hidden card-military">
-  <form (submit)="submitForm($event)" class="p-6">
-    <h2 class="text-2xl font-semibold text-center mb-2">Crear una cuenta</h2>
-    <p class="text-center text-gray-500 mb-6">Ingresa tus datos para registrarte</p>
-
-    <div class="space-y-4">
-      <div>
-        <label class="block text-sm font-medium mb-1">Tipo de usuario</label>
-        <div class="space-y-2">
-          <label class="flex items-center gap-2">
-            <input type="radio" [(ngModel)]="userType" name="userType" value="personal" class="accent-military-gold" />
-            <span>Personal (Busco empleo)</span>
-          </label>
-          <label class="flex items-center gap-2">
-            <input type="radio" [(ngModel)]="userType" name="userType" value="institutional" class="accent-military-gold" />
-            <span>Institucional (Publico vacantes)</span>
-          </label>
-        </div>
-      </div>
-
-      <div>
-        <label class="block text-sm font-medium mb-1" for="email">Correo electrónico</label>
-        <input id="email" [(ngModel)]="email" name="email" type="email" required placeholder="correo@ejemplo.com" class="w-full border rounded px-3 py-2" />
-      </div>
-      <div>
-  <label class="block text-sm font-medium mb-1" for="cedula">Cédula</label>
-  <div class="flex gap-2">
-    <input
-      id="cedula"
-      [(ngModel)]="cedula"
-      name="cedula"
-      type="text"
-      placeholder="000-0000000-0"
-      class="w-full border rounded px-3 py-2"
-    />
-    <button
-      type="button"
-      (click)="buscarCedula()"
-      class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-2 rounded flex items-center gap-1"
-    >
-      <lucide-angular [img]="Search" class="h-4 w-4"></lucide-angular>
-      Buscar
-    </button>
-  </div>
-</div>
-
-
-      <div>
-        <label class="block text-sm font-medium mb-1" for="fullName">Nombre completo</label>
-        <input id="fullName" [(ngModel)]="fullName" name="fullName" type="text" required class="w-full border rounded px-3 py-2" />
-      </div>
-
-      <div *ngIf="userType === 'institutional'">
-        <label class="block text-sm font-medium mb-1" for="institution">Nombre de la institución</label>
-        <input id="institution" [(ngModel)]="institution" name="institution" type="text" required class="w-full border rounded px-3 py-2" />
-
-        <div class="mt-4">
-          <label class="block text-sm font-medium mb-1" for="logo">Logo de la institución</label>
+      <div class="space-y-4">
+        <!-- Tipo de usuario -->
+        <div>
+          <label class="block text-sm font-medium mb-1">Tipo de usuario</label>
           <div class="space-y-2">
-            <div *ngIf="logoPreview; else placeholderLogo" class="relative inline-block">
-              <img [src]="logoPreview" alt="Logo preview" class="w-24 h-24 object-contain border rounded bg-gray-50" />
-              <button type="button" (click)="removeLogo()" class="absolute -top-2 -right-2 h-6 w-6 bg-red-500 text-white rounded-full flex items-center justify-center">
-                <lucide-angular [img]="X" class="w-4 h-4"></lucide-angular>
-              </button>
-            </div>
-            <ng-template #placeholderLogo>
-              <div class="flex items-center justify-center w-24 h-24 border-2 border-dashed border-gray-300 rounded bg-gray-50">
-                <lucide-angular [img]="Upload" class="h-6 w-6 text-gray-400"></lucide-angular>
-              </div>
-            </ng-template>
-            <input type="file" accept="image/*" (change)="handleLogoChange($event)" class="text-sm" />
-            <p class="text-xs text-gray-500">Sube el logo de tu institución (PNG, JPG, máx. 2MB)</p>
+            <label class="flex items-center gap-2">
+              <input type="radio" [(ngModel)]="userType" name="userType"
+                value="personal" class="accent-military-gold" />
+              <span>Personal (Busco empleo)</span>
+            </label>
+            <label class="flex items-center gap-2">
+              <input type="radio" [(ngModel)]="userType" name="userType"
+                value="institutional" class="accent-military-gold" />
+              <span>Institucional (Publico vacantes)</span>
+            </label>
           </div>
         </div>
+           <!-- Cédula -->
+        <div>
+          <label class="block text-sm font-medium mb-1"
+            for="cedula">Cédula</label>
+          <div class="flex gap-2">
+            <input id="cedula" [(ngModel)]="cedula" name="cedula" type="text"
+              placeholder="000-0000000-0"
+              class="w-full border rounded px-3 py-2" />
+            <button type="button" (click)="buscarCedula()"
+              class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-2 rounded flex items-center gap-1">
+              <lucide-angular [img]="Search" class="h-4 w-4"></lucide-angular>
+              Buscar
+            </button>
+          </div>
+        </div>
+        <!-- Nombres -->
+        <div>
+          <label class="block text-sm font-medium mb-1"
+            for="nombres">Nombres</label>
+          <input id="nombres" [(ngModel)]="nombres" name="nombres" type="text"
+            required placeholder="Ej. Juan Carlos"
+            class="w-full border rounded px-3 py-2" />
+        </div>
+
+        <!-- Apellidos -->
+        <div>
+          <label class="block text-sm font-medium mb-1"
+            for="apellidos">Apellidos</label>
+          <input id="apellidos" [(ngModel)]="apellidos" name="apellidos"
+            type="text" required placeholder="Ej. Pérez Gómez"
+            class="w-full border rounded px-3 py-2" />
+        </div>
+
+        <!-- Nombre completo -->
+        <div>
+          <label class="block text-sm font-medium mb-1" for="fullName">Nombre
+            completo</label>
+          <input id="fullName" [(ngModel)]="fullName" name="fullName"
+            type="text" required class="w-full border rounded px-3 py-2" />
+        </div>
+
+
+
+        <!-- Email -->
+        <div>
+          <label class="block text-sm font-medium mb-1" for="email">Correo
+            electrónico</label>
+          <input id="email" [(ngModel)]="email" name="email" type="email"
+            required placeholder="correo@ejemplo.com"
+            class="w-full border rounded px-3 py-2" />
+        </div>
+
+
+
+        <!-- Institucional -->
+        <div>
+          <!-- Selector de institución -->
+          <label class="block text-sm font-medium mb-1" for="institution">Nombre
+            de la institución</label>
+          <select
+            id="institution"
+            name="institution"
+            [(ngModel)]="selectedInstitution"
+            (change)="onInstitutionChange()"
+            class="w-full border rounded px-3 py-2">
+            <option value disabled selected>Selecciona una institución</option>
+            <option *ngFor="let inst of institutions" [value]="inst.id">
+              {{ inst.name }}
+            </option>
+          </select>
+
+          <!-- Logo de la institución -->
+          <div class="mt-4">
+            <label class="block text-sm font-medium mb-1">Logo de la
+              institución</label>
+            <div class="flex items-center justify-center">
+              <img *ngIf="selectedInstitutionLogo; else placeholderLogo"
+                [src]="selectedInstitutionLogo" alt="Logo preview"
+                class="w-24 h-24 object-contain border rounded bg-gray-50" />
+              <ng-template #placeholderLogo>
+                <div
+                  class="w-24 h-24 border-2 border-dashed border-gray-300 rounded bg-gray-50 flex items-center justify-center">
+                  <lucide-angular [img]="Upload"
+                    class="h-6 w-6 text-gray-400"></lucide-angular>
+                </div>
+              </ng-template>
+            </div>
+          </div>
+        </div>
+       <!-- Departamento -->
+        <div>
+          <label class="block text-sm font-medium mb-1"
+            for="departamento">Departamento</label>
+          <select id="departamento" name="departamento"
+            [(ngModel)]="departamento" required
+            class="w-full border rounded px-3 py-2">
+            <option value disabled selected>Selecciona un departamento</option>
+            <option *ngFor="let dept of departamentos" [value]="dept.id">{{
+              dept.nombre }}</option>
+          </select>
+        </div>
+        <!-- Contraseña -->
+        <div>
+          <label class="block text-sm font-medium mb-1"
+            for="password">Contraseña</label>
+          <input id="password" [(ngModel)]="password" name="password"
+            type="password" required class="w-full border rounded px-3 py-2" />
+        </div>
+
+        <!-- Confirmar contraseña -->
+        <div>
+          <label class="block text-sm font-medium mb-1"
+            for="confirmPassword">Confirmar contraseña</label>
+          <input id="confirmPassword" [(ngModel)]="confirmPassword"
+            name="confirmPassword" type="password" required
+            class="w-full border rounded px-3 py-2" />
+        </div>
+
+        <!-- Botón de enviar -->
+        <button type="submit"
+          class="w-full mt-4 bg-[#D4AF37] hover:bg-amber-500 text-black font-semibold py-2 rounded">
+          Registrarse
+        </button>
       </div>
 
-      <div>
-        <label class="block text-sm font-medium mb-1" for="password">Contraseña</label>
-        <input id="password" [(ngModel)]="password" name="password" type="password" required class="w-full border rounded px-3 py-2" />
-      </div>
-
-      <div>
-        <label class="block text-sm font-medium mb-1" for="confirmPassword">Confirmar contraseña</label>
-        <input id="confirmPassword" [(ngModel)]="confirmPassword" name="confirmPassword" type="password" required class="w-full border rounded px-3 py-2" />
-      </div>
-
-      <button type="submit" class="w-full mt-4 bg-[#D4AF37] hover:bg-amber-500 text-black font-semibold py-2 rounded">
-        Registrarse
-      </button>
-    </div>
-
-    <p class="text-center text-sm text-gray-600 mt-6">
-      ¿Ya tienes una cuenta? <a routerLink="/login" class="text-blue-600 hover:underline">Iniciar sesión</a>
-    </p>
-  </form>
-</div>
+      <!-- Enlace para login -->
+      <p class="text-center text-sm text-gray-600 mt-6">
+        ¿Ya tienes una cuenta? <a routerLink="/login"
+          class="text-blue-600 hover:underline">Iniciar sesión</a>
+      </p>
+    </form>
+  </div>
 </div>

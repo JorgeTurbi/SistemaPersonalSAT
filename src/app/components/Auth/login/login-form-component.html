@@ -1,37 +1,59 @@
 
-<div class="min-h-screen flex flex-col items-center justify-center bg-gray-100 space-y-6">
+<div
+  class="min-h-screen flex flex-col items-center justify-center bg-gray-100 space-y-6">
   <!-- Logo centrado arriba -->
   <img src="/images/logo/c5iLogo.png" alt="Logo C5i" class="h-28 w-28" />
 
-  <div class="w-full max-w-md bg-white shadow-md rounded-lg overflow-hidden card-military">
-<div class="w-full max-w-md mx-auto bg-white shadow-md rounded-lg overflow-hidden card-military">
-  <form (submit)="submitForm($event)" class="p-6">
-    <h2 class="text-2xl font-semibold text-center mb-2">Iniciar sesión</h2>
-    <p class="text-center text-gray-500 mb-6">Ingresa tus credenciales para acceder a tu cuenta</p>
+  <div
+    class="w-full max-w-md bg-white shadow-md rounded-lg overflow-hidden card-military">
+    <div
+      class="w-full max-w-md mx-auto bg-white shadow-md rounded-lg overflow-hidden card-military">
+      <form [formGroup]="loginForm" class="p-6">
+        <h2 class="text-2xl font-semibold text-center mb-2">Iniciar sesión</h2>
+        <p class="text-center text-gray-500 mb-6">Ingresa tus credenciales para
+          acceder a tu cuenta</p>
 
-    <div class="space-y-4">
-      <div>
-        <label class="block text-sm font-medium mb-1" for="email">Correo electrónico</label>
-        <input id="email" [(ngModel)]="email" name="email" type="email" required placeholder="correo@ejemplo.com" class="w-full border rounded px-3 py-2" />
-      </div>
+        <div class="space-y-4">
+          <div>
+            <label class="block text-sm font-medium mb-1" for="email">Correo
+              electrónico</label>
+            <input id="email" formControlName="usuario" name="email" type="email"
+              required placeholder="correo@ejemplo.com"
+              class="w-full border rounded px-3 py-2" />
+            <small class="text-red-900"
+              *ngIf="loginForm.get('usuario')?.invalid && loginForm.get('usuario')?.touched">Campo
+              requerido</small>
 
-      <div>
-        <div class="flex items-center justify-between mb-1">
-          <label class="text-sm font-medium" for="password">Contraseña</label>
-          <a routerLink="/forgot-password" class="text-sm text-blue-600 hover:underline">¿Olvidaste tu contraseña?</a>
+          </div>
+
+          <div>
+            <div class="flex items-center justify-between mb-1">
+              <label class="text-sm font-medium"
+                for="password">Contraseña</label>
+              <a routerLink="/forgot-password"
+                class="text-sm text-blue-600 hover:underline">¿Olvidaste tu
+                contraseña?</a>
+            </div>
+            <input id="password" formControlName="password" name="password"
+              type="password" required
+              class="w-full border rounded px-3 py-2" />
+            <small class="text-red-900"
+              *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched">Campo
+              requerido</small>
+
+          </div>
+
+          <button type="button" (click)="submitForm()"
+            class="w-full mt-4 bg-[#D4AF37] hover:bg-amber-500 text-black font-semibold py-2 rounded">
+            Iniciar sesión
+          </button>
         </div>
-        <input id="password" [(ngModel)]="password" name="password" type="password" required class="w-full border rounded px-3 py-2" />
-      </div>
 
-      <button type="submit" class="w-full mt-4 bg-[#D4AF37] hover:bg-amber-500 text-black font-semibold py-2 rounded">
-        Iniciar sesión
-      </button>
+        <p class="text-center text-sm text-gray-600 mt-6">
+          ¿No tienes una cuenta? <a routerLink="/register"
+            class="text-blue-600 hover:underline">Registrarse</a>
+        </p>
+      </form>
     </div>
-
-    <p class="text-center text-sm text-gray-600 mt-6">
-      ¿No tienes una cuenta? <a routerLink="/register" class="text-blue-600 hover:underline">Registrarse</a>
-    </p>
-  </form>
-</div>
-</div>
+  </div>
 </div>

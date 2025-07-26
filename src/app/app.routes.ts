@@ -16,7 +16,7 @@ export const routes: Routes = [
     ]
   },
 
- // 👇 Estas rutas deben ir fuera del layout principal
+ // Estas rutas deben ir fuera del layout principal
   {
     path: 'login',
     loadComponent: () => import('./components/Auth/login/login-form-component').then(m => m.LoginFormComponent)
@@ -26,7 +26,7 @@ export const routes: Routes = [
     loadComponent: () => import('./components/Auth/Register/register-form-component').then(m => m.RegisterFormComponent)
   },
 
-  // ✅ Esta debe ir siempre al final
+  // Esta debe ir siempre al final
   {
     path: '**',
     loadComponent: () => import('./components/NotFound/not-found').then(m => m.NotFound)
