@@ -6,6 +6,8 @@ import { LoginRequest } from '../login/InterfaceLogin/LoginRequest';
 import { Observable } from 'rxjs';
 import { environment } from '../../../../Enviroments/enviroment';
 import { HttpClient } from '@angular/common/http';
+import { UserDto } from '../Register/InterfaceRegister/UserDto';
+import { User } from 'lucide-angular';
 
 @Injectable({
   providedIn: 'root'
@@ -28,5 +30,8 @@ authLogin(login:LoginRequest):Observable<DataResponse<LoginData>> {
     return localStorage.getItem('token');
   }
 
-
+    registerUser(user:UserDto):Observable<DataResponse<boolean>>
+    {
+      return this.http.post<DataResponse<boolean>>(`${environment.apiUrl}/Auth/register`,user);
+    }
 }

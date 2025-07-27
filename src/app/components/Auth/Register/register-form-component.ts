@@ -9,11 +9,12 @@ import { InstitucionService } from '../../Services/institucion-service';
 import { DataResponse } from '../../../Interface/Response';
 import { IDEPARTAMENTO } from '../../../Interface/IDepartamento';
 import { MessageService } from 'primeng/api';
-import { passwordMatchValidator } from './passwordMatchValidator';
 import { ServiciosGenerales } from '../../GeneralServices/servicios-generales';
 import { IUserDataService } from '../../../Interface/IUserDataService';
 import { IResponseTokenDataService } from './InterfaceRegister/ResponseTokenDataService';
 import { ConsultaJceResponse } from '../../../Interface/ConsultaJceResponse';
+import { UserDto } from './InterfaceRegister/UserDto';
+import { AuthService } from '../Services/auth-service';
 
 @Component({
   selector: 'app-registerform',
@@ -39,8 +40,9 @@ export class RegisterFormComponent implements OnInit {
   registerForm!: FormGroup;
   showPassword: boolean = false;
   showConfirmPassword: boolean = false;
+  regUser!:UserDto;
 
-  constructor(
+  constructor(private auth: AuthService,
     private serviceGeneral: ServiciosGenerales,
     private router: Router, private _InstitucionService: InstitucionService, private fb: FormBuilder, private messageService: MessageService) { }
   ngOnInit(): void {
@@ -49,21 +51,23 @@ export class RegisterFormComponent implements OnInit {
     this.getInstitutions();
     this.getdepartamentos();
     this.registerForm = this.fb.group({
+      id:[''],
       userType: ['P', Validators.required],
-      cedula: ['', [Validators.required, Validators.pattern(/^\d{3}-\d{7}-\d{1}$/)]],
+      cedula: ['', Validators.required],
       nombres: ['', Validators.required],
       apellidos: ['', Validators.required],
       fullName: ['', Validators.required],
+      usuario:['',Validators.required],
       email: ['', [Validators.required, Validators.email]],
       institution: [null, Validators.required],
       departamento: [null, Validators.required],
       password: ['', Validators.required],
-      confirmPassword: ['', [Validators.required]]
 
-    },
-      {
-        validators: passwordMatchValidator('password', 'confirmPassword')
-      }
+
+    }
+      // {
+      //   validators: passwordMatchValidator('password', 'confirmPassword')
+      // }
     );
 
     // 👉 Escucha cambios y actualiza fullName automáticamente
@@ -74,6 +78,10 @@ export class RegisterFormComponent implements OnInit {
     this.registerForm.get('apellidos')?.valueChanges.subscribe(() => {
       this.updateFullName();
     });
+       this.registerForm.get('email')?.valueChanges.subscribe(() => {
+      this.updateUsuario();
+    });
+
 
   }
 
@@ -91,6 +99,12 @@ export class RegisterFormComponent implements OnInit {
     const fullName = `${nombres} ${apellidos}`.trim();
 
     this.registerForm.get('fullName')?.setValue(fullName, { emitEvent: false });
+  }
+  updateUsuario():void{
+       const correo = this.registerForm.get('email')?.value || '';
+
+
+    this.registerForm.get('usuario')?.setValue(correo, { emitEvent: false });
   }
   getdepartamentos() {
     this._InstitucionService.getDepartmentos().subscribe({
@@ -177,13 +191,33 @@ export class RegisterFormComponent implements OnInit {
 
 
   submitForm() {
+   console.log(`==>`,this.registerForm.value);
     if (this.registerForm.invalid) {
-      this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Las contraseñas no coinciden.' });
+             console.log(`registro--0`);
+      this.messageService.add({ severity: 'error', summary: 'Error', detail: 'registros invalidos' });
       this.registerForm.markAllAsTouched();
-      this.registerForm.markAllAsTouched();
-      return;
-    }
 
-    console.log(this.registerForm.value);
+      return;
+
+    }
+    this.regUser=this.registerForm.value;
+    this.auth.registerUser(this.regUser).subscribe({
+      next:(res:DataResponse<boolean>)=>{
+        if(res.success)
+        {
+
+            this.messageService.add({ severity: 'success', summary: "Registro", detail: res.message });
+            this.messageService.add({ severity: 'info', summary: "Information", detail: "Redigiriendo" });
+            return this.router.navigateByUrl("/login")
+        }
+      return  this.messageService.add({ severity: 'error', summary: 'Error', detail: res.message });
+          console.log(`registro1`);
+      },
+        error: (err:any) => {
+            this.messageService.add({ severity: 'error', summary: 'Error', detail: err.message });
+               console.log(`registro2`);
+      }
+    });
+    console.log(this.regUser);
   }
 }

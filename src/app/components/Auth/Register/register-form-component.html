@@ -47,7 +47,7 @@
           <label class="block text-sm font-medium mb-1"
             for="nombres">Nombres</label>
           <input id="nombres" formControlName="nombres" name="nombres"
-            type="text" required
+            type="text"
             placeholder="Ej. Juan Carlos"
             class="w-full border rounded px-3 py-2" />
         </div>
@@ -57,7 +57,7 @@
           <label class="block text-sm font-medium mb-1"
             for="apellidos">Apellidos</label>
           <input id="apellidos" formControlName="apellidos" name="apellidos"
-            type="text" required
+            type="text"
             placeholder="Ej. Pérez Gómez"
             class="w-full border rounded px-3 py-2" />
         </div>
@@ -67,7 +67,7 @@
           <label class="block text-sm font-medium mb-1" for="fullName">Nombre
             completo</label>
           <input id="fullName" formControlName="fullName" name="fullName"
-            type="text" required
+            type="text"
             class="w-full border rounded px-3 py-2" />
         </div>
 
@@ -142,14 +142,15 @@
             </button>
           </div>
           <div
-            *ngIf="registerForm.get('confirmPassword')?.hasError('passwordMismatch') && registerForm.get('confirmPassword')?.touched"
+            *ngIf="registerForm.get('password')?.hasError('required') && registerForm.get('password')?.touched"
             class="text-red-500 text-sm">
-            Las contraseñas no coinciden.
+            Contraseña es requerida.
           </div>
+
         </div>
 
         <!-- Confirmar contraseña -->
-        <div>
+        <!-- <div>
           <label class="block text-sm font-medium mb-1"
             for="confirmPassword">Confirmar contraseña</label>
           <div class="relative">
@@ -172,7 +173,7 @@
             class="text-red-500 text-sm">
             Las contraseñas no coinciden.
           </div>
-        </div>
+        </div> -->
 
         <!-- Botón de enviar -->
         <button type="button" (click)="submitForm()"
