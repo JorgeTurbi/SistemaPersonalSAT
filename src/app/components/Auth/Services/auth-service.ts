@@ -24,6 +24,9 @@ authLogin(login:LoginRequest):Observable<DataResponse<LoginData>> {
   return this.http.post<DataResponse<LoginData>>(`${environment.apiUrl}/auth/login`, login);
 }
 
+  getToken(): string | null {
+    return localStorage.getItem('token');
+  }
 
 
 }

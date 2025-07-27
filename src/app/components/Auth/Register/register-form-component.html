@@ -1,8 +1,9 @@
-<div class="min-h-screen flex items-center justify-center bg-gray-100">
+<div
+  class="min-h-screen flex items-center justify-center bg-gray-100 py-16 px-4">
   <div
-    class="w-full max-w-md mx-auto bg-white shadow-md rounded-lg overflow-hidden card-military">
-    <form (submit)="submitForm($event)" class="p-6">
-      <h2 class="text-2xl font-semibold text-center mb-2">Crear una cuenta</h2>
+    class="w-full max-w-2xl mx-auto bg-white shadow-md rounded-lg overflow-hidden card-military">
+    <form [formGroup]="registerForm" class="p-10">
+      <h2 class="text-3xl font-semibold text-center mb-2">Crear una cuenta</h2>
       <p class="text-center text-gray-500 mb-6">Ingresa tus datos para
         registrarte</p>
 
@@ -12,23 +13,26 @@
           <label class="block text-sm font-medium mb-1">Tipo de usuario</label>
           <div class="space-y-2">
             <label class="flex items-center gap-2">
-              <input type="radio" [(ngModel)]="userType" name="userType"
-                value="personal" class="accent-military-gold" />
+
+              <input type="radio" value="P" class="accent-military-gold"
+                formControlName="userType" name="userType" />
               <span>Personal (Busco empleo)</span>
             </label>
             <label class="flex items-center gap-2">
-              <input type="radio" [(ngModel)]="userType" name="userType"
-                value="institutional" class="accent-military-gold" />
+
+              <input type="radio" value="I" class="accent-military-gold"
+                formControlName="userType" name="userType" />
               <span>Institucional (Publico vacantes)</span>
             </label>
           </div>
         </div>
-           <!-- Cédula -->
+        <!-- Cédula -->
         <div>
           <label class="block text-sm font-medium mb-1"
             for="cedula">Cédula</label>
           <div class="flex gap-2">
-            <input id="cedula" [(ngModel)]="cedula" name="cedula" type="text"
+            <input id="cedula" formControlName="cedula" mask="000-0000000-0"
+              name="cedula" type="text"
               placeholder="000-0000000-0"
               class="w-full border rounded px-3 py-2" />
             <button type="button" (click)="buscarCedula()"
@@ -42,8 +46,9 @@
         <div>
           <label class="block text-sm font-medium mb-1"
             for="nombres">Nombres</label>
-          <input id="nombres" [(ngModel)]="nombres" name="nombres" type="text"
-            required placeholder="Ej. Juan Carlos"
+          <input id="nombres" formControlName="nombres" name="nombres"
+            type="text" required
+            placeholder="Ej. Juan Carlos"
             class="w-full border rounded px-3 py-2" />
         </div>
 
@@ -51,8 +56,9 @@
         <div>
           <label class="block text-sm font-medium mb-1"
             for="apellidos">Apellidos</label>
-          <input id="apellidos" [(ngModel)]="apellidos" name="apellidos"
-            type="text" required placeholder="Ej. Pérez Gómez"
+          <input id="apellidos" formControlName="apellidos" name="apellidos"
+            type="text" required
+            placeholder="Ej. Pérez Gómez"
             class="w-full border rounded px-3 py-2" />
         </div>
 
@@ -60,37 +66,31 @@
         <div>
           <label class="block text-sm font-medium mb-1" for="fullName">Nombre
             completo</label>
-          <input id="fullName" [(ngModel)]="fullName" name="fullName"
-            type="text" required class="w-full border rounded px-3 py-2" />
+          <input id="fullName" formControlName="fullName" name="fullName"
+            type="text" required
+            class="w-full border rounded px-3 py-2" />
         </div>
-
-
 
         <!-- Email -->
         <div>
           <label class="block text-sm font-medium mb-1" for="email">Correo
             electrónico</label>
-          <input id="email" [(ngModel)]="email" name="email" type="email"
+          <input id="email" formControlName="email" name="email" type="email"
             required placeholder="correo@ejemplo.com"
             class="w-full border rounded px-3 py-2" />
         </div>
-
-
 
         <!-- Institucional -->
         <div>
           <!-- Selector de institución -->
           <label class="block text-sm font-medium mb-1" for="institution">Nombre
             de la institución</label>
-          <select
-            id="institution"
-            name="institution"
-            [(ngModel)]="selectedInstitution"
-            (change)="onInstitutionChange()"
+          <select id="institution" name="institution"
+            formControlName="institution" (change)="onInstitutionChange()"
             class="w-full border rounded px-3 py-2">
             <option value disabled selected>Selecciona una institución</option>
             <option *ngFor="let inst of institutions" [value]="inst.id">
-              {{ inst.name }}
+              {{ inst.codigoNombre }}
             </option>
           </select>
 
@@ -100,7 +100,8 @@
               institución</label>
             <div class="flex items-center justify-center">
               <img *ngIf="selectedInstitutionLogo; else placeholderLogo"
-                [src]="selectedInstitutionLogo" alt="Logo preview"
+                [src]="selectedInstitutionLogo"
+                alt="Logo preview"
                 class="w-24 h-24 object-contain border rounded bg-gray-50" />
               <ng-template #placeholderLogo>
                 <div
@@ -112,37 +113,69 @@
             </div>
           </div>
         </div>
-       <!-- Departamento -->
+        <!-- Departamento -->
         <div>
           <label class="block text-sm font-medium mb-1"
             for="departamento">Departamento</label>
           <select id="departamento" name="departamento"
-            [(ngModel)]="departamento" required
+            formControlName="departamento"
             class="w-full border rounded px-3 py-2">
             <option value disabled selected>Selecciona un departamento</option>
             <option *ngFor="let dept of departamentos" [value]="dept.id">{{
-              dept.nombre }}</option>
+              dept.direccion }}</option>
           </select>
         </div>
         <!-- Contraseña -->
         <div>
           <label class="block text-sm font-medium mb-1"
             for="password">Contraseña</label>
-          <input id="password" [(ngModel)]="password" name="password"
-            type="password" required class="w-full border rounded px-3 py-2" />
+          <div class="relative">
+            <input id="password" formControlName="password" name="password"
+              [type]="showPassword ? 'text' : 'password'"
+              class="w-full border rounded px-3 py-2" />
+            <button
+              type="button"
+              (click)="togglePasswordVisibility()"
+              class="absolute right-2 top-1/2 -translate-y-1/2 text-gray-600">
+              <lucide-angular [img]="showPassword ? EyeOff : Eye"
+                class="h-5 w-5"></lucide-angular>
+            </button>
+          </div>
+          <div
+            *ngIf="registerForm.get('confirmPassword')?.hasError('passwordMismatch') && registerForm.get('confirmPassword')?.touched"
+            class="text-red-500 text-sm">
+            Las contraseñas no coinciden.
+          </div>
         </div>
 
         <!-- Confirmar contraseña -->
         <div>
           <label class="block text-sm font-medium mb-1"
             for="confirmPassword">Confirmar contraseña</label>
-          <input id="confirmPassword" [(ngModel)]="confirmPassword"
-            name="confirmPassword" type="password" required
-            class="w-full border rounded px-3 py-2" />
+          <div class="relative">
+            <input id="confirmPassword" formControlName="confirmPassword"
+              name="confirmPassword"
+              [type]="showConfirmPassword ? 'text' : 'password'"
+              class="w-full border rounded px-3 py-2" />
+            <button
+              type="button"
+              (click)="toggleConfirmPasswordVisibility()"
+              class="absolute right-2 top-1/2 -translate-y-1/2 text-gray-600">
+              <lucide-angular [img]="showConfirmPassword ? EyeOff : Eye"
+                class="h-5 w-5"></lucide-angular>
+            </button>
+
+          </div>
+
+          <div
+            *ngIf="registerForm.get('confirmPassword')?.hasError('passwordMismatch') && registerForm.get('confirmPassword')?.touched"
+            class="text-red-500 text-sm">
+            Las contraseñas no coinciden.
+          </div>
         </div>
 
         <!-- Botón de enviar -->
-        <button type="submit"
+        <button type="button" (click)="submitForm()"
           class="w-full mt-4 bg-[#D4AF37] hover:bg-amber-500 text-black font-semibold py-2 rounded">
           Registrarse
         </button>

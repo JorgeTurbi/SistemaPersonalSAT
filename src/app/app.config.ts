@@ -1,24 +1,49 @@
-import { ApplicationConfig, provideBrowserGlobalErrorListeners, provideZoneChangeDetection } from '@angular/core';
+import { ApplicationConfig, importProvidersFrom, provideBrowserGlobalErrorListeners, provideZoneChangeDetection } from '@angular/core';
 import { provideRouter } from '@angular/router';
+import Aura from '@primeng/themes/aura';
 
 import { routes } from './app.routes';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { providePrimeNG } from 'primeng/config';
-import { provideHttpClient } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptors } from '@angular/common/http';
+import { ToastModule } from 'primeng/toast';
+import { MessageService } from 'primeng/api';
+import { provideNgxMask } from 'ngx-mask';
+import { authInterceptor } from './Interceptos/auth-interceptor';
+
+
 
 export const appConfig: ApplicationConfig = {
-  providers: [ provideHttpClient(),
+  providers: [
+  provideHttpClient(withInterceptors([authInterceptor])),
+    provideNgxMask(),
+    importProvidersFrom(ToastModule),
+    MessageService,
+    // provideHttpClient(),
+    // {
+    //   provide: HTTP_INTERCEPTORS,
+    //   useClass: AuthInterceptor,
+    //   multi: true
+    // },
     provideBrowserGlobalErrorListeners(),
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
     provideAnimations(),
     providePrimeNG({
-    zIndex: {
-        modal: 1100,    // dialog, sidebar
-        overlay: 1000,  // dropdown, overlaypanel
-        menu: 1000,     // overlay menus
-        tooltip: 1100   // tooltip
-    }
-})
+      zIndex: {
+        modal: 1100,
+        overlay: 1000,
+        menu: 1000,
+        tooltip: 1100
+      },
+      theme: {
+        preset: Aura,
+        options: {
+          prefix: 'p',
+          darkModeSelector: '.dark-theme'
+        }
+      },
+      ripple: true
+    })
   ]
 };

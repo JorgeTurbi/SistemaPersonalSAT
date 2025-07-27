@@ -3,10 +3,12 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../Services/auth-service';
-import { MessageService } from 'primeng/api';
+
 import { LoginRequest } from './InterfaceLogin/LoginRequest';
 import { LoginData } from './InterfaceLogin/LoginData';
 import { DataResponse } from '../../../Interface/Response';
+import { MessageService } from 'primeng/api';
+import { RippleModule } from 'primeng/ripple';
 
 
 @Component({
@@ -15,7 +17,7 @@ import { DataResponse } from '../../../Interface/Response';
   imports: [CommonModule, FormsModule, ReactiveFormsModule, RouterModule],
   templateUrl: './login-form-component.html',
   styleUrl: './login-form-component.css',
-     providers: [MessageService]
+  providers: [RippleModule]
 })
 export class LoginFormComponent implements OnInit {
 
@@ -30,8 +32,6 @@ export class LoginFormComponent implements OnInit {
       password: ['', Validators.required]
     });
 
-
-
   }
 
   submitForm() {
@@ -44,7 +44,8 @@ export class LoginFormComponent implements OnInit {
       this.LogInUser = this.loginForm.value;
       this.auth.authLogin(this.LogInUser).subscribe({
         next: (res: DataResponse<LoginData>) => {
-            console.log(`====>${res}`);
+
+
           if (res.success) {
             localStorage.setItem('token', res.data.token);
             localStorage.setItem('user', JSON.stringify(res.data.user));
