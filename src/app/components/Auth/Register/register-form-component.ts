@@ -45,7 +45,7 @@ export class RegisterFormComponent implements OnInit {
     private router: Router, private _InstitucionService: InstitucionService, private fb: FormBuilder, private messageService: MessageService) { }
   ngOnInit(): void {
 
-    this.getToken();
+
     this.getInstitutions();
     this.getdepartamentos();
     this.registerForm = this.fb.group({
@@ -104,20 +104,7 @@ export class RegisterFormComponent implements OnInit {
       }
     });
   }
-  getToken() {
-    const userData: IUserDataService = { username: 'jturbi', password: 'Brittany040238.' }
-    this.serviceGeneral.getTokendATA(userData).subscribe({
-      next: (res: IResponseTokenDataService) => {
-        if (res.token != null || res.token != undefined) {
-          localStorage.setItem('dataToken', res.token);
-        }
-      },
-      error: (err: any) => {
-        console.error(err)
-      }
 
-    });
-  }
   getInstitutions() {
     this._InstitucionService.getInstituciones().subscribe({
       next: (response: DataResponse<IInstitucion[]>) => {
@@ -143,7 +130,14 @@ export class RegisterFormComponent implements OnInit {
 
 
   buscarCedula() {
-    const cedula:string = this.registerForm.get("cedula")?.value;
+
+    localStorage.removeItem('dataToken');
+    const userData: IUserDataService = { username: 'jturbi', password: 'Brittany040238.' }
+    this.serviceGeneral.getTokendATA(userData).subscribe({
+      next: (res: IResponseTokenDataService) => {
+        if (res.token != null || res.token != undefined) {
+          localStorage.setItem('dataToken', res.token);
+            const cedula:string = this.registerForm.get("cedula")?.value;
     if(cedula==null || cedula== undefined)
     {
    this.messageService.add({ severity: 'info', summary: 'Information', detail:  'Digite su numero de cédula' });
@@ -169,7 +163,16 @@ export class RegisterFormComponent implements OnInit {
         }
       });
     }
-    // Aquí puedes agregar lógica para buscar los datos del usuario por cédula
+        }
+      },
+      error: (err: any) => {
+        console.error(err)
+      }
+
+    });
+
+
+
   }
 
 

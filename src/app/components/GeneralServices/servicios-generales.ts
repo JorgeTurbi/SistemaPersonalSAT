@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { IUserDataService } from '../../Interface/IUserDataService';
 import { IResponseTokenDataService } from '../Auth/Register/InterfaceRegister/ResponseTokenDataService';
 import { Observable } from 'rxjs';
-import { environment } from '../../../Enviroments/Enviroment';
+import { environment } from '../../../Enviroments/enviroment';
 import { ConsultaJceResponse } from '../../Interface/ConsultaJceResponse';
 
 @Injectable({

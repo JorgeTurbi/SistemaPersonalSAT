@@ -1,11 +1,15 @@
 // src/app/interceptors/auth.interceptor.ts
 import { HttpInterceptorFn } from '@angular/common/http';
-import { environment } from '../../Enviroments/Enviroment';
+import { environment } from '../../Enviroments/enviroment';
+import { finalize } from 'rxjs';
+import { inject } from '@angular/core';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const dataservicesUrl = environment.dataUrl;
   const dataToken = localStorage.getItem('dataToken'); // o puedes usar un valor fijo para prueba
-
+  const spinner = inject(NgxSpinnerService);
+  spinner.show();
   if (req.url.startsWith(dataservicesUrl) && dataToken) {
     const modifiedReq = req.clone({
       setHeaders: {
@@ -13,10 +17,20 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
       }
     });
 
-    console.log('✅ Authorization header añadido:', modifiedReq.headers.get('Authorization'));
-    return next(modifiedReq);
+
+    return next(modifiedReq).pipe(
+      finalize(()=>{
+        spinner.hide();
+      })
+    );
   }
 
-  console.warn('⛔ No se añadió Authorization');
-  return next(req);
+
+  return next(req).pipe(
+    finalize(()=>{
+      spinner.hide();
+    }
+
+    )
+  );
 };

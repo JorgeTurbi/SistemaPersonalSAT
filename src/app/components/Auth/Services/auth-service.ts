@@ -4,7 +4,7 @@ import { DataResponse } from '../../../Interface/Response';
 import { LoginData } from '../login/InterfaceLogin/LoginData';
 import { LoginRequest } from '../login/InterfaceLogin/LoginRequest';
 import { Observable } from 'rxjs';
-import { environment } from '../../../../Enviroments/Enviroment';
+import { environment } from '../../../../Enviroments/enviroment';
 import { HttpClient } from '@angular/common/http';
 
 @Injectable({
