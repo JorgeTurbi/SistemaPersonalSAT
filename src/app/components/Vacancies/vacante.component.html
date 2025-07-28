@@ -21,7 +21,7 @@
   styleClass="custom-dialog-position"
   [style]="{ width: '50rem' }"
   [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }"
- [maximizable]="true"
+  [maximizable]="true"
   [dismissableMask]="true"
   [contentStyle]="{ 'background-color': 'white', 'padding': '1.5rem', 'border-radius': '0.5rem' }">
 
@@ -34,57 +34,24 @@
       nueva vacante militar</p>
   </div>
   <!-- create-job-form.component.html -->
-  <form [formGroup]="form" (ngSubmit)="onSubmit()" class="space-y-6">
-    <div class="border-2 border-dashed border-gray-300 rounded-lg p-6">
-      <label class="block font-medium mb-2">Logo de la Institución</label>
-      <ng-container *ngIf="logoPreview; else uploadBlock">
-        <div class="mt-2 relative inline-block">
-          <img [src]="logoPreview" alt="Logo preview"
-            class="h-20 w-20 object-contain border rounded" />
-          <button type="button" (click)="removeLogo()"
-            class="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1 hover:bg-red-600">
-            ✕
-          </button>
-        </div>
-      </ng-container>
-      <ng-template #uploadBlock>
-        <div class="mt-2">
-          <label
-            class="cursor-pointer inline-flex items-center px-4 py-2 border border-gray-300 rounded-md bg-white hover:bg-gray-50">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2"
-              viewBox="0 0 24 24" fill="none" stroke="currentColor"
-              stroke-width="2"><path
-                d="M4 16v1a2 2 0 002 2h12a2 2 0 002-2v-1" /><path
-                d="M12 12v9m0-9l-3 3m3-3l3 3M12 3v4" /></svg>
-            Subir Logo
-            <input type="file" accept="image/*"
-              (change)="handleLogoChange($event)" class="hidden" />
-          </label>
-        </div>
-      </ng-template>
-    </div>
+  <form [formGroup]="vacanteForm" (ngSubmit)="onSubmit()" class="space-y-6">
 
     <!-- Agrega los campos del formulario aquí -->
     <div class="grid md:grid-cols-2 gap-4">
       <label class="block">
         <span class="font-medium">Título de la Posición *</span>
-        <input type="text" formControlName="title"
+        <input type="text" formControlName="titulo"
           placeholder="Ej: Especialista en Ciberseguridad"
           class="mt-1 block w-full rounded border-gray-300" />
       </label>
 
       <label class="block">
         <span class="font-medium">Institución *</span>
-        <select formControlName="institution"
+        <select formControlName="institucionId"
           class="mt-1 block w-full rounded border-gray-300">
-          <option value>Seleccionar institución</option>
-          <option value="ejercito-rd">Ejército de República Dominicana</option>
-          <option value="armada-rd">Armada de República Dominicana</option>
-          <option value="fuerza-aerea-rd">Fuerza Aérea Dominicana</option>
-          <option value="policia-nacional">Policía Nacional</option>
-          <option value="ministerio-defensa">Ministerio de Defensa</option>
-          <option value="cesfront">CESFRONT</option>
-          <option value="direccion-c5i">Dirección C5i</option>
+          <option [value]="null" disabled>Seleccionar institución</option>
+          <option *ngFor="let item of institutions" [value]="item.id">{{item.codigoNombre}}</option>
+
         </select>
       </label>
     </div>
@@ -92,42 +59,44 @@
     <div class="grid md:grid-cols-3 gap-4">
       <label class="block">
         <span class="font-medium">Ubicación *</span>
-        <select formControlName="location"
+        <select formControlName="provinciaId"
           class="mt-1 block w-full rounded border-gray-300">
-          <option value>Seleccionar provincia</option>
-          <option value="distrito-nacional">Distrito Nacional</option>
-          <option value="santo-domingo">Santo Domingo</option>
-          <option value="santiago">Santiago</option>
-          <option value="la-altagracia">La Altagracia</option>
-          <option value="puerto-plata">Puerto Plata</option>
+          <option  [value]="null" disabled>Seleccionar provincia</option>
+          <option *ngFor="let item of provinciaList" [value]="item.id">{{item.nombre}}</option>
+
         </select>
       </label>
 
       <label class="block">
         <span class="font-medium">Tipo de Contrato *</span>
-        <select formControlName="type"
+        <select formControlName="tipoContrato"
           class="mt-1 block w-full rounded border-gray-300">
-          <option value>Tipo de empleo</option>
-          <option value="full-time">Tiempo Completo</option>
+          <option [value]="null" disabled>Tipo de empleo</option>
+          <option *ngFor="let tipo of tipoContratoOpciones"
+            [value]="tipo.value">
+            {{ tipo.label }}
+          </option>
+          <!-- <option value="full-time">Tiempo Completo</option>
           <option value="part-time">Medio Tiempo</option>
           <option value="contract">Contrato</option>
-          <option value="temporary">Temporal</option>
+          <option value="temporary">Temporal</option> -->
         </select>
       </label>
 
       <label class="block">
         <span class="font-medium">Categoría *</span>
-        <select formControlName="category"
+        <select formControlName="categoriaId"
           class="mt-1 block w-full rounded border-gray-300">
-          <option value>Categoría de puesto</option>
-          <option value="operaciones">Operaciones Especiales</option>
-          <option value="inteligencia">Inteligencia y
+          <option [value]="null" disabled>Categoría de puesto</option>
+          <option *ngFor="let item of vacanteCategoriaList"
+            [value]="item.id">{{item.nombre}}</option>
+          <!-- <option value="inteligencia">Inteligencia y
             Contrainteligencia</option>
           <option value="seguridad-fronteriza">Seguridad Fronteriza</option>
           <option value="ciberseguridad">Ciberseguridad</option>
           <option value="administracion">Administración</option>
           <option value="logistica">Logística</option>
-          <option value="comunicaciones">Comunicaciones</option>
+          <option value="comunicaciones">Comunicaciones</option> -->
         </select>
       </label>
     </div>
@@ -135,14 +104,14 @@
     <div class="grid md:grid-cols-2 gap-4">
       <label class="block">
         <span class="font-medium">Salario/Compensación</span>
-        <input type="text" formControlName="salary"
+        <input type="text" formControlName="salarioCompensacion"
           placeholder="Ej: RD$85,000 - RD$120,000 mensual"
           class="mt-1 block w-full rounded border-gray-300" />
       </label>
 
       <label class="block">
         <span class="font-medium">Fecha Límite de Aplicación</span>
-        <input type="date" formControlName="deadline"
+        <input type="date" formControlName="fechaLimiteAplicacion"
           class="mt-1 block w-full rounded border-gray-300" />
       </label>
     </div>
@@ -150,14 +119,14 @@
     <div class="grid md:grid-cols-2 gap-4">
       <label class="block">
         <span class="font-medium">Horario de Trabajo</span>
-        <input type="text" formControlName="workSchedule"
+        <input type="text" formControlName="horarioTrabajo"
           placeholder="Ej: Lunes a Viernes 8:00 AM - 5:00 PM"
           class="mt-1 block w-full rounded border-gray-300" />
       </label>
 
       <label class="block">
         <span class="font-medium">Duración del Contrato</span>
-        <input type="text" formControlName="contractDuration"
+        <input type="text" formControlName="duracionContrato"
           placeholder="Ej: Indefinido, 1 año, 2 años"
           class="mt-1 block w-full rounded border-gray-300" />
       </label>
@@ -165,21 +134,21 @@
 
     <label class="block">
       <span class="font-medium">Descripción del Puesto *</span>
-      <textarea formControlName="description"
+      <textarea formControlName="descripcionPuesto"
         placeholder="Describa las responsabilidades y objetivos del puesto..."
         class="mt-1 block w-full rounded border-gray-300 min-h-[100px]"></textarea>
     </label>
 
     <label class="block">
       <span class="font-medium">Responsabilidades Específicas</span>
-      <textarea formControlName="responsibilities"
+      <textarea formControlName="responsabilidadesEspecificas"
         placeholder="Liste las responsabilidades específicas del puesto..."
         class="mt-1 block w-full rounded border-gray-300 min-h-[80px]"></textarea>
     </label>
 
     <label class="block">
       <span class="font-medium">Requisitos Generales *</span>
-      <textarea formControlName="requirements"
+      <textarea formControlName="requisitosGenerales"
         placeholder="Indique los requisitos generales: rango, experiencia básica, etc."
         class="mt-1 block w-full rounded border-gray-300 min-h-[100px]"></textarea>
     </label>
@@ -187,14 +156,14 @@
     <div class="grid md:grid-cols-2 gap-4">
       <label class="block">
         <span class="font-medium">Educación Requerida</span>
-        <textarea formControlName="education"
+        <textarea formControlName="educacionRequerida"
           placeholder="Ej: Licenciatura en Ingeniería, Maestría en Seguridad..."
           class="mt-1 block w-full rounded border-gray-300 min-h-[80px]"></textarea>
       </label>
 
       <label class="block">
         <span class="font-medium">Experiencia Requerida</span>
-        <textarea formControlName="experience"
+        <textarea formControlName="experienciaRequerida"
           placeholder="Ej: Mínimo 5 años en operaciones militares..."
           class="mt-1 block w-full rounded border-gray-300 min-h-[80px]"></textarea>
       </label>
@@ -202,21 +171,22 @@
 
     <label class="block">
       <span class="font-medium">Habilidades y Competencias</span>
-      <textarea formControlName="skills"
+      <textarea formControlName="habilidadesCompetencias"
         placeholder="Liste las habilidades técnicas y competencias necesarias..."
         class="mt-1 block w-full rounded border-gray-300 min-h-[80px]"></textarea>
     </label>
 
     <label class="block">
       <span class="font-medium">Beneficios y Compensaciones</span>
-      <textarea formControlName="benefits"
+      <textarea formControlName="beneficiosCompensaciones"
         placeholder="Describa los beneficios adicionales: seguro médico, bonificaciones, etc."
         class="mt-1 block w-full rounded border-gray-300 min-h-[80px]"></textarea>
     </label>
 
     <label class="block">
       <span class="font-medium">Información de Contacto *</span>
-      <textarea formControlName="contact" placeholder="Tel: 829-462-7091
+      <textarea formControlName="informacionContacto"
+        placeholder="Tel: 829-462-7091
 Email: rrhh@institucion.gob.do
 Dirección: Ave. 27 de Febrero, Distrito Nacional"
         class="mt-1 block w-full rounded border-gray-300 min-h-[80px]"></textarea>
@@ -225,7 +195,7 @@ Dirección: Ave. 27 de Febrero, Distrito Nacional"
     <div class="flex justify-end space-x-2 pt-6 border-t">
       <button type="button"
         class="border border-gray-300 px-4 py-2 rounded">Cancelar</button>
-      <button type="submit"
+      <button type="button" (click)="onSubmit()"
         class="bg-military-green hover:bg-green-700 text-white px-4 py-2 rounded">
         Publicar Vacante
       </button>

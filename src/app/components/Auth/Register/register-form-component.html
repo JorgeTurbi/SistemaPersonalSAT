@@ -20,7 +20,7 @@
             </label>
             <label class="flex items-center gap-2">
 
-              <input type="radio" value="I" class="accent-military-gold"
+              <input type="radio" value="V" class="accent-military-gold"
                 formControlName="userType" name="userType" />
               <span>Institucional (Publico vacantes)</span>
             </label>
@@ -63,13 +63,13 @@
         </div>
 
         <!-- Nombre completo -->
-        <div>
+        <!-- <div>
           <label class="block text-sm font-medium mb-1" for="fullName">Nombre
             completo</label>
           <input id="fullName" formControlName="fullName" name="fullName"
             type="text"
             class="w-full border rounded px-3 py-2" />
-        </div>
+        </div> -->
 
         <!-- Email -->
         <div>
@@ -86,7 +86,7 @@
           <label class="block text-sm font-medium mb-1" for="institution">Nombre
             de la institución</label>
           <select id="institution" name="institution"
-            formControlName="institution" (change)="onInstitutionChange()"
+            formControlName="institutionId" (change)="onInstitutionChange()"
             class="w-full border rounded px-3 py-2">
             <option value disabled selected>Selecciona una institución</option>
             <option *ngFor="let inst of institutions" [value]="inst.id">
@@ -118,7 +118,7 @@
           <label class="block text-sm font-medium mb-1"
             for="departamento">Departamento</label>
           <select id="departamento" name="departamento"
-            formControlName="departamento"
+            formControlName="departamentoId"
             class="w-full border rounded px-3 py-2">
             <option value disabled selected>Selecciona un departamento</option>
             <option *ngFor="let dept of departamentos" [value]="dept.id">{{
@@ -130,7 +130,7 @@
           <label class="block text-sm font-medium mb-1"
             for="password">Contraseña</label>
           <div class="relative">
-            <input id="password" formControlName="password" name="password"
+            <input id="password" formControlName="passwordHash" name="password"
               [type]="showPassword ? 'text' : 'password'"
               class="w-full border rounded px-3 py-2" />
             <button

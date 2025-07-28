@@ -10,3 +10,4 @@ export interface UserDto {
   passwordHash: string;
   cedula: string;
 }
+

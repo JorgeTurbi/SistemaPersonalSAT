@@ -5,6 +5,8 @@ import { IResponseTokenDataService } from '../Auth/Register/InterfaceRegister/Re
 import { Observable } from 'rxjs';
 import { environment } from '../../../Enviroments/enviroment';
 import { ConsultaJceResponse } from '../../Interface/ConsultaJceResponse';
+import { DataResponse } from '../../Interface/Response';
+import { IProvincia } from '../../Interface/IProvincia';
 
 @Injectable({
   providedIn: 'root'
@@ -22,5 +24,10 @@ export class ServiciosGenerales {
   getUserData(cedula: string): Observable<ConsultaJceResponse> {
     console.log("===>", cedula);
     return this.http.get<ConsultaJceResponse>(`${environment.dataUrl}/ConsultaJCE?Cedula=${cedula}`);
+  }
+
+  getProvincias():Observable<DataResponse<IProvincia[]>>
+  {
+    return this.http.get<DataResponse<IProvincia[]>>(`${environment.apiUrl}/Provincia`);
   }
 }

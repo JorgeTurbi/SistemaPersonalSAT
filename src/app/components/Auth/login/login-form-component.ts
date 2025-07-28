@@ -35,34 +35,36 @@ export class LoginFormComponent implements OnInit {
   }
 
   submitForm() {
-      console.log(this.loginForm.value);
+
     if (!this.loginForm.valid) {
 
-       this.messageService.add({ severity: 'Info', summary: 'Por favor, completa todos los campos.' });
+      this.messageService.add({ severity: 'Info', summary: 'Por favor, completa todos los campos.' });
       return;
     }
-      this.LogInUser = this.loginForm.value;
-      this.auth.authLogin(this.LogInUser).subscribe({
-        next: (res: DataResponse<LoginData>) => {
+    this.LogInUser = this.loginForm.value;
+    this.auth.authLogin(this.LogInUser).subscribe({
+      next: (res: DataResponse<LoginData>) => {
 
 
-          if (res.success) {
-            localStorage.setItem('token', res.data.token);
-            localStorage.setItem('user', JSON.stringify(res.data.user));
+        if (res.success) {
+          localStorage.setItem('token', res.data.token);
+          localStorage.setItem('user', JSON.stringify(res.data.user));
 
-            this.messageService.add({ severity: 'success', summary: "Login Exitoso", detail: res.message });
-            this.router.navigate(['/']);
-          }
-          else{
-            this.messageService.add({ severity: 'error', summary: "Error intentando hacer login", detail: res.message });
-              console.log(`Error: ${res.message}`);
-          }
+          this.messageService.add({ severity: 'success', summary: "Login Exitoso", detail: res.message });
+          this.messageService.add({ severity: 'info', summary: "Information", detail: "Redirigiendo" });
 
-        },
-        error: (err:any) => {
-          this.messageService.add({ severity: 'error', summary: 'Error', detail: err.error?.message || 'Error de autenticación' });
+          this.router.navigate(['/']);
         }
-      });
+        else {
+          this.messageService.add({ severity: 'error', summary: "Error intentando hacer login", detail: res.message });
+          console.log(`Error: ${res.message}`);
+        }
+
+      },
+      error: (err: any) => {
+        this.messageService.add({ severity: 'error', summary: 'Error', detail: err || 'Error de autenticación' });
+      }
+    });
 
 
   }

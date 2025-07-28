@@ -1,6 +1,6 @@
 
 import { CommonModule } from '@angular/common';
-import { Component, inject, ViewEncapsulation } from '@angular/core';
+import { Component, inject, OnInit, ViewEncapsulation } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { LucideAngularModule, Search, Filter, MapPin, Building, Briefcase } from 'lucide-angular';
 import { MessageService } from 'primeng/api';
@@ -10,63 +10,147 @@ import { VacanteListComponent } from '../VacancyList/vacante-list';
 import { Dialog } from 'primeng/dialog';
 import { ButtonModule } from 'primeng/button';
 import { StyleClassModule } from 'primeng/styleclass';
+import { ITipoContrato } from './InterfaceVacantes/ivacante';
+import { VacanteServices } from './ServicesVacantes/vacante-services';
+import { ICategoriaVacante } from './InterfaceVacantes/ICateogriaVacante';
+import { DataResponse } from '../../Interface/Response';
+import { ServiciosGenerales } from '../GeneralServices/servicios-generales';
+import { IProvincia } from '../../Interface/IProvincia';
+import { InstitucionService } from '../Services/institucion-service';
+import { IInstitucion } from '../../Interface/IInstitucion';
+import { IProfile } from '../../Interface/IProfile';
 
 
 @Component({
   selector: 'app-vacante',
   standalone: true,
-  imports: [CommonModule, LucideAngularModule, FormsModule,ReactiveFormsModule, ToastModule, FiltroComponent, VacanteListComponent,Dialog,ButtonModule,StyleClassModule],
+  imports: [CommonModule, LucideAngularModule, FormsModule, ReactiveFormsModule, ToastModule, FiltroComponent, VacanteListComponent, Dialog, ButtonModule, StyleClassModule],
   templateUrl: './vacante.component.html',
   styleUrl: './vacante.component.css',
   providers: [MessageService],
   encapsulation: ViewEncapsulation.None, // opcional
 })
-export class VacanteComponent {
+export class VacanteComponent implements OnInit {
+  // variables
   Briefcase = Briefcase;
-    form: FormGroup;
+  vacanteForm!: FormGroup;
   logoPreview: string | null = null;
   isCreateJobOpen = false;
-     visible: boolean = false;
-  constructor(private fb: FormBuilder) {
-    this.form = this.fb.group({
-      title: ['', Validators.required],
-      institution: ['', Validators.required],
-      location: ['', Validators.required],
-      type: ['', Validators.required],
-      category: ['', Validators.required],
-      salary: [''],
-      deadline: [''],
-      workSchedule: [''],
-      contractDuration: [''],
-      description: ['', Validators.required],
-      responsibilities: [''],
-      requirements: ['', Validators.required],
-      education: [''],
-      experience: [''],
-      skills: [''],
-      benefits: [''],
-      contact: ['', Validators.required]
+  visible: boolean = false;
+  vacanteCategoriaList: ICategoriaVacante[] = [];
+  tipoContratoOpciones: { label: string; value: number }[] = [];
+  provinciaList: IProvincia[] = [];
+  institutions: IInstitucion[] = [];
+  selectedInstitution: string = '';
+  perfilUsuario?:IProfile;
+  //constructor
+  constructor(
+    private fb: FormBuilder,
+    private vacanteService: VacanteServices,
+    private messageService: MessageService,
+    private servicioGeneral: ServiciosGenerales,
+    private institucionService: InstitucionService
+  ) { }
+  ngOnInit(): void {
+    this.getCategorias();
+    this.cargarTipoContrato();
+    this.provincias();
+    this.getListInstitucion();
+    const data = localStorage.getItem('user');
+if (data) {
+    this.perfilUsuario= JSON.parse(data);
+
+}
+    // inicializacion del formulario
+    this.vacanteForm = this.fb.group({
+      userId: [this.perfilUsuario?.id, Validators.required],
+      institucionId: [this.perfilUsuario?.id, Validators.required],
+      provinciaId: [null, Validators.required],
+      categoriaId: [null, Validators.required],
+      titulo: ['', Validators.required],
+      tipoContrato: [ITipoContrato.TiempoCompleto, Validators.required],
+      salarioCompensacion: [''],
+      fechaLimiteAplicacion: [''],
+      horarioTrabajo: [''],
+      duracionContrato: [''],
+      descripcionPuesto: ['', Validators.required],
+      requisitosGenerales: ['', Validators.required],
+      responsabilidadesEspecificas: [''],
+      educacionRequerida: [''],
+      experienciaRequerida: [''],
+      habilidadesCompetencias: [''],
+      beneficiosCompensaciones: [''],
+      informacionContacto: ['', Validators.required],
+      isActive: [true, Validators.required]
     });
+
   }
-    showDialog() {
-      if (!this.visible) {
-        this.visible = true;
-        console.log('Dialog opened',this.visible);
+
+
+  getListInstitucion(): void {
+
+    this.institucionService.getInstituciones().subscribe({
+      next: (response: DataResponse<IInstitucion[]>) => {
+        if (response.success && response.data) {
+          this.institutions = response.data.filter(i => i.id == 12);
+          if (this.institutions.length > 0) {
+            this.selectedInstitution = this.institutions[0].id?.toString()!;
+          }
+        } else {
+          this.messageService.add({ severity: 'warn', summary: 'Advertencia', detail: 'No se encontraron instituciones' });
+        }
+      },
+      error: (err) => {
+        const msg = err?.error?.message || 'Error al obtener instituciones';
+        this.messageService.add({ severity: 'error', summary: 'Error', detail: msg });
+        console.error('Error fetching institutions:', err);
+      }
+    });
+
+
+
+
+
+  }
+
+  cargarTipoContrato(): void {
+    const enumObj = ITipoContrato;
+    this.tipoContratoOpciones = Object.keys(enumObj)
+      .filter(key => isNaN(Number(key))) // solo claves string
+      .map(key => ({
+        label: this.humanizar(key),
+        value: enumObj[key as keyof typeof ITipoContrato]
+      }));
+  }
+
+  private humanizar(text: string): string {
+    return text.replace(/([a-z])([A-Z])/g, '$1 $2'); // Ej: TiempoCompleto -> Tiempo Completo
+  }
+  //  tipoContratoOpciones():void {
+  //   return Object.keys(this.tipoContratoEnum)
+  //     .filter(key => !isNaN(Number(this.tipoContratoEnum[key as any])))
+  //     .map(key => ({
+  //       label: key,
+  //       value: this.tipoContratoEnum[key as keyof typeof ITipoContrato]
+  //     }));
+  // }
+  showDialog() {
+    if (!this.visible) {
+      this.visible = true;
+      console.log('Dialog opened', this.visible);
     }
   }
-
-
-
-
 
   onSubmit(): void {
-    if (this.form.valid) {
-      console.log(this.form.value);
+      console.log("sin validar",this.vacanteForm.value);
+    if (this.vacanteForm.valid) {
+      console.log("FORMULARIO VALIDADO==>",this.vacanteForm.value);
       // aquí iría la lógica para enviar la vacante
     }
+          console.log("no validado",this.vacanteForm.value);
   }
 
-   handleLogoChange(event: Event): void {
+  handleLogoChange(event: Event): void {
     const file = (event.target as HTMLInputElement).files?.[0];
     if (file) {
       const reader = new FileReader();
@@ -76,6 +160,42 @@ export class VacanteComponent {
       reader.readAsDataURL(file);
     }
   }
+
+  provincias(): void {
+    this.servicioGeneral.getProvincias().subscribe({
+      next: (res: DataResponse<IProvincia[]>) => {
+        if (res.success) {
+          this.provinciaList = res.data;
+          this.messageService.add({ severity: 'info', summary: "Information", detail: "Obteniendo Provincias" });
+
+        }
+        this.messageService.add({ severity: 'warn', summary: 'Warning', detail: "No se Encontraron Registros" });
+
+      },
+      error: (err: any) => {
+        console.error(err);
+      }
+    });
+  }
+
+  getCategorias() {
+    this.vacanteService.getCategoriesVacante().subscribe({
+      next: (res: DataResponse<ICategoriaVacante[]>) => {
+        if (res.success) {
+          this.vacanteCategoriaList = res.data;
+          this.messageService.add({ severity: 'info', summary: "Information", detail: "Obteniendo Categorias Vacantes" });
+
+        }
+        this.messageService.add({ severity: 'warn', summary: 'Warning', detail: "No se Encontraron Registros" });
+
+      },
+      error: (err: any) => {
+        this.messageService.add({ severity: 'error', summary: 'Error', detail: err.error?.message || 'Error de autenticación' });
+
+      }
+    });
+  }
+
 
   removeLogo(): void {
     this.logoPreview = null;

@@ -40,7 +40,7 @@ export class RegisterFormComponent implements OnInit {
   registerForm!: FormGroup;
   showPassword: boolean = false;
   showConfirmPassword: boolean = false;
-  regUser!:UserDto;
+  regUser!: UserDto;
 
   constructor(private auth: AuthService,
     private serviceGeneral: ServiciosGenerales,
@@ -51,17 +51,15 @@ export class RegisterFormComponent implements OnInit {
     this.getInstitutions();
     this.getdepartamentos();
     this.registerForm = this.fb.group({
-      id:[''],
       userType: ['P', Validators.required],
       cedula: ['', Validators.required],
       nombres: ['', Validators.required],
       apellidos: ['', Validators.required],
-      fullName: ['', Validators.required],
-      usuario:['',Validators.required],
+      usuario: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
-      institution: [null, Validators.required],
-      departamento: [null, Validators.required],
-      password: ['', Validators.required],
+      institutionId: [null, Validators.required],   // <-- ⚠️ nombre correcto
+      departamentoId: [null, Validators.required],  // <-- ⚠️ nombre correcto
+      passwordHash: ['', Validators.required]       // <-- ⚠️ nombre correcto
 
 
     }
@@ -71,14 +69,14 @@ export class RegisterFormComponent implements OnInit {
     );
 
     // 👉 Escucha cambios y actualiza fullName automáticamente
-    this.registerForm.get('nombres')?.valueChanges.subscribe(() => {
-      this.updateFullName();
-    });
+    // this.registerForm.get('nombres')?.valueChanges.subscribe(() => {
+    //   this.updateFullName();
+    // });
 
-    this.registerForm.get('apellidos')?.valueChanges.subscribe(() => {
-      this.updateFullName();
-    });
-       this.registerForm.get('email')?.valueChanges.subscribe(() => {
+    // this.registerForm.get('apellidos')?.valueChanges.subscribe(() => {
+    //   this.updateFullName();
+    // });
+    this.registerForm.get('email')?.valueChanges.subscribe(() => {
       this.updateUsuario();
     });
 
@@ -100,8 +98,8 @@ export class RegisterFormComponent implements OnInit {
 
     this.registerForm.get('fullName')?.setValue(fullName, { emitEvent: false });
   }
-  updateUsuario():void{
-       const correo = this.registerForm.get('email')?.value || '';
+  updateUsuario(): void {
+    const correo = this.registerForm.get('email')?.value || '';
 
 
     this.registerForm.get('usuario')?.setValue(correo, { emitEvent: false });
@@ -151,32 +149,31 @@ export class RegisterFormComponent implements OnInit {
       next: (res: IResponseTokenDataService) => {
         if (res.token != null || res.token != undefined) {
           localStorage.setItem('dataToken', res.token);
-            const cedula:string = this.registerForm.get("cedula")?.value;
-    if(cedula==null || cedula== undefined)
-    {
-   this.messageService.add({ severity: 'info', summary: 'Information', detail:  'Digite su numero de cédula' });
-    }
-    console.log('Buscando información para la cédula:', cedula);
-    const token = localStorage.getItem("dataToken");
-    if (token != null) {
-      this.serviceGeneral.getUserData(cedula).subscribe({
-        next: (res: ConsultaJceResponse) => {
-          if (res.nombres != null || res.nombres != undefined) {
-            this.registerForm.patchValue({
+          const cedula: string = this.registerForm.get("cedula")?.value;
+          if (cedula == null || cedula == undefined) {
+            this.messageService.add({ severity: 'info', summary: 'Information', detail: 'Digite su numero de cédula' });
+          }
+          console.log('Buscando información para la cédula:', cedula);
+          const token = localStorage.getItem("dataToken");
+          if (token != null) {
+            this.serviceGeneral.getUserData(cedula).subscribe({
+              next: (res: ConsultaJceResponse) => {
+                if (res.nombres != null || res.nombres != undefined) {
+                  this.registerForm.patchValue({
 
-              cedula: res.cedula,
-              nombres: res.nombres,
-              apellidos: res.apellido1 + " " + res.apellido2,
-              fullName: res.nombres + "  " + res.apellido1 + " " + res.apellido2
+                    cedula: res.cedula,
+                    nombres: res.nombres,
+                    apellidos: res.apellido1 + " " + res.apellido2,
+                    fullName: res.nombres + "  " + res.apellido1 + " " + res.apellido2
+                  });
+                }
+              },
+              error: (err: any) => {
+
+                this.messageService.add({ severity: 'error', summary: 'Error', detail: err.error?.message || 'Error de autenticación' });
+              }
             });
           }
-        },
-        error: (err: any) => {
-          console.log("mierror==>",err);
-          this.messageService.add({ severity: 'error', summary: 'Error', detail: err.error?.message || 'Error de autenticación' });
-        }
-      });
-    }
         }
       },
       error: (err: any) => {
@@ -191,31 +188,45 @@ export class RegisterFormComponent implements OnInit {
 
 
   submitForm() {
-   console.log(`==>`,this.registerForm.value);
+    console.log(`==>`, this.registerForm.value);
     if (this.registerForm.invalid) {
-             console.log(`registro--0`);
+
       this.messageService.add({ severity: 'error', summary: 'Error', detail: 'registros invalidos' });
       this.registerForm.markAllAsTouched();
 
       return;
 
     }
-    this.regUser=this.registerForm.value;
+    this.regUser = this.registerForm.value;
     this.auth.registerUser(this.regUser).subscribe({
-      next:(res:DataResponse<boolean>)=>{
-        if(res.success)
-        {
+      next: (res: DataResponse<boolean>) => {
+        if (res.success) {
 
-            this.messageService.add({ severity: 'success', summary: "Registro", detail: res.message });
-            this.messageService.add({ severity: 'info', summary: "Information", detail: "Redigiriendo" });
-            return this.router.navigateByUrl("/login")
+          this.messageService.add({ severity: 'success', summary: "Registro", detail: res.message });
+          this.messageService.add({ severity: 'info', summary: "Information", detail: "Redigiriendo" });
+          return this.router.navigateByUrl("/login")
         }
-      return  this.messageService.add({ severity: 'error', summary: 'Error', detail: res.message });
-          console.log(`registro1`);
+        return this.messageService.add({ severity: 'error', summary: 'Error', detail: res.message });
+          console.log("==>+++",res.message )
+
       },
-        error: (err:any) => {
-            this.messageService.add({ severity: 'error', summary: 'Error', detail: err.message });
-               console.log(`registro2`);
+      error: (err: any) => {
+        console.error('Error completo:', err);
+
+        if (err.error?.errors) {
+          const errores = Object.entries(err.error.errors)
+            .map(([field, messages]) => `${field}: ${(messages as string[]).join(', ')}`)
+            .join(' | ');
+
+          this.messageService.add({ severity: 'error', summary: 'Errores de validación', detail: errores });
+          console.log("==>12",errores)
+        } else if (err.error?.title) {
+          this.messageService.add({ severity: 'error', summary: 'Error', detail: err.error.title });
+               console.log("==>23",err.error.title)
+        } else {
+          this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Error inesperado' });
+        }
+
       }
     });
     console.log(this.regUser);
