@@ -158,11 +158,11 @@
       <div formArrayName="education" class="max-h-[300px] overflow-y-auto border rounded p-2">
         <label class="block text-sm font-medium mb-2">Educación</label>
         <div *ngFor="let edu of education.controls; let i = index" [formGroupName]="i" class="border p-3 mb-2 rounded bg-white">
-          <input placeholder="Título / Carrera" formControlName="title" class="w-full mb-2 border rounded px-3 py-1" />
+          <input placeholder="Título / Carrera" formControlName="degree" class="w-full mb-2 border rounded px-3 py-1" />
           <input placeholder="Institución" formControlName="institution" class="w-full mb-2 border rounded px-3 py-1" />
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
-            <input type="text" placeholder="Año inicio" formControlName="startYear" class="border rounded px-3 py-1 w-full" />
-            <input type="text" placeholder="Año fin o 'En curso'" formControlName="endYear" class="border rounded px-3 py-1 w-full" />
+            <input type="text" placeholder="Año inicio" formControlName="startDate" class="border rounded px-3 py-1 w-full" />
+            <input type="text" placeholder="Año fin o 'En curso'" formControlName="endDate" class="border rounded px-3 py-1 w-full" />
           </div>
           <input type="file" accept="application/pdf" class="mt-2 w-full" (change)="handleEducationPdf($event, i)" />
           <button type="button" class="text-red-600 mt-1 w-full sm:w-auto" (click)="removeEducation(i)">Eliminar</button>

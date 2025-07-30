@@ -1,4 +1,6 @@
 export interface IProfileMilitar {
+  id?:number;
+  userId: number;
   profileImage?: string;
   name: string;
   cedula?: string;
@@ -27,17 +29,17 @@ export interface IProfileMilitar {
 }
 
 export interface IExperience {
-  position?: string;
   company?: string;
-  startDate?: string;            // formato ISO: 'YYYY-MM-DD'
-  endDate?: string;              // formato ISO: 'YYYY-MM-DD'
+  position?: string;
+  startDate?: string;  // formato ISO: 'YYYY-MM-DD'
+  endDate?: string;
   description?: string;
 }
 
 export interface IEducation {
-  title?: string;
   institution?: string;
-  startYear?: string;            // año o texto "En curso"
-  endYear?: string;
-  certificatePdf?: string;       // base64 opcional
+  degree?: string;
+  startDate?: string;  // antes tenías startYear
+  endDate?: string;    // antes tenías endYear
+  certificatePdf?: string;      // base64 opcional
 }

@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, RESPONSE_INIT } from '@angular/core';
 import { FormBuilder, FormGroup, FormArray, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Dialog } from 'primeng/dialog';
 import { IInstitucionMilitar, IRango } from '../../Interface/IGenerico';
@@ -28,6 +28,8 @@ export class EditProfileDialogComponent implements OnInit {
   InstitucionMilitarList: IInstitucionMilitar[] = [];
 perfilUsuario?: IProfile;
 crearPerfilMilitar!:IProfileMilitar;
+Aplicante:IProfileMilitar={} as IProfileMilitar;
+
   estadosCiviles: string[] = ['Soltero', 'Casado', 'Divorciado', 'Viudo'];
 
   constructor(
@@ -43,7 +45,6 @@ crearPerfilMilitar!:IProfileMilitar;
       this.perfilUsuario = JSON.parse(data);
 
     }
-
     this.getRangosList();
     this.getInstitucionList();
     this.form = this.fb.group({
@@ -132,6 +133,7 @@ crearPerfilMilitar!:IProfileMilitar;
       endDate: [''],
       description: ['']
     }));
+
   }
 
 
@@ -154,12 +156,13 @@ crearPerfilMilitar!:IProfileMilitar;
   /** Métodos para educación */
   addEducation() {
     this.education.push(this.fb.group({
-      title: [''],
+      degree: [''],
       institution: [''],
-      startYear: [''],
-      endYear: [''],
+      startDate: [''],
+      endDate: [''],
       certificatePdf: [''] // base64 opcional
     }));
+
   }
 
   removeEducation(index: number) {
@@ -199,6 +202,19 @@ crearPerfilMilitar!:IProfileMilitar;
     if (this.form.valid) {
       console.log('✅ Perfil:', this.form.value);
       this.crearPerfilMilitar=this.form.value;
+
+      this.crearPerfilMilitar.experience = this.crearPerfilMilitar.experience.map(e => ({
+  ...e,
+  startDate: e.startDate ? new Date(e.startDate).toISOString() : undefined,
+  endDate: e.endDate ? new Date(e.endDate).toISOString() : undefined
+}));
+
+this.crearPerfilMilitar.education = this.crearPerfilMilitar.education.map(e => ({
+  ...e,
+  startDate: e.startDate ? new Date(e.startDate).toISOString() : undefined,
+  endDate: e.endDate ? new Date(e.endDate).toISOString() : undefined
+}));
+
             this.servicioGenerico.createAplicacion(this.crearPerfilMilitar).subscribe({
               next:(res:DataResponse<boolean>)=>{
                 if(res.success)

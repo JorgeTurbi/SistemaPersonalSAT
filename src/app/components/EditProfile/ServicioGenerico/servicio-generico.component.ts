@@ -23,12 +23,12 @@ export class ServicioGenericoComponent {
     return this.http.get<DataResponse<IInstitucionMilitar[]>>(`${environment.apiUrl}/Generico/GetInstitucionesMilitares`)
   }
 
-  createAplicacion(dato:IProfileMilitar):Observable<DataResponse<boolean>>
+  createAplicacion(crearPerfilMilitar:IProfileMilitar):Observable<DataResponse<boolean>>
   {
-    return this.http.post<DataResponse<boolean>>(`${environment.apiUrl}/Aplicante/create`,dato);
+    return this.http.post<DataResponse<boolean>>(`${environment.apiUrl}/Aplicante/create`,crearPerfilMilitar);
   }
     GetAplicacion(dato:number):Observable<DataResponse<IProfileMilitar>>
   {
-    return this.http.get<DataResponse<IProfileMilitar>>(`${environment.apiUrl}/Aplicante/${dato}`);
+    return this.http.get<DataResponse<IProfileMilitar>>(`${environment.apiUrl}/Aplicante/GetById?UserId=${dato}`);
   }
 }

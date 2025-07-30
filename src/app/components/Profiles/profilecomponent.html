@@ -29,10 +29,10 @@
   <!-- Contenido del Tab: Perfil -->
   <div *ngIf="activeTab === 'profile'" class="bg-white rounded-lg shadow overflow-hidden">
     <div class="bg-[#001F3F] text-white p-6 flex items-center gap-4">
-      <img src="/images/Herrera.png" alt="Foto de perfil" class="h-20 w-20 rounded-full border-2 border-[#D4AF37]" />
+      <img [src]="Aplicante.profileImage" alt="Foto de perfil" class="h-20 w-20 rounded-full border-2 border-[#D4AF37]" />
       <div>
-        <h2 class="text-2xl font-bold">Misael Zacarías G. Herrera Vásquez</h2>
-        <p>Capitán de Corbeta • Especialista en Operaciones Navales y Ciberseguridad</p>
+        <h2 class="text-2xl font-bold">{{Aplicante.name}}</h2>
+        <p>{{Aplicante.rank}} • {{Aplicante.specialization}}</p>
       </div>
     </div>
 
@@ -41,12 +41,12 @@
       <div>
         <h3 class="text-lg font-semibold mb-2">📌 Información Personal</h3>
         <div class="grid md:grid-cols-2 gap-4">
-          <p><strong>País/Nacionalidad:</strong> República Dominicana/Dominicano</p>
-          <p><strong>Fecha de Nacimiento:</strong> 03/03/1985</p>
-          <p><strong>Estado Civil:</strong> Casado</p>
-          <p><strong>Teléfono:</strong> 829-745-2199</p>
-          <p><strong>Correo:</strong> {{"misaelherrera03@gmail.com"}}</p>
-          <p><strong>Dirección:</strong> Santo Domingo, República Dominicana</p>
+          <p><strong>País/Nacionalidad:</strong>{{Aplicante.country}}</p>
+          <p><strong>Fecha de Nacimiento:</strong> {{Aplicante.birthDate | date:'dd/MM/yyyy'}}</p>
+          <p><strong>Estado Civil:</strong>{{Aplicante.maritalStatus}}</p>
+          <p><strong>Teléfono:</strong>{{Aplicante.phone}}</p>
+          <p><strong>Correo:</strong> {{Aplicante.email}}</p>
+          <p><strong>Dirección:</strong> {{Aplicante.address}}</p>
         </div>
       </div>
 
@@ -54,30 +54,15 @@
       <div>
         <h3 class="text-lg font-semibold mb-2">💼 Experiencia</h3>
         <div class="space-y-4">
-          <div>
+          <div *ngFor="let item of Aplicante.experience">
             <div class="flex justify-between font-medium">
-              <p>Subdirector Auxiliar del Director del Estado Mayor Personal</p>
-              <span>2023 - Presente</span>
+              <p>{{item.position}}</p>
+              <span>{{item.startDate | date:'yyyy'}}- {{item.endDate | date:'yyyy'}}</span>
             </div>
-            <p class="text-sm text-gray-600">Ministerio de Defensa</p>
-            <p class="text-gray-700">Supervisión y coordinación de actividades del personal del Estado Mayor...</p>
+            <p class="text-sm text-gray-600">{{item.company}}</p>
+            <p class="text-gray-700">{{item.description}}</p>
           </div>
-          <div>
-            <div class="flex justify-between font-medium">
-              <p>Ayudante del Director del Estado Mayor Personal</p>
-              <span>2021 - 2023</span>
-            </div>
-            <p class="text-sm text-gray-600">Ministerio de Defensa</p>
-            <p class="text-gray-700">Gestión administrativa y operativa del personal...</p>
-          </div>
-          <div>
-            <div class="flex justify-between font-medium">
-              <p>Comandante de Lancha de Rescate HAMAL LR-151</p>
-              <span>2018 - 2021</span>
-            </div>
-            <p class="text-sm text-gray-600">Armada de República Dominicana</p>
-            <p class="text-gray-700">Comando y control de operaciones de rescate marítimo...</p>
-          </div>
+
         </div>
       </div>
 
@@ -85,36 +70,17 @@
       <div>
         <h3 class="text-lg font-semibold mb-2">🎓 Educación</h3>
         <div class="space-y-4">
-          <div class="flex justify-between items-center">
+          <div *ngFor="let item of Aplicante.education" class="flex justify-between items-center">
             <div>
-              <p class="font-medium">Maestría en Diplomacia y Derecho Internacional</p>
-              <p class="text-sm text-gray-600">Universidad de la Tercera Edad</p>
+              <p class="font-medium">{{item.degree}}</p>
+              <p class="text-sm text-gray-600">{{item.institution}}</p>
             </div>
             <div class="flex gap-2 items-center text-sm">
-              <span>2021 (En curso)</span>
-              <button class="text-blue-600 hover:underline">📄 PDF</button>
+              <span>{{item.startDate | date:'yyyy'}}- {{item.endDate | date:'yyyy'}}</span>
+              <button class="text-blue-600 hover:underline" (click)="descargarPdf(item.certificatePdf!)">📄 PDF</button>
             </div>
           </div>
-          <div class="flex justify-between items-center">
-            <div>
-              <p class="font-medium">Licenciatura en Derecho (Magna Cum Laude)</p>
-              <p class="text-sm text-gray-600">Universidad del Caribe</p>
-            </div>
-            <div class="flex gap-2 items-center text-sm">
-              <span>2021</span>
-              <button class="text-blue-600 hover:underline">📄 PDF</button>
-            </div>
-          </div>
-          <div class="flex justify-between items-center">
-            <div>
-              <p class="font-medium">Licenciatura en Ciencias Navales (Magna Cum Laude)</p>
-              <p class="text-sm text-gray-600">Academia Naval, ARD</p>
-            </div>
-            <div class="flex gap-2 items-center text-sm">
-              <span>2006</span>
-              <button class="text-blue-600 hover:underline">📄 PDF</button>
-            </div>
-          </div>
+
         </div>
       </div>
 
@@ -122,14 +88,14 @@
       <div>
         <h3 class="text-lg font-semibold mb-2">🧠 Habilidades</h3>
         <div class="flex flex-wrap gap-2 text-xs">
-          <span class="bg-gray-200 px-3 py-1 rounded-full">Liderazgo naval</span>
-          <span class="bg-gray-200 px-3 py-1 rounded-full">Operaciones marítimas</span>
+          <span *ngFor="let item of Aplicante.skills?.split(',')" class="bg-gray-200 px-3 py-1 rounded-full">{{item}}</span>
+          <!-- <span class="bg-gray-200 px-3 py-1 rounded-full">Operaciones marítimas</span>
           <span class="bg-gray-200 px-3 py-1 rounded-full">Gestión de personal</span>
           <span class="bg-gray-200 px-3 py-1 rounded-full">Derecho internacional</span>
           <span class="bg-gray-200 px-3 py-1 rounded-full">Inglés y francés</span>
           <span class="bg-gray-200 px-3 py-1 rounded-full">Microsoft Office</span>
           <span class="bg-gray-200 px-3 py-1 rounded-full">Ciberseguridad</span>
-          <span class="bg-gray-200 px-3 py-1 rounded-full">Resolución de conflictos</span>
+          <span class="bg-gray-200 px-3 py-1 rounded-full">Resolución de conflictos</span> -->
         </div>
       </div>
     </div>
