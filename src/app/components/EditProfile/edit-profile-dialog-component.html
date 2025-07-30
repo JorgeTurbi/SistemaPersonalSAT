@@ -1,39 +1,79 @@
-<!-- edit-profile-dialog.component.html -->
-<div class="card flex justify-center">
-
-<p-dialog
-  header="Agregar Perfil"
-  [(visible)]="visible"
-  [modal]="true"
-  [dismissableMask]="true"
-  [style]="{ width: '50rem' }"
-  [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }"
-  [maximizable]="true"
-  [contentStyle]="{ 'background-color': '#f9fafb', 'padding': '2rem', 'border-radius': '0.75rem' }"
->
-    <form [formGroup]="form" (ngSubmit)="onSubmit()" class="space-y-6">
+<div class="card flex justify-center w-full max-w-full">
+  <p-dialog
+    header="Agregar Perfil"
+    [(visible)]="visible"
+    [modal]="true"
+    [dismissableMask]="true"
+    [style]="{ width: '60rem', maxWidth: '95vw' }"
+    [breakpoints]="{ '1199px': '75vw', '575px': '95vw' }"
+    [maximizable]="true"
+    [contentStyle]="{ 'background-color': '#f9fafb', 'padding': '1rem', 'border-radius': '0.75rem', 'max-height': '90vh', 'overflow-y': 'auto' }"
+  >
+    <form [formGroup]="form" class="space-y-4 w-full">
 
       <!-- Imagen de perfil -->
       <div>
         <label class="block text-sm font-medium mb-1">Foto de Perfil</label>
-        <div class="flex items-center space-x-4 mt-2">
+        <div class="flex flex-col sm:flex-row items-center gap-4 mt-2">
           <div class="w-24 h-24 rounded-full bg-gray-200 border flex items-center justify-center overflow-hidden">
             <img *ngIf="form.value.profileImage" [src]="form.value.profileImage" alt="Foto" class="w-full h-full object-cover" />
           </div>
-          <input type="file" accept="image/*" (change)="handleImageChange($event)" />
+          <input type="file" accept="image/*" (change)="handleImageChange($event)" class="w-full sm:w-auto"/>
         </div>
       </div>
 
-      <!-- Nombre -->
+      <!-- Nombre completo -->
       <div>
         <label for="name" class="block text-sm font-medium mb-1">Nombre Completo</label>
         <input id="name" type="text" formControlName="name" class="w-full border border-gray-300 rounded-md px-3 py-2" />
       </div>
 
-      <!-- Cédula -->
+      <!-- Cédula con botón de búsqueda responsivo -->
       <div>
         <label for="cedula" class="block text-sm font-medium mb-1">Cédula</label>
-        <input id="cedula" type="text" formControlName="cedula" class="w-full border border-gray-300 rounded-md px-3 py-2" />
+        <div class="flex flex-col sm:flex-row sm:items-center gap-2 w-full">
+          <input
+            id="cedula"
+            type="text"
+            formControlName="cedula"
+            class="flex-1 w-full border border-gray-300 rounded-md px-3 py-2"
+            placeholder="Ingrese cédula"
+          />
+          <button
+            type="button"
+            class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 w-full sm:w-auto"
+            (click)="buscarPorCedula()"
+          >
+            Buscar
+          </button>
+        </div>
+      </div>
+
+      <!-- Fecha de nacimiento -->
+      <div>
+        <label for="birthDate" class="block text-sm font-medium mb-1">Fecha de Nacimiento</label>
+        <input id="birthDate" type="date" formControlName="birthDate" class="w-full border border-gray-300 rounded-md px-3 py-2" />
+      </div>
+
+      <!-- País -->
+      <div>
+        <label for="country" class="block text-sm font-medium mb-1">País</label>
+        <input id="country" type="text" formControlName="country" class="w-full border border-gray-300 rounded-md px-3 py-2" />
+      </div>
+
+      <!-- Nacionalidad -->
+      <div>
+        <label for="nationality" class="block text-sm font-medium mb-1">Nacionalidad</label>
+        <input id="nationality" type="text" formControlName="nationality" class="w-full border border-gray-300 rounded-md px-3 py-2" />
+      </div>
+
+      <!-- Estado Civil -->
+      <div>
+        <label for="maritalStatus" class="block text-sm font-medium mb-1">Estado Civil</label>
+        <select id="maritalStatus" formControlName="maritalStatus" class="w-full border border-gray-300 rounded-md px-3 py-2">
+          <option value="">Seleccione</option>
+          <option *ngFor="let estado of estadosCiviles" [value]="estado">{{estado}}</option>
+        </select>
       </div>
 
       <!-- Teléfono -->
@@ -48,16 +88,18 @@
         <input id="email" type="email" formControlName="email" class="w-full border border-gray-300 rounded-md px-3 py-2" />
       </div>
 
-      <!-- Fecha de nacimiento -->
-      <div>
-        <label for="birthDate" class="block text-sm font-medium mb-1">Fecha de Nacimiento</label>
-        <input id="birthDate" type="date" formControlName="birthDate" class="w-full border border-gray-300 rounded-md px-3 py-2" />
-      </div>
-
       <!-- Dirección -->
       <div>
         <label for="address" class="block text-sm font-medium mb-1">Dirección</label>
         <input id="address" type="text" formControlName="address" class="w-full border border-gray-300 rounded-md px-3 py-2" />
+      </div>
+           <!-- institucion -->
+      <div>
+        <label for="institution" class="block text-sm font-medium mb-1">Institución</label>
+        <select id="institution" formControlName="institution" (change)="SelectedInstitucion($event)" class="w-full border border-gray-300 rounded-md px-3 py-2">
+          <option value="">Selecciona su Institución</option>
+          <option *ngFor="let item of InstitucionMilitarList" [value]="item.id">{{ item.institucion }}</option>
+        </select>
       </div>
 
       <!-- Rango -->
@@ -65,7 +107,7 @@
         <label for="rank" class="block text-sm font-medium mb-1">Rango</label>
         <select id="rank" formControlName="rank" class="w-full border border-gray-300 rounded-md px-3 py-2">
           <option value="">Selecciona un rango</option>
-          <option *ngFor="let rango of rangos" [value]="rango">{{ rango }}</option>
+          <option *ngFor="let rango of rangosFiltrados" [value]="rango.id">{{ rango.nombre }}</option>
         </select>
       </div>
 
@@ -92,11 +134,56 @@
         <input id="emergencyPhone" type="text" formControlName="emergencyPhone" class="w-full border border-gray-300 rounded-md px-3 py-2" />
       </div>
 
-      <!-- Botones -->
-      <div class="flex justify-end space-x-2 pt-6">
-        <button type="button" pButton label="Cancelar" class="p-button-outlined" (click)="visible = false"></button>
-        <button type="submit" pButton label="Guardar Cambios" class="bg-[#3A5311] text-white px-4 py-2 rounded hover:bg-green-700">Guardar</button>
+      <!-- ========================== -->
+      <!-- EXPERIENCIA LABORAL -->
+      <!-- ========================== -->
+      <div formArrayName="experience" class="max-h-[300px] overflow-y-auto border rounded p-2">
+        <label class="block text-sm font-medium mb-2">Experiencia Laboral</label>
+        <div *ngFor="let exp of experience.controls; let i = index" [formGroupName]="i" class="border p-3 mb-2 rounded bg-white">
+          <input placeholder="Cargo / Puesto" formControlName="position" class="w-full mb-2 border rounded px-3 py-1" />
+          <input placeholder="Institución" formControlName="company" class="w-full mb-2 border rounded px-3 py-1" />
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+            <input type="date" formControlName="startDate" class="border rounded px-3 py-1 w-full" />
+            <input type="date" formControlName="endDate" class="border rounded px-3 py-1 w-full" />
+          </div>
+          <textarea placeholder="Descripción de funciones" formControlName="description" class="w-full mt-2 border rounded px-3 py-1"></textarea>
+          <button type="button" class="text-red-600 mt-1 w-full sm:w-auto" (click)="removeExperience(i)">Eliminar</button>
+        </div>
+        <button type="button" (click)="addExperience()" class="mt-2 bg-green-600 text-white px-3 py-1 rounded w-full sm:w-auto">+ Agregar Experiencia</button>
       </div>
+
+      <!-- ========================== -->
+      <!-- EDUCACIÓN -->
+      <!-- ========================== -->
+      <div formArrayName="education" class="max-h-[300px] overflow-y-auto border rounded p-2">
+        <label class="block text-sm font-medium mb-2">Educación</label>
+        <div *ngFor="let edu of education.controls; let i = index" [formGroupName]="i" class="border p-3 mb-2 rounded bg-white">
+          <input placeholder="Título / Carrera" formControlName="title" class="w-full mb-2 border rounded px-3 py-1" />
+          <input placeholder="Institución" formControlName="institution" class="w-full mb-2 border rounded px-3 py-1" />
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+            <input type="text" placeholder="Año inicio" formControlName="startYear" class="border rounded px-3 py-1 w-full" />
+            <input type="text" placeholder="Año fin o 'En curso'" formControlName="endYear" class="border rounded px-3 py-1 w-full" />
+          </div>
+          <input type="file" accept="application/pdf" class="mt-2 w-full" (change)="handleEducationPdf($event, i)" />
+          <button type="button" class="text-red-600 mt-1 w-full sm:w-auto" (click)="removeEducation(i)">Eliminar</button>
+        </div>
+        <button type="button" (click)="addEducation()" class="mt-2 bg-green-600 text-white px-3 py-1 rounded w-full sm:w-auto">+ Agregar Educación</button>
+      </div>
+
+      <!-- ========================== -->
+      <!-- HABILIDADES -->
+      <!-- ========================== -->
+      <div>
+        <label class="block text-sm font-medium mb-1">Habilidades / Competencias</label>
+        <textarea formControlName="skills" rows="3" class="w-full border border-gray-300 rounded-md px-3 py-2"></textarea>
+      </div>
+
+      <!-- BOTONES -->
+      <div class="flex flex-col sm:flex-row justify-end gap-2 pt-6">
+        <button type="button" pButton label="Cancelar" class="p-button-outlined w-full sm:w-auto" (click)="visible = false"></button>
+        <button type="button" (click)="onSubmit()" pButton label="Guardar Cambios" class="bg-[#3A5311] text-white px-4 py-2 rounded hover:bg-green-700 w-full sm:w-auto">Guardar</button>
+      </div>
+
     </form>
   </p-dialog>
 </div>

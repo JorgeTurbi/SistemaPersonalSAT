@@ -14,13 +14,11 @@
   <div class="space-y-4">
     <app-job-card
       *ngFor="let job of jobsData"
-      [id]="job.id"
-      [title]="job.title"
-      [company]="job.company"
-      [location]="job.location"
-      [type]="job.type"
-      [requirements]="job.requirements"
-      [postedDate]="job.postedDate"
+      [data]="job"
+
     ></app-job-card>
   </div>
 </div>
+
+
+

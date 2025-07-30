@@ -1,9 +1,15 @@
 import { CommonModule } from '@angular/common';
-import { Component, ViewEncapsulation } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output, ViewEncapsulation } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { LucideAngularModule, Search, Filter, MapPin, Building, Briefcase } from 'lucide-angular';
 import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
+import { IProvincia } from '../../Interface/IProvincia';
+import { ServiciosGenerales } from '../GeneralServices/servicios-generales';
+import { DataResponse } from '../../Interface/Response';
+import { InstitucionService } from '../Services/institucion-service';
+import { IInstitucion } from '../../Interface/IInstitucion';
+import { IDEPARTAMENTO } from '../../Interface/IDepartamento';
 
 @Component({
   selector: 'app-filtro',
@@ -13,7 +19,7 @@ import { ToastModule } from 'primeng/toast';
     providers: [MessageService],
   encapsulation: ViewEncapsulation.None, // opcional
 })
-export class FiltroComponent {
+export class FiltroComponent implements OnInit {
   // Icons
   searchIcon = Search;
   filterIcon = Filter;
@@ -31,37 +37,69 @@ export class FiltroComponent {
   locationFilter = 'all';
   institutionFilter = 'all';
   positionFilter = 'all';
+  provincias:IProvincia[]=[];
+@Output() filtersChanged = new EventEmitter<any>();
 
-  provincias = [
-    { value: 'distrito-nacional', label: 'Distrito Nacional' },
-    { value: 'santo-domingo', label: 'Santo Domingo' },
-    { value: 'santiago', label: 'Santiago' },
-    { value: 'la-altagracia', label: 'La Altagracia' },
-    { value: 'la-vega', label: 'La Vega' },
-    { value: 'puerto-plata', label: 'Puerto Plata' },
-    { value: 'barahona', label: 'Barahona' },
-    { value: 'san-juan', label: 'San Juan' },
-    // ...continúa según tu lista
-  ];
+  instituciones:IInstitucion[] = [];
 
-  instituciones = [
-    { value: 'ejercito-rd', label: 'Ejército de República Dominicana' },
-    { value: 'armada-rd', label: 'Armada de República Dominicana' },
-    { value: 'fuerza-aerea-rd', label: 'Fuerza Aérea Dominicana' },
-    { value: 'cesfront', label: 'CESFRONT' },
-    // ...
-  ];
+  categorias:IDEPARTAMENTO[] = [];
 
-  categorias = [
-    { value: 'operaciones', label: 'Operaciones Especiales' },
-    { value: 'inteligencia', label: 'Inteligencia y Contrainteligencia' },
-    { value: 'ciberseguridad', label: 'Ciberseguridad' },
-    { value: 'administracion', label: 'Administración' },
-    { value: 'medicina-militar', label: 'Medicina Militar' },
-    // ...
-  ];
+  /**
+   *
+   */
+  constructor(private servicioGenerales:ServiciosGenerales,
+    private serviceInstitucions:InstitucionService
+  ) {
 
 
+  }
+ngOnInit():void{
+ this.servicioGenerales.getProvincias().subscribe({
+  next:(res:DataResponse<IProvincia[]>)=>{
+    if (res.success) {
+       this.provincias=res.data;
+    }
+
+  },
+  error:(err:any)=>{
+    console.error(err);
+  }
+ });
+ this.serviceInstitucions.getInstituciones().subscribe({
+ next:(res:DataResponse<IInstitucion[]>)=>{
+    if (res.success) {
+       this.instituciones=res.data;
+    }
+
+  },
+  error:(err:any)=>{
+    console.error(err);
+  }
+ });
+
+ this.serviceInstitucions.getDepartmentos().subscribe({
+   next:(res:DataResponse<IDEPARTAMENTO[]>)=>{
+    if (res.success) {
+       this.categorias=res.data;
+    }
+
+  },
+  error:(err:any)=>{
+    console.error(err);
+  }
+ });
+}
+
+
+  applyFilters() {
+    this.filtersChanged.emit({
+      search: this.searchTerm.toLowerCase(),
+      type: this.typeFilter,
+      location: this.locationFilter,
+      institution: this.institutionFilter,
+      category: this.positionFilter
+    });
+  }
 
   resetFilters() {
     this.searchTerm = '';
@@ -69,10 +107,18 @@ export class FiltroComponent {
     this.locationFilter = 'all';
     this.institutionFilter = 'all';
     this.positionFilter = 'all';
+    this.applyFilters(); // Emite para resetear la lista
   }
 
-  applyFilters() {
-    console.log('Aplicando filtros...');
-    // Aquí iría lógica para filtrar la lista de vacantes
+
+    // Emitimos cada vez que cambia algo
+  emitFilters() {
+    this.filtersChanged.emit({
+      search: this.searchTerm,
+      type: this.typeFilter,
+      location: this.locationFilter,
+      institution: this.institutionFilter,
+      category: this.positionFilter
+    });
   }
 }

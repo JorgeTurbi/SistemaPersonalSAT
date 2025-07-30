@@ -3,6 +3,7 @@ import { Component, Input } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';import { RouterModule } from '@angular/router';
 import {  ArrowLeft, Building, MapPin, Calendar, DollarSign, Users, Phone, Mail, LucideAngularModule, Briefcase, GraduationCap, ChevronDown, ChevronUp } from 'lucide-angular';
 import { trigger, state, style, transition, animate } from '@angular/animations';
+import { IVacanteDto } from '../Vacancies/InterfaceVacantes/IVacanteDto';
 
 @Component({
   selector: 'app-jobcard-detail',
@@ -27,23 +28,24 @@ export class JobCardDetail {
   showResponsibilities = false;
 showQualifications = false;
 showBenefits = false;
-  @Input() id!: string;
-  @Input() title!: string;
-  @Input() company!: string;
-  @Input() location!: string;
-  @Input() type!: string;
-  @Input() requirements!: string[];
-  @Input() postedDate!: string;
+@Input() data!:IVacanteDto;
+  // @Input() id!: string;
+  // @Input() title!: string;
+  // @Input() company!: string;
+  // @Input() location!: string;
+  // @Input() type!: string;
+  // @Input() requirements!: string[];
+  // @Input() postedDate!: string;
 
-  @Input() salary!: string;
-  @Input() teamSize!: string;
-  @Input() experience!: string;
-  @Input() description!: string;
-  @Input() responsibilities!: string[];
-  @Input() qualifications!: string[];
-  @Input() benefits!: string[];
-  @Input() contactEmail!: string;
-  @Input() contactPhone!: string;
+  // @Input() salary!: string;
+  // @Input() teamSize!: string;
+  // @Input() experience!: string;
+  // @Input() description!: string;
+  // @Input() responsibilities!: string[];
+  // @Input() qualifications!: string[];
+  // @Input() benefits!: string[];
+  // @Input() contactEmail!: string;
+  // @Input() contactPhone!: string;
 
   Briefcase = Briefcase;
   GraduationCap = GraduationCap;

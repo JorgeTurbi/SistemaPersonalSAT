@@ -10,7 +10,7 @@ import { VacanteListComponent } from '../VacancyList/vacante-list';
 import { Dialog } from 'primeng/dialog';
 import { ButtonModule } from 'primeng/button';
 import { StyleClassModule } from 'primeng/styleclass';
-import { ITipoContrato } from './InterfaceVacantes/ivacante';
+import { ITipoContrato, IVacante } from './InterfaceVacantes/ivacante';
 import { VacanteServices } from './ServicesVacantes/vacante-services';
 import { ICategoriaVacante } from './InterfaceVacantes/ICateogriaVacante';
 import { DataResponse } from '../../Interface/Response';
@@ -42,7 +42,9 @@ export class VacanteComponent implements OnInit {
   provinciaList: IProvincia[] = [];
   institutions: IInstitucion[] = [];
   selectedInstitution: string = '';
-  perfilUsuario?:IProfile;
+  perfilUsuario?: IProfile;
+  createVacante!: IVacante;
+    currentFilters: any = {};
   //constructor
   constructor(
     private fb: FormBuilder,
@@ -50,6 +52,7 @@ export class VacanteComponent implements OnInit {
     private messageService: MessageService,
     private servicioGeneral: ServiciosGenerales,
     private institucionService: InstitucionService
+
   ) { }
   ngOnInit(): void {
     this.getCategorias();
@@ -57,10 +60,10 @@ export class VacanteComponent implements OnInit {
     this.provincias();
     this.getListInstitucion();
     const data = localStorage.getItem('user');
-if (data) {
-    this.perfilUsuario= JSON.parse(data);
+    if (data) {
+      this.perfilUsuario = JSON.parse(data);
 
-}
+    }
     // inicializacion del formulario
     this.vacanteForm = this.fb.group({
       userId: [this.perfilUsuario?.id, Validators.required],
@@ -69,24 +72,28 @@ if (data) {
       categoriaId: [null, Validators.required],
       titulo: ['', Validators.required],
       tipoContrato: [ITipoContrato.TiempoCompleto, Validators.required],
-      salarioCompensacion: [''],
-      fechaLimiteAplicacion: [''],
-      horarioTrabajo: [''],
-      duracionContrato: [''],
+      salarioCompensacion: ['', Validators.required],
+      fechaLimiteAplicacion: ['', Validators.required],
+      horarioTrabajo: ['', Validators.required],
+      duracionContrato: ['', Validators.required],
       descripcionPuesto: ['', Validators.required],
       requisitosGenerales: ['', Validators.required],
-      responsabilidadesEspecificas: [''],
-      educacionRequerida: [''],
-      experienciaRequerida: [''],
-      habilidadesCompetencias: [''],
-      beneficiosCompensaciones: [''],
-      informacionContacto: ['', Validators.required],
+      responsabilidadesEspecificas: ['', Validators.required],
+      educacionRequerida: ['', Validators.required],
+      experienciaRequerida: ['', Validators.required],
+      habilidadesCompetencias: ['', Validators.required],
+      beneficiosCompensaciones: ['', Validators.required],
+      telefono: ['', Validators.required],
+      email: ['', Validators.required],
+      direccion: ['', Validators.required],
       isActive: [true, Validators.required]
     });
 
   }
 
-
+onFiltersChanged(filters: any) {
+  this.currentFilters = filters;
+}
   getListInstitucion(): void {
 
     this.institucionService.getInstituciones().subscribe({
@@ -106,11 +113,6 @@ if (data) {
         console.error('Error fetching institutions:', err);
       }
     });
-
-
-
-
-
   }
 
   cargarTipoContrato(): void {
@@ -126,14 +128,7 @@ if (data) {
   private humanizar(text: string): string {
     return text.replace(/([a-z])([A-Z])/g, '$1 $2'); // Ej: TiempoCompleto -> Tiempo Completo
   }
-  //  tipoContratoOpciones():void {
-  //   return Object.keys(this.tipoContratoEnum)
-  //     .filter(key => !isNaN(Number(this.tipoContratoEnum[key as any])))
-  //     .map(key => ({
-  //       label: key,
-  //       value: this.tipoContratoEnum[key as keyof typeof ITipoContrato]
-  //     }));
-  // }
+
   showDialog() {
     if (!this.visible) {
       this.visible = true;
@@ -142,12 +137,66 @@ if (data) {
   }
 
   onSubmit(): void {
-      console.log("sin validar",this.vacanteForm.value);
-    if (this.vacanteForm.valid) {
-      console.log("FORMULARIO VALIDADO==>",this.vacanteForm.value);
-      // aquí iría la lógica para enviar la vacante
+    console.log("===>",this.vacanteForm.value);
+    if (this.vacanteForm.invalid) {
+      this.vacanteForm.markAllAsTouched();
+      return;
+
     }
-          console.log("no validado",this.vacanteForm.value);
+    if (this.vacanteForm.valid) {
+        console.log("===>+++",this.vacanteForm.value);
+
+const formValue:IVacante = this.vacanteForm.value;
+
+  const payload: IVacante = {
+    userId: Number(formValue.userId),
+    institucionId: Number(formValue.institucionId),
+    provinciaId: Number(formValue.provinciaId),
+    categoriaId: Number(formValue.categoriaId),
+    titulo: formValue.titulo,
+    tipoContrato: Number(formValue.tipoContrato) as ITipoContrato,
+    salarioCompensacion: formValue.salarioCompensacion,
+    fechaLimiteAplicacion: formValue.fechaLimiteAplicacion
+      ? new Date(formValue.fechaLimiteAplicacion).toISOString()
+      : undefined,
+    horarioTrabajo: formValue.horarioTrabajo,
+    duracionContrato: formValue.duracionContrato,
+    descripcionPuesto: formValue.descripcionPuesto,
+    requisitosGenerales: formValue.requisitosGenerales,
+    responsabilidadesEspecificas: formValue.responsabilidadesEspecificas,
+    educacionRequerida: formValue.educacionRequerida,
+    experienciaRequerida: formValue.experienciaRequerida,
+    habilidadesCompetencias: formValue.habilidadesCompetencias,
+    beneficiosCompensaciones: formValue.beneficiosCompensaciones,
+    telefono: formValue.telefono,
+    email: formValue.email,
+    direccion: formValue.direccion,
+    isActive: formValue.isActive
+  };
+
+
+
+
+      // aquí iría la lógica para enviar la vacante
+      this.vacanteService.newVacante(payload).subscribe({
+        next: (res: DataResponse<boolean>) => {
+          if (res.success) {
+
+            return this.messageService.add({ severity: 'success', summary: "Nueva Vacante", detail: res.message });
+
+          }
+          if (!res.success) {
+
+            return this.messageService.add({ severity: 'error', summary: 'Error', detail: res.message });
+          }
+
+        },
+        error: (err: any) => {
+          console.error(err);
+        }
+      });
+    }
+
   }
 
   handleLogoChange(event: Event): void {

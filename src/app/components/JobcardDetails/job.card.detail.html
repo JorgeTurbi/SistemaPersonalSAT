@@ -1,20 +1,22 @@
 <div class="max-w-5xl mx-auto px-4 py-6 bg-white rounded shadow">
 
   <!-- Encabezado del puesto -->
-  <h2 class="text-xl font-bold text-military-navy">{{ title }}</h2>
+  <h2 class="text-xl font-bold text-military-navy">{{ data.titulo }}</h2>
   <div class="flex flex-wrap items-center text-sm text-gray-600 mt-1 gap-2">
     <lucide-angular [img]="Building" class="w-4 h-4 text-gray-500"></lucide-angular>
-    <span>{{ company }}</span>
+    <span>{{ data.institucionNombre }}</span>
 
     <lucide-angular [img]="MapPin" class="w-4 h-4 text-gray-500 ml-4"></lucide-angular>
      <span></span>
-    <span>{{ location }}</span>
+    <span>{{ data.provinciaNombre }}</span>
   </div>
 
   <!-- Badges -->
   <div class="mt-2 flex flex-wrap gap-2 text-sm">
-    <span class="bg-military-navy text-white px-2 py-1 rounded">{{ type }}</span>
-    <span class="border border-gray-300 px-2 py-1 rounded text-gray-600">Experiencia: {{ experience }}</span>
+    <span class="bg-military-navy text-white px-2 py-1 rounded">
+      {{ data.tipoContrato==1?"Tiempo Completo":data.tipoContrato==2?"Medio Tiempo": data.tipoContrato==3?"Contrato":"Temporal" }}
+    </span>
+    <span class="border border-gray-300 px-2 py-1 rounded text-gray-600">Experiencia: {{ data.experienciaRequerida }}</span>
   </div>
 
   <!-- Detalles del puesto -->
@@ -23,15 +25,15 @@
   <div class="grid sm:grid-cols-2 gap-4 text-sm">
     <div class="flex items-center gap-2">
       <lucide-angular [img]="Calendar" class="w-4 h-4 text-gray-500"></lucide-angular>
-      <span>Fecha de publicación: {{ postedDate }}</span>
+      <span>Fecha de publicación: {{ data.createdAt | date: 'dd/MM/yyyy' }}</span>
     </div>
     <div class="flex items-center gap-2">
       <lucide-angular [img]="DollarSign" class="w-4 h-4 text-gray-500"></lucide-angular>
-      <span>Salario: {{ salary }}</span>
+      <span>Salario: {{ data.salarioCompensacion }}</span>
     </div>
     <div class="flex items-center gap-2">
       <lucide-angular [img]="Users" class="w-4 h-4 text-gray-500"></lucide-angular>
-      <span>Tamaño del equipo: {{ teamSize }}</span>
+      <span>Tamaño del equipo: {{ "No Espesificado"}}</span>
     </div>
   </div>
 
@@ -39,7 +41,7 @@
   <div class="mt-6">
     <h3 class="text-lg font-semibold">Descripción del puesto</h3>
     <hr class="my-4 border-t-2 border-gray-300" />
-    <p class="mt-2 text-sm text-gray-700">{{ description }}</p>
+    <p class="mt-2 text-sm text-gray-700">{{ data.descripcionPuesto }}</p>
   </div>
 
   <!-- Secciones -->
@@ -53,7 +55,7 @@
   </div>
   <hr class="my-2 border-t-2 border-gray-300" />
   <ul *ngIf="showResponsibilities" @accordionAnimation class="list-disc pl-5 mt-1 text-sm">
-    <li *ngFor="let item of responsibilities">{{ item }}</li>
+    <li *ngFor="let item of data.responsabilidadesEspecificas">{{ item }}</li>
   </ul>
 </div>
 
@@ -67,7 +69,7 @@
   </div>
   <hr class="my-2 border-t-2 border-gray-300" />
   <ul *ngIf="showQualifications" @accordionAnimation class="list-disc pl-5 mt-1 text-sm">
-    <li *ngFor="let item of qualifications">{{ item }}</li>
+    <li *ngFor="let item of data.habilidadesCompetencias">{{ item }}</li>
   </ul>
 </div>
 
@@ -82,7 +84,7 @@
   </div>
   <hr class="my-2 border-t-2 border-gray-300" />
   <ul *ngIf="showBenefits" @accordionAnimation class="list-disc pl-5 mt-1 text-sm">
-    <li *ngFor="let item of benefits">{{ item }}</li>
+    <li *ngFor="let item of data.beneficiosCompensaciones">{{ item }}</li>
   </ul>
 </div>
 
@@ -93,11 +95,11 @@
     <div class="grid sm:grid-cols-2 gap-4 text-sm mt-2">
       <div class="flex items-center gap-2">
         <lucide-angular [img]="Phone" class="w-4 h-4 text-gray-500"></lucide-angular>
-        <span>{{ contactPhone }}</span>
+        <span>{{ data.telefono }}</span>
       </div>
       <div class="flex items-center gap-2">
         <lucide-angular [img]="Mail" class="w-4 h-4 text-gray-500"></lucide-angular>
-        <span>{{ contactEmail }}</span>
+        <span>{{ data.email}}</span>
       </div>
     </div>
   </div>

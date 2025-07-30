@@ -16,7 +16,9 @@ export interface IVacante {
   experienciaRequerida?: string;
   habilidadesCompetencias?: string;
   beneficiosCompensaciones?: string;
-  informacionContacto: string;
+  telefono: string;
+  email: string;
+  direccion:string;
   isActive: boolean;
 }
 

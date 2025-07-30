@@ -207,7 +207,6 @@ export class RegisterFormComponent implements OnInit {
           return this.router.navigateByUrl("/login")
         }
         return this.messageService.add({ severity: 'error', summary: 'Error', detail: res.message });
-          console.log("==>+++",res.message )
 
       },
       error: (err: any) => {
@@ -229,6 +228,6 @@ export class RegisterFormComponent implements OnInit {
 
       }
     });
-    console.log(this.regUser);
+
   }
 }

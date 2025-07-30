@@ -16,6 +16,7 @@
           <input
             type="text"
             [(ngModel)]="searchTerm"
+             (ngModelChange)="emitFilters()"
             placeholder="Buscar por título, institución, provincia..."
             class="pl-10 pr-4 py-2 w-full border border-gray-300 rounded focus:ring-2 focus:ring-military-gold"
           />
@@ -52,7 +53,7 @@
               class="w-full border rounded pl-10 pr-3 py-2 focus:ring-2 focus:ring-military-gold"
             >
               <option value="all">Todas las provincias</option>
-              <option *ngFor="let p of provincias" [value]="p.value">{{ p.label }}</option>
+              <option *ngFor="let p of provincias" [value]="p.nombre">{{ p.nombre }}</option>
             </select>
           </div>
         </div>
@@ -67,7 +68,7 @@
               class="w-full border rounded pl-10 pr-3 py-2 focus:ring-2 focus:ring-military-gold"
             >
               <option value="all">Todas las instituciones</option>
-              <option *ngFor="let i of instituciones" [value]="i.value">{{ i.label }}</option>
+              <option *ngFor="let i of instituciones" [value]="i.nombre">{{ i.nombre }}</option>
             </select>
           </div>
         </div>
@@ -80,7 +81,7 @@
             class="w-full border rounded px-3 py-2 focus:ring-2 focus:ring-military-gold"
           >
             <option value="all">Todas las categorías</option>
-            <option *ngFor="let c of categorias" [value]="c.value">{{ c.label }}</option>
+            <option *ngFor="let c of categorias" [value]="c.direccion">{{ c.direccion }}</option>
           </select>
         </div>
       </div>
