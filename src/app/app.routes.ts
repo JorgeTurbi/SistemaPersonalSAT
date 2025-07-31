@@ -8,7 +8,7 @@ export const routes: Routes = [
     children: [
       { path: '', loadComponent: () => import('./components/Pages/main-page').then(m => m.MainPage) },
       { path: 'jobs', loadComponent: () => import('./components/Vacancies/vacante.component').then(m => m.VacanteComponent) },
-      { path: 'jobsdetails', loadComponent: () => import('./components/VacanteDetalle/vacante-details').then(m => m.VacanteDetails) },
+      { path: 'jobsdetails/:id', loadComponent: () => import('./components/VacanteDetalle/vacante-details').then(m => m.VacanteDetails) },
       { path: 'reclutador', loadComponent: () => import('./components/recruiter/recruiter-component').then(m => m.RecruiterComponent) },
       { path: 'profile', loadComponent: () => import('./components/Profiles/profilecomponent').then(m => m.Profilecomponent) }
 

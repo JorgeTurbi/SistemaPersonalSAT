@@ -5,6 +5,7 @@ import { DataResponse } from '../../../Interface/Response';
 import { IInstitucionMilitar, IRango } from '../../../Interface/IGenerico';
 import { environment } from '../../../../Enviroments/enviroment';
 import { IProfileMilitar } from '../InterfaceProfile/IProfileMilitar';
+import { IAplicacionesDTO } from '../../Profiles/InterfaceAplicaciones/IAplicacionesDTO';
 
 @Injectable({
   providedIn: 'root'
@@ -30,5 +31,10 @@ export class ServicioGenericoComponent {
     GetAplicacion(dato:number):Observable<DataResponse<IProfileMilitar>>
   {
     return this.http.get<DataResponse<IProfileMilitar>>(`${environment.apiUrl}/Aplicante/GetById?UserId=${dato}`);
+  }
+
+  getAplicaionesbyUserId(userId:number):Observable<DataResponse<IAplicacionesDTO[]>>
+  {
+    return this.http.get<DataResponse<IAplicacionesDTO[]>>(`${environment.apiUrl}/Aplicaciones/GetAplicacionesbyUserId?UserId=${userId}`);
   }
 }

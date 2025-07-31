@@ -11,6 +11,7 @@ import { ServicioGenericoComponent } from '../EditProfile/ServicioGenerico/servi
 import { IProfileMilitar } from '../EditProfile/InterfaceProfile/IProfileMilitar';
 import { DataResponse } from '../../Interface/Response';
 import { MessageService } from 'primeng/api';
+import { IVacante } from '../Vacancies/InterfaceVacantes/ivacante';
 
 @Component({
   selector: 'app-jobcard-detail',
@@ -36,25 +37,6 @@ export class JobCardDetail implements OnInit {
   showQualifications = false;
   showBenefits = false;
   perfilUsuario!: IProfile;
-  @Input() data!: IVacanteDto;
-  // @Input() id!: string;
-  // @Input() title!: string;
-  // @Input() company!: string;
-  // @Input() location!: string;
-  // @Input() type!: string;
-  // @Input() requirements!: string[];
-  // @Input() postedDate!: string;
-
-  // @Input() salary!: string;
-  // @Input() teamSize!: string;
-  // @Input() experience!: string;
-  // @Input() description!: string;
-  // @Input() responsibilities!: string[];
-  // @Input() qualifications!: string[];
-  // @Input() benefits!: string[];
-  // @Input() contactEmail!: string;
-  // @Input() contactPhone!: string;
-
   Briefcase = Briefcase;
   GraduationCap = GraduationCap;
   DollarSign = DollarSign;
@@ -67,10 +49,8 @@ export class JobCardDetail implements OnInit {
   Mail = Mail;
   ChevronDown = ChevronDown;
   ChevronUp = ChevronUp
+  @Input() dataVacante!: IVacanteDto;
 
-  /**
-   *
-   */
   constructor(
     private aplicaService: Aplicaservices,
     private perfilAplicante: ServicioGenericoComponent,
@@ -96,9 +76,9 @@ aplicar() {
       next: (res: DataResponse<IProfileMilitar>) => {
         if (res.success && res.data) {
           const datos: IAplicacionVacante = {
-            aplicanteId: res.data.id,  // Id del aplicante desde la API
-            vacanteId: this.data.id,   // Id de la vacante seleccionada
-            estadoId: 1                // 1 = Pendiente
+            aplicanteId: res.data.id,
+            vacanteId: this.dataVacante?.id,
+            estadoId: 1
           } as IAplicacionVacante;
             this.SendDatos(datos);
 
@@ -134,11 +114,7 @@ SendDatos(dato:IAplicacionVacante)
                   summary: "Aplicación exitosa",
                   detail: resp.message
                 });
-                // this.messageService.add({
-                //   severity: 'info',
-                //   summary: "Información",
-                //   detail: "Redirigiendo..."
-                // });
+       ;
               } else {
                 this.messageService.add({
                   severity: 'warn',
@@ -156,43 +132,8 @@ SendDatos(dato:IAplicacionVacante)
               });
             }
           });
-}
-  // aplicar() {
-  //   if (this.perfilUsuario.id > 0) {
-  //     this.perfilAplicante.GetAplicacion(this.perfilUsuario.id).subscribe({
+        }
 
-  //       next: (res: DataResponse<IProfileMilitar>) => {
-  //         if (res.success) {
-
-  //           const datos: IAplicacionVacante = {
-  //             aplicanteId: res.data.id,   // Id del aplicante desde tu respuesta
-  //             vacanteId: this.data.id,    // Id de la vacante seleccionada
-  //             estadoId: 1                 // 1 = Pendiente por defecto
-  //           } as IAplicacionVacante;
-  //           this.aplicaService.crearAplicacionVacante(datos).subscribe({
-
-  //             next: (res:DataResponse<boolean>) => {
-  //                     if (res.success) {
-  //                            this.messageService.add({ severity: 'success', summary: "Login Exitoso", detail: res.message });
-  //         this.messageService.add({ severity: 'info', summary: "Information", detail: "Redirigiendo" });
-  //                     }
-  //             },
-  //             error: (err: any) => {
-  //               console.error(err);
-  //             }
-  //           });
-
-  //         }
-  //         return;
-  //       },
-  //       error: (err: any) => {
-  //         console.error(err);
-  //       }
-
-  //     });
-  //   }
-
-  // }
 
 }
 

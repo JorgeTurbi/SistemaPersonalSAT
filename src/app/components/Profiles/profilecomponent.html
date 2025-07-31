@@ -8,11 +8,18 @@
     >
       ✏️ Editar Perfil
     </button> -->
-    <button (click)="abrirEditor()"
+    <button *ngIf="Aplicante==null || undefined" (click)="abrirEditor()"
   class="bg-[#D4AF37] hover:bg-amber-500 text-black px-4 py-2 rounded flex items-center gap-2 text-sm font-semibold"
 >
   <lucide-angular [img]="Plus" class="w-4 h-4"></lucide-angular>
   Agregar Perfil
+</button>
+
+    <button (click)="abrirEditor()"
+  class="bg-[#D4AF37] hover:bg-amber-500 text-black px-4 py-2 rounded flex items-center gap-2 text-sm font-semibold"
+>
+  <!-- <lucide-angular [img]="Plus" class="w-4 h-4"></lucide-angular> -->
+ ✏️ Editar Perfil
 </button>
   </div>
 
@@ -108,72 +115,35 @@
   <h2 class="text-2xl font-bold text-[#001F3F]">Aplicaciones</h2>
 
   <div class="space-y-4">
-    <div class="bg-white border border-gray-200 rounded-lg p-4 shadow-sm">
+    <div *ngFor="let item of listadoAplicaciones"  class="bg-white border border-gray-200 rounded-lg p-4 shadow-sm">
       <div class="flex justify-between items-start mb-3">
         <div>
-          <h3 class="text-lg font-semibold text-gray-900">Especialista en Ciberseguridad</h3>
-          <p class="text-sm text-gray-600">Dirección de Ciberseguridad C5i</p>
+          <h3 class="text-lg font-semibold text-gray-900">{{item.tituloVacante}}</h3>
+          <p class="text-sm text-gray-600">{{item.departamento}}</p>
           <div class="text-sm text-gray-500 flex items-center mt-1">
-            📍 Distrito Nacional, República Dominicana
+            📍 {{item.ubicacion}}
           </div>
         </div>
         <div class="text-right space-y-2">
-          <span class="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-medium">Entrevista</span>
+          <span *ngIf="item.estadoId==5" class="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-medium">{{item.estado}}</span>
+          <span *ngIf="item.estadoId==1" class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-medium">{{item.estado}}</span>
+           <span *ngIf="item.estadoId==2"class="bg-gray-100 text-gray-800 px-3 py-1 rounded-full text-sm font-medium">{{item.estado}}</span>
+           <span *ngIf="item.estadoId==4"class="bg-red-600 text-white px-3 py-1 rounded-full text-sm font-medium">{{item.estado}}</span>
+           <span *ngIf="item.estadoId==3"class="bg-green-600 text-white px-3 py-1 rounded-full text-sm font-medium">{{item.estado}}</span>
+
           <div class="flex gap-2 justify-end">
             <button class="text-blue-600 text-sm hover:underline">👁 Ver Detalles</button>
-            <button class="text-blue-600 text-sm hover:underline">🔗 Ver vacante</button>
+            <button class="text-blue-600 text-sm hover:underline" (click)=" consultaVacantes(item.vacanteId)">🔗 Ver vacante</button>
           </div>
         </div>
       </div>
       <div class="flex justify-between text-sm text-gray-500">
-        <div>📅 Aplicado: 15/05/2025</div>
-        <div class="text-green-600">📅 Entrevista: 22/05/2025</div>
+        <div>📅 Aplicado: {{item.fechaAplicacion | date: "dd/MM/yyyy"}}</div>
+        <div *ngIf="item.fechaentrevista" class="text-green-600">📅 Entrevista: {{item.fechaentrevista | date: "dd/MM/yyyy"}}</div>
       </div>
     </div>
 
-    <div class="bg-white border border-gray-200 rounded-lg p-4 shadow-sm">
-      <div class="flex justify-between items-start mb-3">
-        <div>
-          <h3 class="text-lg font-semibold text-gray-900">Analista de Inteligencia Militar</h3>
-          <p class="text-sm text-gray-600">Dirección de Inteligencia C5i</p>
-          <div class="text-sm text-gray-500 flex items-center mt-1">
-            📍 Distrito Nacional, República Dominicana
-          </div>
-        </div>
-        <div class="text-right space-y-2">
-          <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-medium">En revisión</span>
-          <div class="flex gap-2 justify-end">
-            <button class="text-blue-600 text-sm hover:underline">👁 Ver Detalles</button>
-            <button class="text-blue-600 text-sm hover:underline">🔗 Ver vacante</button>
-          </div>
-        </div>
-      </div>
-      <div class="flex justify-between text-sm text-gray-500">
-        <div>📅 Aplicado: 12/05/2025</div>
-      </div>
-    </div>
 
-    <div class="bg-white border border-gray-200 rounded-lg p-4 shadow-sm">
-      <div class="flex justify-between items-start mb-3">
-        <div>
-          <h3 class="text-lg font-semibold text-gray-900">Administrador de Base de Datos</h3>
-          <p class="text-sm text-gray-600">Dirección de Sistemas Computacionales C5i</p>
-          <div class="text-sm text-gray-500 flex items-center mt-1">
-            📍 Distrito Nacional, República Dominicana
-          </div>
-        </div>
-        <div class="text-right space-y-2">
-          <span class="bg-gray-100 text-gray-800 px-3 py-1 rounded-full text-sm font-medium">Aplicado</span>
-          <div class="flex gap-2 justify-end">
-            <button class="text-blue-600 text-sm hover:underline">👁 Ver Detalles</button>
-            <button class="text-blue-600 text-sm hover:underline">🔗 Ver vacante</button>
-          </div>
-        </div>
-      </div>
-      <div class="flex justify-between text-sm text-gray-500">
-        <div>📅 Aplicado: 08/05/2025</div>
-      </div>
-    </div>
   </div>
 </div>
 

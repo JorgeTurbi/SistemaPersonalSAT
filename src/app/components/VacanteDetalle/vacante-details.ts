@@ -1,10 +1,12 @@
 import { Component, inject, Input, OnInit } from '@angular/core';
 import { ArrowLeft, LucideAngularModule } from "lucide-angular";
 import { JobCardDetail } from '../JobcardDetails/job.card.detail';
-import { Router, RouterModule } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { SharedService } from '../GeneralServices/SharedService';
 import { IVacanteDto } from '../Vacancies/InterfaceVacantes/IVacanteDto';
+import { VacanteServices } from '../Vacancies/ServicesVacantes/vacante-services';
+import { DataResponse } from '../../Interface/Response';
 
 @Component({
   selector: 'app-vacante-details',
@@ -16,58 +18,60 @@ export class VacanteDetails implements OnInit {
   ArrowLeft=ArrowLeft;
 @Input() jobId: string = '';
     router =inject(Router)
-  job !:IVacanteDto;
+  job: IVacanteDto = {} as IVacanteDto;
 
-  // = {
-  //   title: "Especialista en Ciberseguridad",
-  //   company: "Dirección de Ciberseguridad C5i",
-  //   location: "Distrito Nacional, República Dominicana",
-  //   type: "Tiempo Completo",
-  //   salary: "RD$85,000 - RD$120,000",
-  //   teamSize: "15-20 personas",
-  //   experience: "3-5 años",
-  //   posted: "16 de mayo, 2025",
-  //   description: "Buscamos un especialista en ciberseguridad con experiencia militar para fortalecer nuestras capacidades de defensa digital en el C5i...",
-  //   responsibilities: [
-  //     "Monitorear y analizar amenazas de ciberseguridad en tiempo real",
-  //     "Implementar y mantener protocolos de seguridad informática militar",
-  //     "Realizar análisis forense digital en caso de incidentes",
-  //     "Coordinar respuestas a emergencias cibernéticas",
-  //     "Capacitar al personal en mejores prácticas de seguridad",
-  //     "Proteger los sistemas de información del C5i"
-  //   ],
-  //   qualifications: [
-  //     "Título en Ingeniería de Sistemas, Ciberseguridad o afín",
-  //     "Mínimo 5 años de experiencia en ciberseguridad",
-  //     "Certificaciones en CISSP, CEH o similares (preferible)",
-  //     "Experiencia en protección de sistemas críticos",
-  //     "Conocimientos en análisis forense digital y SIEM"
-  //   ],
-  //   benefits: [
-  //     "Seguro médico militar completo",
-  //     "Capacitación y certificaciones internacionales",
-  //     "Oportunidades de ascenso dentro de las Fuerzas Armadas",
-  //     "Estabilidad laboral y pensión militar",
-  //     "Acceso a tecnología de punta",
-  //     "Beneficios adicionales del personal militar"
-  //   ],
-  //   contactEmail: "reclutamiento@c5i.mil.do",
-  //   contactPhone: "829-462-7091"
-  // };
     vacanteDetalle!:IVacanteDto;
-    /**
-     *
-     */
-    constructor(private shared: SharedService) {}
+
+    constructor(private shared: SharedService,
+       private route: ActivatedRoute,
+       private vacanteService:VacanteServices
+    ) {}
 
     ngOnInit():void{
-        this.shared.currentVacante.subscribe(datos=>this.vacanteDetalle=datos);
-        this.job=this.vacanteDetalle;
+        // this.shared.currentVacante.subscribe(datos=>this.vacanteDetalle=datos);
+        // this.job=this.vacanteDetalle;
+        // Intentar primero cargar del SharedService
+    // this.shared.currentVacante.subscribe(datos => {
+    //   if (datos) {
+    //     this.job = datos;
+    //   }
+    // });
+
+    // Si no viene por shared, usar el parámetro de la URL
+    // this.route.paramMap.subscribe(params => {
+    //   const id = Number(params.get('id'));
+    //   if (id && !this.job) {
+    //     this.vacanteService.getVacatebyId(id).subscribe({
+    //       next: (res:DataResponse<IVacanteDto>) => { if(res.success) this.job = res.data; },
+    //       error: (err:any) => console.error('Error cargando vacante:', err)
+    //     });
+    //   }
+    // });
+
+    // 1️⃣ Intentamos obtener del servicio compartido
+    // this.shared.currentVacante.subscribe(datos => {
+    //   if (datos && datos.id) {
+    //     this.job = datos;
+    //   }
+    // });
+
+    // 2️⃣ Si no hay datos (ej: al refrescar página), tomamos el ID de la URL
+    const jobId:number = Number(this.route.snapshot.paramMap.get('id'));
+    if (jobId) {
+      this.vacanteService.getVacatebyId(jobId).subscribe({
+          next: (res:DataResponse<IVacanteDto>) => { if(res.success) this.job = res.data; },
+          error: (err:any) => console.error('Error cargando vacante:', err)
+        });
     }
+  }
+
 
 
   goDetails()
   {
-    this.router.navigate(['/jobs']);
+   this.shared.changeMessage(this.job);
+
+  // Navega con el ID como parámetro
+  this.router.navigate(['/jobs']);
   }
 }

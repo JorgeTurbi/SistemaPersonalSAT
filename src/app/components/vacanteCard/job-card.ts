@@ -32,10 +32,20 @@ constructor(
 
 verDetalles()
 {
-  this.shared.changeMessage(this.data);
-              this.messageService.add({ severity: 'info', summary: 'Information', detail: 'Regidiriengo...' });
+  // this.shared.changeMessage(this.data);
+  //             this.messageService.add({ severity: 'info', summary: 'Information', detail: 'Regidiriengo...' });
 
-  this.router.navigate(['/jobsdetails']);
+    this.shared.changeMessage(this.data); // Para que sigas usando el SharedService
+
+  // 👇 Navegar pasando el ID de la vacante
+  this.router.navigate(['/jobsdetails', this.data.id]);
+
+  this.messageService.add({
+    severity: 'info',
+    summary: 'Información',
+    detail: 'Redirigiendo a detalles de la vacante...'
+  })
+
 }
 }
 

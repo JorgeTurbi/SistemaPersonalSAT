@@ -28,4 +28,8 @@ export class VacanteServices {
   {
     return this.http.get<DataResponse<IVacanteDto[]>>(`${environment.apiUrl}/Vacante`);
   }
+  getVacatebyId(vancanteId:number):Observable<DataResponse<IVacanteDto>>
+  {
+      return this.http.get<DataResponse<IVacanteDto>>(`${environment.apiUrl}/Vacante/GetVacanteById?id=${vancanteId}`);
+  }
 }

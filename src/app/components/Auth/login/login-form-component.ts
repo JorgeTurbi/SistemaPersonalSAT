@@ -9,6 +9,7 @@ import { LoginData } from './InterfaceLogin/LoginData';
 import { DataResponse } from '../../../Interface/Response';
 import { MessageService } from 'primeng/api';
 import { RippleModule } from 'primeng/ripple';
+import { AplicanteProfileService } from '../../Profiles/ServiceProfile/aplicante-profile-service';
 
 
 @Component({
@@ -23,7 +24,9 @@ export class LoginFormComponent implements OnInit {
 
   loginForm!: FormGroup;
   LogInUser!: LoginRequest;
-  constructor(private router: Router, private auth: AuthService, private fb: FormBuilder, private messageService: MessageService) { }
+  constructor(private router: Router, private auth: AuthService, private fb: FormBuilder, private messageService: MessageService,
+    private profileService: AplicanteProfileService
+  ) { }
 
 
   ngOnInit(): void {
@@ -49,6 +52,10 @@ export class LoginFormComponent implements OnInit {
         if (res.success) {
           localStorage.setItem('token', res.data.token);
           localStorage.setItem('user', JSON.stringify(res.data.user));
+            if (res.data.perfil!=null) {
+              this.profileService.setAplicanteProfile(res.data.perfil);
+            }
+
 
           this.messageService.add({ severity: 'success', summary: "Login Exitoso", detail: res.message });
           this.messageService.add({ severity: 'info', summary: "Information", detail: "Redirigiendo" });
