@@ -1,11 +1,11 @@
 import { Component, inject, ViewEncapsulation } from '@angular/core';
 
-import { Router } from '@angular/router'; import { LucideAngularModule, User, Briefcase, GraduationCap, ArrowRight, Users, Shield, Award } from 'lucide-angular';
+import { Router, RouterModule } from '@angular/router'; import { LucideAngularModule, User, Briefcase, GraduationCap, ArrowRight, Users, Shield, Award } from 'lucide-angular';
 
 @Component({
   selector: 'app-main',
   standalone: true,
-  imports: [LucideAngularModule],
+  imports: [LucideAngularModule, RouterModule],
   templateUrl: './main-page.html',
   styleUrl: './main-page.css',
   encapsulation: ViewEncapsulation.None, // opcional

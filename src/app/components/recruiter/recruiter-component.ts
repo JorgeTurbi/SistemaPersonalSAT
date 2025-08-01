@@ -3,6 +3,10 @@ import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { LucideAngularModule, FileDown, Eye, Users, TrendingUp, Filter } from 'lucide-angular';
+import { IAplicanteReclutadorDto } from './InterfaceRecruiter/IAplicanteReclutadorDto';
+import { VacanteServices } from '../Vacancies/ServicesVacantes/vacante-services';
+import { DataResponse } from '../../Interface/Response';
+import { IVacanteResumen } from './InterfaceRecruiter/IVacanteResumen';
 
 interface Applicant {
   id: string;
@@ -17,6 +21,10 @@ interface Applicant {
   education: string;
   skills: string[];
 }
+interface ColorApplication {
+  label: string;
+  color: string;
+}
 
 @Component({
   selector: 'app-recruiter',
@@ -26,6 +34,7 @@ interface Applicant {
   styleUrl: './recruiter-component.css'
 })
 export class RecruiterComponent implements OnInit {
+  Aplicantes: IAplicanteReclutadorDto[] = [];
   FileDown = FileDown;
   Eye = Eye;
   Users = Users;
@@ -34,22 +43,49 @@ export class RecruiterComponent implements OnInit {
   private route = inject(ActivatedRoute);
   jobId = this.route.snapshot.paramMap.get('jobId');
   itemsPerPage = 2;
-  perPageOptions = [2,3,5, 10, 25, 50];
+  perPageOptions = [2, 3, 5, 10, 25, 50];
   currentPage = 1;
-  total_pages=1;
+  total_pages = 1;
   paginated_Applicants: Applicant[] = [];
   // Variables necesarias
   sortBy = signal<'match' | 'date' | 'name'>('match');
   sortOrder = signal<'asc' | 'desc'>('desc');
   statusFilter = signal<string>('all');
   pageSize = 2;
-  jobTitle = 'Especialista en Ciberseguridad';
-  jobCompany = 'Dirección de Ciberseguridad C5i';
-// Al inicializar el componente
-ngOnInit() {
-  // Aquí asegúrate de que 'applicants' esté llena
-  this.updatePagination();
-}
+  jobTitle: string = '';
+  jobCompany:string = '';
+  resumenVacantes: IVacanteResumen[] = [];
+  totalAplicaciones:number=0;
+  promedioAplicaciones:number=0;
+  entrevista:number=0;
+  seleccionado:number=0;
+
+  /**
+   *
+   */
+  constructor(private vacatenService: VacanteServices) {
+
+
+  }
+  // Al inicializar el componente
+
+  ngOnInit() {
+    this.vacatenService.getVacantesCategoriasActivas().subscribe({
+      next: (res: DataResponse<IVacanteResumen[]>) => {
+        if (res.success) {
+          this.resumenVacantes = res.data;
+        }
+      },
+      error: (err: any) => {
+        console.error(err)
+      }
+    });
+
+    // Aquí asegúrate de que 'applicants' esté llena
+    this.updatePagination();
+
+
+  }
 
   applicants = signal<Applicant[]>([
 
@@ -105,9 +141,49 @@ ngOnInit() {
   ]);
 
 
-get totalPages(): number {
-  return Math.ceil(this.applicants().length / this.itemsPerPage);
+
+  getAplicantesbyVacanteId(event: Event) {
+    const Value = (event.target as HTMLSelectElement).value;
+    const vacanteId = Value ? Number(Value) : 0;
+
+    if (vacanteId > 0) {
+      this.vacatenService.getAplicantsbyVacanteId(vacanteId).subscribe({
+        next: (res: DataResponse<IAplicanteReclutadorDto[]>) => {
+          if (res.success) {
+            const vacanteSeleccionada = this.resumenVacantes.find(a => a.vacanteId === vacanteId);
+
+            this.jobTitle = vacanteSeleccionada ? vacanteSeleccionada.nombreVacante : '';
+            this.jobCompany=vacanteSeleccionada ? vacanteSeleccionada.nombreCategoria : '';
+            this.Aplicantes = res.data;
+            this.totalAplicaciones= Number(this.Aplicantes.length);
+            this.promedioAplicaciones=this.getAverageMatch();
+            this.entrevista=this.Aplicantes.filter(a => a.estadoId === 5).length;
+            this.seleccionado=this.Aplicantes.filter(a => a.estadoId === 3).length;
+          }
+        },
+        error: (err: any) => {
+          console.error("error consultando las aplicaciones de vacantes", err);
+        }
+      });
+    }
+
+
+  }
+getAverageMatch(): number {
+  if (!this.Aplicantes || this.Aplicantes.length === 0) {
+    return 0;
+  }
+
+  const total = this.Aplicantes
+    .map(a => a.matchPorcentaje || 0)
+    .reduce((sum, value) => sum + value, 0);
+
+  return total / this.Aplicantes.length;
 }
+
+  get totalPages(): number {
+    return Math.ceil(this.applicants().length / this.itemsPerPage);
+  }
   // get paginatedApplicants(): Applicant[] {
   //   const startIndex = (this.currentPage - 1) * this.itemsPerPage;
   //   return this.applicants().slice(startIndex, startIndex + this.itemsPerPage);
@@ -121,7 +197,7 @@ get totalPages(): number {
 
   // Métodos de paginación
   updatePagination() {
-  this.total_pages = this.totalPages;
+    this.total_pages = this.totalPages;
     const startIndex = (this.currentPage - 1) * this.itemsPerPage;
     const endIndex = startIndex + this.itemsPerPage;
     this.paginated_Applicants = this.applicants().slice(startIndex, endIndex);
@@ -163,15 +239,26 @@ get totalPages(): number {
   );
 
 
-  getStatusBadge(status: Applicant['status']) {
-    const statusMap = {
-      pending: { label: 'Pendiente', color: 'bg-gray-200 text-gray-700' },
-      reviewed: { label: 'Revisado', color: 'bg-blue-100 text-blue-800' },
-      interview: { label: 'Entrevista', color: 'bg-yellow-100 text-yellow-800' },
-      selected: { label: 'Seleccionado', color: 'bg-green-100 text-green-800' },
-      rejected: { label: 'Rechazado', color: 'bg-red-100 text-red-800' },
+  // getStatusBadge(estado:number):ColorApplication[] {
+  //   const statusMap:ColorApplication[] = {
+  //     1: { label: 'Pendiente', color: 'bg-gray-200 text-gray-700' },
+  //     2: { label: 'En revisión', color: 'bg-blue-100 text-blue-800' },
+  //     5: { label: 'Entrevista programada', color: 'bg-yellow-100 text-yellow-800' },
+  //     3: { label: 'Aprobado', color: 'bg-green-100 text-green-800' },
+  //     4: { label: 'Rechazado', color: 'bg-red-100 text-red-800' },
+  //   };
+  //   return statusMap[estado];
+  // }
+  getStatusBadge(estado: number): ColorApplication {
+    const statusMap: { [key: number]: ColorApplication } = {
+      1: { label: 'Pendiente', color: 'bg-gray-200 text-gray-700' },
+      2: { label: 'En revisión', color: 'bg-blue-100 text-blue-800' },
+      5: { label: 'Entrevista programada', color: 'bg-yellow-100 text-yellow-800' },
+      3: { label: 'Aprobado', color: 'bg-green-100 text-green-800' },
+      4: { label: 'Rechazado', color: 'bg-red-100 text-red-800' },
     };
-    return statusMap[status];
+
+    return statusMap[estado] ?? { label: 'Desconocido', color: 'bg-gray-100 text-gray-500' };
   }
 
   getMatchColor(percentage: number): string {
@@ -209,12 +296,12 @@ get totalPages(): number {
     console.log('Exportando a PDF...');
   }
 
-  handleExportProfilePDF(applicantName: string) {
-    console.log(`Generando PDF para ${applicantName}`);
+  handleExportProfilePDF(nombre: string) {
+    console.log(`Generando PDF para ${nombre}`);
   }
   // Si quieres que al cambiar itemsPerPage se actualice la tabla:
-ngOnChanges() {
-  this.updatePagination();
-}
+  ngOnChanges() {
+    this.updatePagination();
+  }
 }
 

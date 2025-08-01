@@ -22,7 +22,7 @@ export class ServiciosGenerales {
   }
 
   getUserData(cedula: string): Observable<ConsultaJceResponse> {
-    console.log("===>", cedula);
+
     return this.http.get<ConsultaJceResponse>(`${environment.dataUrl}/ConsultaJCE?Cedula=${cedula}`);
   }
 

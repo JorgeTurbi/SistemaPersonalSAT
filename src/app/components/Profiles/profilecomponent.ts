@@ -49,14 +49,14 @@ export class Profilecomponent implements OnInit {
   }
   ngOnInit(): void {
 
-    const data = localStorage.getItem('user');
+    const data = sessionStorage.getItem('user');
     if (data) {
       this.perfilUsuario = JSON.parse(data);
      // this.getPerfilAplicante(this.perfilUsuario?.id!);
     }
     this.aplicanteProfileService.aplicanteProfile$.subscribe(profile => {
     if (profile) {
-      console.log('Perfil cargado:', profile);
+
       this.Aplicante= profile;
     }
   });

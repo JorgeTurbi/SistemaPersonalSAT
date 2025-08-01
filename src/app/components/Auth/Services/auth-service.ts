@@ -27,7 +27,7 @@ authLogin(login:LoginRequest):Observable<DataResponse<LoginData>> {
 }
 
   getToken(): string | null {
-    return localStorage.getItem('token');
+    return sessionStorage.getItem('token');
   }
 
     registerUser(user:UserDto):Observable<DataResponse<boolean>>

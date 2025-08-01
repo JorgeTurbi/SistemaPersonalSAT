@@ -6,6 +6,8 @@ import { Observable } from 'rxjs';
 import { environment } from '../../../../Enviroments/enviroment';
 import { IVacante } from '../InterfaceVacantes/ivacante';
 import { IVacanteDto } from '../InterfaceVacantes/IVacanteDto';
+import { IAplicanteReclutadorDto } from '../../recruiter/InterfaceRecruiter/IAplicanteReclutadorDto';
+import { IVacanteResumen } from '../../recruiter/InterfaceRecruiter/IVacanteResumen';
 
 @Injectable({
   providedIn: 'root'
@@ -32,4 +34,13 @@ export class VacanteServices {
   {
       return this.http.get<DataResponse<IVacanteDto>>(`${environment.apiUrl}/Vacante/GetVacanteById?id=${vancanteId}`);
   }
+
+    getAplicantsbyVacanteId(vacanteId:number):Observable<DataResponse<IAplicanteReclutadorDto[]>>
+    {
+      return this.http.get<DataResponse<IAplicanteReclutadorDto[]>>(`${environment.apiUrl}/Aplicaciones/ConsultadeAplicantes?VacanteId=${vacanteId}`);
+    }
+     getVacantesCategoriasActivas():Observable<DataResponse<IVacanteResumen[]>>
+    {
+      return this.http.get<DataResponse<IVacanteResumen[]>>(`${environment.apiUrl}/Aplicaciones/GetVacanteCategoriasActivas`);
+    }
 }

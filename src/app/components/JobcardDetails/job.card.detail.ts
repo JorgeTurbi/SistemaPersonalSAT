@@ -60,7 +60,7 @@ export class JobCardDetail implements OnInit {
 
   }
   ngOnInit(): void {
-    const data = localStorage.getItem('user');
+    const data = sessionStorage.getItem('user');
     if (data) {
       this.perfilUsuario = JSON.parse(data);
 

@@ -9,8 +9,8 @@ let activeRequests = 0; // contador de peticiones activas
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const dataservicesUrl = environment.dataUrl;
-  const dataToken = localStorage.getItem('dataToken');
-  const token = localStorage.getItem('token');
+  const dataToken = sessionStorage.getItem('dataToken');
+  const token = sessionStorage.getItem('token');
 
   const spinner = inject(NgxSpinnerService);
 

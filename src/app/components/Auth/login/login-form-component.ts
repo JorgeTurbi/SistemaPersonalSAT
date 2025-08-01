@@ -50,8 +50,8 @@ export class LoginFormComponent implements OnInit {
 
 
         if (res.success) {
-          localStorage.setItem('token', res.data.token);
-          localStorage.setItem('user', JSON.stringify(res.data.user));
+          sessionStorage.setItem('token', res.data.token);
+          sessionStorage.setItem('user', JSON.stringify(res.data.user));
             if (res.data.perfil!=null) {
               this.profileService.setAplicanteProfile(res.data.perfil);
             }
@@ -60,7 +60,7 @@ export class LoginFormComponent implements OnInit {
           this.messageService.add({ severity: 'success', summary: "Login Exitoso", detail: res.message });
           this.messageService.add({ severity: 'info', summary: "Information", detail: "Redirigiendo" });
 
-          this.router.navigate(['/']);
+          this.router.navigate(['/inicio']);
         }
         else {
           this.messageService.add({ severity: 'error', summary: "Error intentando hacer login", detail: res.message });

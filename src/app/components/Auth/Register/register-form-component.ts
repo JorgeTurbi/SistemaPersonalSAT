@@ -143,18 +143,18 @@ export class RegisterFormComponent implements OnInit {
 
   buscarCedula() {
 
-    localStorage.removeItem('dataToken');
+    sessionStorage.removeItem('dataToken');
     const userData: IUserDataService = { username: 'jturbi', password: 'Brittany040238.' }
     this.serviceGeneral.getTokendATA(userData).subscribe({
       next: (res: IResponseTokenDataService) => {
         if (res.token != null || res.token != undefined) {
-          localStorage.setItem('dataToken', res.token);
+          sessionStorage.setItem('dataToken', res.token);
           const cedula: string = this.registerForm.get("cedula")?.value;
           if (cedula == null || cedula == undefined) {
             this.messageService.add({ severity: 'info', summary: 'Information', detail: 'Digite su numero de cédula' });
           }
-          console.log('Buscando información para la cédula:', cedula);
-          const token = localStorage.getItem("dataToken");
+
+          const token = sessionStorage.getItem("dataToken");
           if (token != null) {
             this.serviceGeneral.getUserData(cedula).subscribe({
               next: (res: ConsultaJceResponse) => {

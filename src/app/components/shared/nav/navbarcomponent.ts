@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, ViewEncapsulation } from '@angular/core';
+import { Component, inject, OnInit, ViewEncapsulation } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { LucideAngularModule, Languages, Bell, Sun, Moon, X, Menu, Briefcase, LanguagesIcon, Globe, LogOut } from 'lucide-angular';
@@ -17,7 +17,7 @@ import { MessageService } from 'primeng/api';
   providers: [MessageService],
   encapsulation: ViewEncapsulation.None, // opcional
 })
-export class Navbarcomponent {
+export class Navbarcomponent implements OnInit {
 
   Languages = Languages;
   Bell = Bell;
@@ -30,57 +30,18 @@ export class Navbarcomponent {
   Globe = Globe;
   logout = LogOut;
 
-  // private notifications = inject(MessageService);
-  // langService = inject(LanguageService);
-
-
-
-  // mobileOpen = false;
-  // isDark = document.documentElement.classList.contains('dark');
-
-  // notify = this.notifications;
-  // lang = this.langService;
-
-  // toggleTheme() {
-  //   this.isDark = !this.isDark;
-  //   document.documentElement.classList.toggle('dark', this.isDark);
-  //   this.notifications.add({
-  //     severity: 'info',
-  //     summary: 'Tema activado',
-  //     detail: this.isDark ? 'Tema oscuro activado' : 'Tema claro activado',
-  //     life: 3000
-  //   });
-  // }
-
-  //   info(message: string, duration = 4000) {
-
-  //       this.notifications.add({
-  //     severity: 'info',
-  //     summary: 'Information',
-  //     detail: message,
-  //     life: duration
-  //   });
-  // }
-  // toggleLang() {
-  //   const next = this.lang.lang() === 'es' ? 'en' : 'es';
-  //   this.lang.setLanguage(next);
-
-  //   this.notifications.add({
-
-  //     severity: 'success',
-  //     summary: 'Idioma cambiado',
-  //     detail: next === 'es' ? 'Idioma cambiado a Español' : 'Language changed to English',
-  //     life: 3000
-  //   });
-  // }
-
-  // closeMobile() {
-  //   this.mobileOpen = false;
-  // }
 
   isMenuOpen = false;
   currentLanguage = 'es';
   router = inject(Router);
+  isLogin:boolean=false;
+  ngOnInit(): void {
+   const token =sessionStorage.getItem('token');
+   if (token) {
+    this.isLogin=true;
+   }
+  }
+
 
   t(key: string): string {
     // Aquí puedes integrar ngx-translate o tu función i18n personalizada
@@ -109,5 +70,16 @@ export class Navbarcomponent {
     this.router.navigate([path]);
     this.isMenuOpen = false;
   }
+  Salir()
+  {
+    sessionStorage.clear();
+    sessionStorage.removeItem('token');
 
+    sessionStorage.removeItem('user');
+   const token= sessionStorage.getItem('token');
+    if(!token)
+    {
+     this.router.navigate(['/login']);
+    }
+  }
 }
