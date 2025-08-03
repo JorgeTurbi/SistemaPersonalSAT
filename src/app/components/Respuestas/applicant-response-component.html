@@ -1,0 +1,92 @@
+<div class="flex justify-center items-center min-h-screen bg-gray-50 p-6">
+  <div class="w-full max-w-2xl">
+    <div class="bg-white rounded-2xl shadow-lg p-8 border border-gray-100">
+
+      <!-- Header con icono -->
+      <div class="flex items-center mb-6 border-b border-gray-200 pb-4">
+        <lucide-angular [img]="Reply" class="h-6 w-6 text-green-600 mr-2"></lucide-angular>
+        <h2 class="text-2xl font-bold text-gray-800">Responder al Reclutador</h2>
+      </div>
+
+      <form [formGroup]="responseForm" (ngSubmit)="onSubmit()" class="space-y-6">
+
+        <!-- Campo Mensaje -->
+        <div>
+          <label class="block text-sm font-medium text-gray-600 mb-1">
+            <lucide-angular [img]="MessageSquare" class="h-4 w-4 inline text-gray-400 mr-1"></lucide-angular>
+            Tu Mensaje
+          </label>
+          <textarea
+            formControlName="message"
+            rows="4"
+            class="w-full rounded-lg border-gray-300 focus:ring-2 focus:ring-green-500 focus:border-green-500"
+            placeholder="Escribe tu respuesta al reclutador..."></textarea>
+        </div>
+
+        <!-- Tipo de Respuesta -->
+        <div>
+          <label class="block text-sm font-medium text-gray-600 mb-1">
+            <lucide-angular [img]="CheckCircle" class="h-4 w-4 inline text-gray-400 mr-1"></lucide-angular>
+            Tipo de Respuesta
+          </label>
+          <select
+            formControlName="responseType"
+            class="w-full rounded-lg border-gray-300 focus:ring-2 focus:ring-green-500 focus:border-green-500">
+            <option value="confirm">Confirmar Entrevista</option>
+            <option value="reject">Rechazar</option>
+            <option value="reschedule">Solicitar Reprogramación</option>
+            <option value="question">Consulta / Pregunta</option>
+          </select>
+        </div>
+
+        <!-- Propuesta de Fecha/Hora (solo si reprograma) -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-sm font-medium text-gray-600 mb-1">
+              <lucide-angular [img]="Calendar" class="h-4 w-4 inline text-gray-400 mr-1"></lucide-angular>
+              Nueva Fecha (opcional)
+            </label>
+            <input
+              type="date"
+              formControlName="proposedDate"
+              class="w-full rounded-lg border-gray-300 focus:ring-2 focus:ring-green-500 focus:border-green-500">
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-600 mb-1">
+              <lucide-angular [img]="Clock" class="h-4 w-4 inline text-gray-400 mr-1"></lucide-angular>
+              Nueva Hora (opcional)
+            </label>
+            <input
+              type="time"
+              formControlName="proposedTime"
+              class="w-full rounded-lg border-gray-300 focus:ring-2 focus:ring-green-500 focus:border-green-500">
+          </div>
+        </div>
+
+        <!-- Adjuntar Archivos -->
+        <div>
+          <label class="block text-sm font-medium text-gray-600 mb-1">
+            <lucide-angular [img]="Paperclip" class="h-4 w-4 inline text-gray-400 mr-1"></lucide-angular>
+            Adjuntar Archivos (opcional)
+          </label>
+          <input
+            type="file"
+            (change)="onFileSelected($event)"
+            multiple
+            class="w-full rounded-lg border-gray-300 focus:ring-2 focus:ring-green-500 focus:border-green-500">
+          <small class="text-gray-400">Puedes adjuntar CV actualizado u otros documentos</small>
+        </div>
+
+        <!-- Botón de Enviar -->
+        <div class="flex justify-end pt-4 border-t border-gray-200">
+          <button
+            type="submit"
+            class="flex items-center px-5 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors">
+            <lucide-angular [img]="Send" class="h-4 w-4 mr-2"></lucide-angular>
+            Enviar Respuesta
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

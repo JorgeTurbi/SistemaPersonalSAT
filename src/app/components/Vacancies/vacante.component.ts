@@ -59,7 +59,8 @@ export class VacanteComponent implements OnInit {
     this.cargarTipoContrato();
     this.provincias();
     this.getListInstitucion();
-    const data = sessionStorage.getItem('user');
+    const data = localStorage.getItem('user');
+
     if (data) {
       this.perfilUsuario = JSON.parse(data);
 

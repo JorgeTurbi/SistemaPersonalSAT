@@ -36,7 +36,7 @@ export class Navbarcomponent implements OnInit {
   router = inject(Router);
   isLogin:boolean=false;
   ngOnInit(): void {
-   const token =sessionStorage.getItem('token');
+   const token =localStorage.getItem('token');
    if (token) {
     this.isLogin=true;
    }
@@ -49,6 +49,7 @@ export class Navbarcomponent implements OnInit {
       'nav.home': 'Inicio',
       'nav.jobs': 'Empleos',
       'nav.profile': 'Perfil',
+      'nav.aplicantes': 'Aplicantes',
       'nav.login': 'Iniciar sesión',
       'nav.register': 'Registrarse',
       'nav.logout': 'Cerrar sesión'
@@ -72,11 +73,11 @@ export class Navbarcomponent implements OnInit {
   }
   Salir()
   {
-    sessionStorage.clear();
-    sessionStorage.removeItem('token');
+    localStorage.clear();
+    localStorage.removeItem('token');
 
-    sessionStorage.removeItem('user');
-   const token= sessionStorage.getItem('token');
+    localStorage.removeItem('user');
+   const token= localStorage.getItem('token');
     if(!token)
     {
      this.router.navigate(['/login']);

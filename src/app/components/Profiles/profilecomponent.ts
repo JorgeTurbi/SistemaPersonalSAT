@@ -49,7 +49,7 @@ export class Profilecomponent implements OnInit {
   }
   ngOnInit(): void {
 
-    const data = sessionStorage.getItem('user');
+    const data = localStorage.getItem('user');
     if (data) {
       this.perfilUsuario = JSON.parse(data);
      // this.getPerfilAplicante(this.perfilUsuario?.id!);

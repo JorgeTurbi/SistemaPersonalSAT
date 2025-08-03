@@ -1,0 +1,145 @@
+<div class="flex justify-center items-center min-h-screen bg-gray-50 p-6">
+  <div class="w-full max-w-2xl">
+    <div class="bg-white rounded-2xl shadow-lg p-8 border border-gray-100">
+
+      <!-- Header con icono -->
+      <div class="flex items-center mb-6 border-b border-gray-200 pb-4">
+        <lucide-angular [img]="MessageSquare" class="h-6 w-6 text-blue-600 mr-2"></lucide-angular>
+        <h2 class="text-2xl font-bold text-gray-800">Actualizar Aplicación</h2>
+      </div>
+
+      <form [formGroup]="applicationForm" (ngSubmit)="onSubmit()" class="space-y-6">
+
+        <!-- Campo Mensaje -->
+        <div>
+          <label class="block text-sm font-medium text-gray-600 mb-1">
+            <lucide-angular [img]="Mail" class="h-4 w-4 inline text-gray-400 mr-1"></lucide-angular>
+            Mensaje al Aplicante
+          </label>
+          <textarea
+            formControlName="newMessage"
+            rows="4"
+            class="w-full rounded-lg border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            placeholder="Escribe un mensaje para el aplicante..."></textarea>
+        </div>
+
+        <!-- Tipo de mensaje -->
+        <div>
+          <label class="block text-sm font-medium text-gray-600 mb-1">
+            <lucide-angular [img]="Info" class="h-4 w-4 inline text-gray-400 mr-1"></lucide-angular>
+            Tipo de Mensaje
+          </label>
+          <select
+            formControlName="messageType"
+            class="w-full rounded-lg border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+            <option value="info">Información</option>
+            <option value="interview">Entrevista</option>
+            <option value="feedback">Retroalimentación</option>
+            <option value="decision">Decisión Final</option>
+          </select>
+        </div>
+
+        <!-- Estado -->
+        <div>
+          <label class="block text-sm font-medium text-gray-600 mb-1">
+            <lucide-angular [img]="BadgeCheck" class="h-4 w-4 inline text-gray-400 mr-1"></lucide-angular>
+            Cambiar Estado
+          </label>
+          <select
+            formControlName="status"
+            class="w-full rounded-lg border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+            <option value="applied">Aplicado</option>
+            <option value="inReview">En Revisión</option>
+            <option value="interview">Entrevista</option>
+            <option value="accepted">Aceptado</option>
+            <option value="rejected">Rechazado</option>
+          </select>
+        </div>
+
+        <!-- Fecha y hora de entrevista -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-sm font-medium text-gray-600 mb-1">
+              <lucide-angular [img]="Calendar" class="h-4 w-4 inline text-gray-400 mr-1"></lucide-angular>
+              Fecha Entrevista
+            </label>
+            <input
+              type="date"
+              formControlName="interviewDate"
+              class="w-full rounded-lg border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-600 mb-1">
+              <lucide-angular [img]="Clock" class="h-4 w-4 inline text-gray-400 mr-1"></lucide-angular>
+              Hora Entrevista
+            </label>
+            <input
+              type="time"
+              formControlName="interviewTime"
+              class="w-full rounded-lg border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+          </div>
+        </div>
+
+        <!-- Ubicación de la entrevista -->
+        <div>
+          <label class="block text-sm font-medium text-gray-600 mb-1">
+            <lucide-angular [img]="MapPin" class="h-4 w-4 inline text-gray-400 mr-1"></lucide-angular>
+            Ubicación de la Entrevista
+          </label>
+          <input
+            type="text"
+            formControlName="interviewLocation"
+            class="w-full rounded-lg border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            placeholder="Ej: Edificio C5i, Sala 3, Piso 5">
+        </div>
+
+        <!-- Datos del Reclutador -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div>
+            <label class="block text-sm font-medium text-gray-600 mb-1">
+              <lucide-angular [img]="User" class="h-4 w-4 inline text-gray-400 mr-1"></lucide-angular>
+              Nombre
+            </label>
+            <input
+              type="text"
+              formControlName="recruiterName"
+              class="w-full rounded-lg border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              placeholder="Nombre completo">
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-600 mb-1">
+              <lucide-angular [img]="Mail" class="h-4 w-4 inline text-gray-400 mr-1"></lucide-angular>
+              Email
+            </label>
+            <input
+              type="email"
+              formControlName="recruiterEmail"
+              class="w-full rounded-lg border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              placeholder="correo@ejemplo.com">
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-600 mb-1">
+              <lucide-angular [img]="Phone" class="h-4 w-4 inline text-gray-400 mr-1"></lucide-angular>
+              Teléfono
+            </label>
+            <input
+              type="tel"
+              formControlName="recruiterPhone"
+              class="w-full rounded-lg border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              placeholder="(809) 000-0000">
+          </div>
+        </div>
+
+        <!-- Botón de Enviar -->
+        <div class="flex justify-end pt-4 border-t border-gray-200">
+          <button
+            type="submit"
+            class="flex items-center px-5 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+            <lucide-angular [img]="Send" class="h-4 w-4 mr-2"></lucide-angular>
+            Enviar Actualización
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

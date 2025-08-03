@@ -1,0 +1,129 @@
+<div class="container mx-auto px-4 py-8">
+  <div class="mb-6">
+    <a routerLink="/profile" class="inline-flex items-center px-4 py-2 border rounded-md text-gray-700 hover:bg-gray-100 mb-4">
+      <lucide-angular [img]="ArrowLeft" class="h-4 w-4 mr-2"></lucide-angular>
+      Volver al Perfil
+    </a>
+
+    <div class="flex flex-col md:flex-row md:items-center justify-between">
+      <div>
+        <h1 class="text-3xl font-bold text-[#001F3F] mb-2">{{ applicationData.jobTitle }}</h1>
+        <div class="text-gray-600 mb-2 font-medium">{{ applicationData.company }}</div>
+        <div class="flex items-center text-gray-500">
+          <lucide-angular [img]="MapPin" class="h-4 w-4 mr-1"></lucide-angular>
+          {{ applicationData.location }}
+        </div>
+      </div>
+      <div class="mt-4 md:mt-0">
+        <span class="inline-flex items-center px-2 py-1 rounded-md text-sm font-medium"
+              [ngClass]="getStatusClass(applicationData.status)">
+          <i [class]="getStatusIcon(applicationData.status) + ' h-5 w-5 mr-1'"></i>
+          {{ getStatusLabel(applicationData.status) }}
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid gap-6 lg:grid-cols-3">
+    <!-- Main Content -->
+    <div class="lg:col-span-2 space-y-6">
+      <!-- Recruiter Messages -->
+      <div class="border rounded-lg shadow-sm p-4">
+        <h2 class="flex items-center text-lg font-semibold mb-4">
+          <lucide-angular [img]="MessageSquare" class="h-5 w-5 mr-2"></lucide-angular>
+          Mensajes del Reclutador
+        </h2>
+        <div class="space-y-4">
+          <div *ngFor="let message of applicationData.recruiterMessages" class="border-l-4 border-blue-200 pl-4 py-3">
+            <div class="flex items-center mb-2">
+              <i [class]="getMessageIcon(message.type) + ' h-4 w-4'"></i>
+              <span class="text-sm text-gray-500 ml-2">{{ message.date }}</span>
+            </div>
+            <p class="text-gray-700">{{ message.message }}</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Next Steps -->
+      <div *ngIf="applicationData.nextSteps" class="border rounded-lg shadow-sm p-4">
+        <h2 class="flex items-center text-lg font-semibold mb-2">
+          <lucide-angular [img]="CheckCircle" class="h-5 w-5 mr-2"></lucide-angular>
+          Próximos Pasos
+        </h2>
+        <p class="text-gray-700">{{ applicationData.nextSteps }}</p>
+      </div>
+    </div>
+
+    <!-- Sidebar -->
+    <div class="space-y-6">
+      <!-- Application Info -->
+      <div class="border rounded-lg shadow-sm p-4 space-y-3">
+        <h3 class="text-lg font-semibold mb-2">Información de la Aplicación</h3>
+        <div>
+          <label class="text-sm font-medium text-gray-500">Fecha de Aplicación</label>
+          <p class="text-gray-900">{{ applicationData.appliedDate }}</p>
+        </div>
+        <div>
+          <label class="text-sm font-medium text-gray-500">Estado Actual</label>
+          <p class="mt-1">
+            <span class="inline-flex items-center px-2 py-1 rounded-md text-sm font-medium"
+                  [ngClass]="getStatusClass(applicationData.status)">
+              <i [class]="getStatusIcon(applicationData.status) + ' h-5 w-5 mr-1'"></i>
+              {{ getStatusLabel(applicationData.status) }}
+            </span>
+          </p>
+        </div>
+      </div>
+
+      <!-- Interview Details -->
+      <div *ngIf="applicationData.interviewDate" class="border rounded-lg shadow-sm p-4 space-y-3">
+        <h3 class="flex items-center text-lg font-semibold mb-2">
+          <lucide-angular [img]="Calendar" class="h-5 w-5 mr-2"></lucide-angular>
+          Detalles de Entrevista
+        </h3>
+        <div>
+          <label class="text-sm font-medium text-gray-500">Fecha y Hora</label>
+          <p class="text-gray-900">{{ applicationData.interviewDate }}</p>
+        </div>
+        <div *ngIf="applicationData.interviewLocation">
+          <label class="text-sm font-medium text-gray-500">Ubicación</label>
+          <p class="text-gray-900">{{ applicationData.interviewLocation }}</p>
+        </div>
+      </div>
+
+      <!-- Recruiter Contact -->
+      <div *ngIf="applicationData.recruiterContact" class="border rounded-lg shadow-sm p-4 space-y-3">
+        <h3 class="flex items-center text-lg font-semibold mb-2">
+          <lucide-angular [img]="User" class="h-5 w-5 mr-2"></lucide-angular>
+          Contacto del Reclutador
+        </h3>
+        <div>
+          <label class="text-sm font-medium text-gray-500">Nombre</label>
+          <p class="text-gray-900">{{ applicationData.recruiterContact!.name }}</p>
+        </div>
+        <div>
+          <label class="text-sm font-medium text-gray-500">Email</label>
+          <p class="text-gray-900">{{ applicationData.recruiterContact!.email }}</p>
+        </div>
+        <div *ngIf="applicationData.recruiterContact?.phone">
+          <label class="text-sm font-medium text-gray-500">Teléfono</label>
+          <p class="text-gray-900">{{ applicationData.recruiterContact!.phone }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Footer -->
+<footer class="bg-gray-900 text-white py-8 mt-16">
+  <div class="container mx-auto px-4 md:px-6">
+    <div class="flex flex-col md:flex-row justify-between items-center">
+      <p>&copy; 2025 VanguardiaMilitar. Todos los derechos reservados.</p>
+      <div class="flex space-x-6 mt-4 md:mt-0">
+        <a href="#" class="hover:text-[#D4AF37] transition-colors">Términos de Servicio</a>
+        <a href="#" class="hover:text-[#D4AF37] transition-colors">Privacidad</a>
+        <a href="#" class="hover:text-[#D4AF37] transition-colors">Contacto</a>
+      </div>
+    </div>
+  </div>
+</footer>

@@ -19,7 +19,7 @@ export class AplicanteProfileService {
 
   setAplicanteProfile(profile: IProfileMilitar) {
     this.aplicanteProfileSubject.next(profile);
-    sessionStorage.setItem('AplicanteProfile', JSON.stringify(profile));
+    localStorage.setItem('AplicanteProfile', JSON.stringify(profile));
   }
 
   getAplicanteProfile() {
@@ -28,6 +28,6 @@ export class AplicanteProfileService {
 
   clearAplicanteProfile() {
     this.aplicanteProfileSubject.next(null!);
-    sessionStorage.removeItem('AplicanteProfile');
+    localStorage.removeItem('AplicanteProfile');
   }
 }

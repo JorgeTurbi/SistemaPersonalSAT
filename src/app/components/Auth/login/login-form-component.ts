@@ -38,6 +38,10 @@ export class LoginFormComponent implements OnInit {
   }
 
   submitForm() {
+    localStorage.clear();
+    localStorage.removeItem('token');
+
+    localStorage.removeItem('user');
 
     if (!this.loginForm.valid) {
 
@@ -50,8 +54,8 @@ export class LoginFormComponent implements OnInit {
 
 
         if (res.success) {
-          sessionStorage.setItem('token', res.data.token);
-          sessionStorage.setItem('user', JSON.stringify(res.data.user));
+          localStorage.setItem('token', res.data.token);
+          localStorage.setItem('user', JSON.stringify(res.data.user));
             if (res.data.perfil!=null) {
               this.profileService.setAplicanteProfile(res.data.perfil);
             }

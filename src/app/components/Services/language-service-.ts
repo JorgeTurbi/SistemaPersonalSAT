@@ -10,11 +10,11 @@ export class LanguageService {
 
   setLanguage(l: Lang) {
     this.current.set(l);
-    sessionStorage.setItem('lang', l);
+    localStorage.setItem('lang', l);
   }
 
   loadFromStorage() {
-    const stored = sessionStorage.getItem('lang') as Lang | null;
+    const stored = localStorage.getItem('lang') as Lang | null;
     if (stored) this.current.set(stored);
   }
 
