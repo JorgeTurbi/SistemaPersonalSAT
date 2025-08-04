@@ -33,7 +33,7 @@
     </div>
     <div class="flex items-center gap-2">
       <lucide-angular [img]="Users" class="w-4 h-4 text-gray-500"></lucide-angular>
-      <span>Tamaño del equipo: {{ "No Espesificado"}}</span>
+      <span>Tamaño del equipo: {{ "No Especificado"}}</span>
     </div>
   </div>
 
@@ -105,7 +105,7 @@
   </div>
 
   <!-- Botón -->
-  <button (click)="aplicar()" class="w-full bg-military-gold text-black hover:bg-amber-500 px-4 py-2 rounded mt-6">
+  <button *ngIf="perfilUsuario.role!='Admin'" (click)="aplicar()" class="w-full bg-military-gold text-black hover:bg-amber-500 px-4 py-2 rounded mt-6">
     Aplicar a este puesto
   </button>
 </div>

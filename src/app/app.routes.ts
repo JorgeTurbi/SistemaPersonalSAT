@@ -20,6 +20,13 @@ export const routes: Routes = [
 
       },
       {
+        path: 'vacante',
+        loadComponent: () => import('./components/VacanteComponente/page-vacante-component').then(a=>a.PageVacanteComponent),
+        canActivate: [authGuard],
+        data: { roles: ['Admin'] } // 🔹 Director pueden entrar
+
+      },
+      {
         path: 'jobs', loadComponent: () => import('./components/Vacancies/vacante.component').then(m => m.VacanteComponent),
         canActivate: [authGuard],
         data: { roles: ['Admin', 'User'] } // 🔹 Todos pueden entrar

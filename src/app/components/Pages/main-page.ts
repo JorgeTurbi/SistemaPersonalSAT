@@ -1,6 +1,8 @@
-import { Component, inject, ViewEncapsulation } from '@angular/core';
+import { Component, inject, OnInit, ViewEncapsulation } from '@angular/core';
 
 import { Router, RouterModule } from '@angular/router'; import { LucideAngularModule, User, Briefcase, GraduationCap, ArrowRight, Users, Shield, Award } from 'lucide-angular';
+import { DashboardDTO } from './PagesInterfaces/DashboardDTO';
+import { DashboardService } from './PagesServices/dashboard-service';
 
 @Component({
   selector: 'app-main',
@@ -10,7 +12,8 @@ import { Router, RouterModule } from '@angular/router'; import { LucideAngularMo
   styleUrl: './main-page.css',
   encapsulation: ViewEncapsulation.None, // opcional
 })
-export class MainPage {
+export class MainPage implements OnInit {
+
   user = User;
   briefcase = Briefcase;
   graduationcap = GraduationCap;
@@ -19,7 +22,25 @@ export class MainPage {
   shield = Shield;
   award = Award;
   router = inject(Router);
+  service =inject(DashboardService);
+  PerfilDashboard:DashboardDTO= {} as DashboardDTO;
 
+
+    ngOnInit(): void {
+    this.LoadDasboard();
+  }
+
+  LoadDasboard()
+  {
+    this.service.getDashboard().subscribe({
+      next:(res:DashboardDTO)=>{
+        this.PerfilDashboard=res;
+      },
+      error:(err:any)=>{
+          console.error(err)
+      }
+    });
+  }
   go(path: string) {
     this.router.navigate([path]);
   }

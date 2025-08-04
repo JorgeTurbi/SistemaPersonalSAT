@@ -1,42 +1,33 @@
+<!-- create-job-form.component.html -->
+ <div class="container mx-auto px-4 py-8">
 
-<div class="container mx-auto px-4 py-8">
-  <!-- Encabezado -->
-  <div class="flex flex-col md:flex-row justify-between items-center mb-8">
-    <h1 class="text-3xl font-bold text-military-navy mb-4 md:mb-0">
-      Vacantes Disponibles
-    </h1>
-    <button *ngIf="perfilUsuario?.role=='Admin'"
-      (click)="showDialog()"
-      class="bg-military-gold text-black hover:bg-amber-500 px-6 py-2 rounded font-medium shadow">
-      Publicar Nueva Vacante
-    </button>
-  </div>
-  <app-filtro (filtersChanged)="onFiltersChanged($event)"></app-filtro>
-  <app-vacante-list [filters]="currentFilters"></app-vacante-list>
+  <!-- Volver -->
+<div class="flex items-center mb-4 gap-4">
+  <button (click)="goDetails()" class="flex items-center border border-gray-400 text-black px-4 py-2 rounded hover:bg-military-gold transition">
+    <lucide-angular [img]="ArrowLeft" class="w-4 h-4 mr-2"></lucide-angular>
+    Volver a Vacantes
+  </button>
+  <h1 class="text-2xl font-bold">Nueva Vacante</h1>
+</div>
 </div>
 
-<p-dialog
-  [modal]="true"
-  [(visible)]="visible"
-  styleClass="custom-dialog-position"
-  [style]="{ width: '50rem' }"
-  [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }"
-  [maximizable]="true"
-  [dismissableMask]="true"
-  [contentStyle]="{ 'background-color': 'white', 'padding': '1.5rem', 'border-radius': '0.5rem' }">
+<div class="max-w-5xl mx-auto my-12 p-6 bg-white rounded-2xl shadow-lg border border-gray-200">
 
+  <!-- Encabezado de la card -->
   <div class="mb-6">
-    <div class="flex items-center gap-2 text-xl font-semibold text-foreground">
-      <lucide-angular [img]="Briefcase"
-        class="w-5 h-5 text-yellow-600"></lucide-angular> Crear Nueva Vacante
+    <div class="flex items-center gap-2 text-xl font-semibold text-gray-800">
+      <lucide-angular [img]="Briefcase" class="w-6 h-6 text-yellow-600"></lucide-angular>
+      Crear Nueva Vacante
     </div>
-    <p class="text-sm text-gray-500">Complete el formulario para publicar una
-      nueva vacante militar</p>
+    <p class="text-sm text-gray-500">
+      Complete el formulario para publicar una nueva vacante militar
+    </p>
   </div>
-  <!-- create-job-form.component.html -->
+
+  <!-- Formulario -->
   <form [formGroup]="vacanteForm" class="space-y-6">
 
-    <!-- Agrega los campos del formulario aquí -->
+      <!-- Agrega los campos del formulario aquí -->
     <div class="grid md:grid-cols-2 gap-4">
       <label class="block">
         <span class="font-medium">Título de la Posición *</span>
@@ -300,5 +291,5 @@ Dirección: Ave. 27 de Febrero, Distrito Nacional"
       </button>
     </div>
   </form>
+</div>
 
-</p-dialog>

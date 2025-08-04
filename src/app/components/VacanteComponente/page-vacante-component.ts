@@ -2,36 +2,36 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, OnInit, ViewEncapsulation } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { LucideAngularModule, Search, Filter, MapPin, Building, Briefcase } from 'lucide-angular';
+import { LucideAngularModule, Search, Filter, MapPin, Building, Briefcase,ArrowLeft } from 'lucide-angular';
 import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
-import { FiltroComponent } from "../Filtro/filtro-component";
-import { VacanteListComponent } from '../VacancyList/vacante-list';
-import { Dialog } from 'primeng/dialog';
+
+
 import { ButtonModule } from 'primeng/button';
 import { StyleClassModule } from 'primeng/styleclass';
-import { ITipoContrato, IVacante } from './InterfaceVacantes/ivacante';
-import { VacanteServices } from './ServicesVacantes/vacante-services';
-import { ICategoriaVacante } from './InterfaceVacantes/ICateogriaVacante';
 import { DataResponse } from '../../Interface/Response';
 import { ServiciosGenerales } from '../GeneralServices/servicios-generales';
 import { IProvincia } from '../../Interface/IProvincia';
 import { InstitucionService } from '../Services/institucion-service';
 import { IInstitucion } from '../../Interface/IInstitucion';
 import { IProfile } from '../../Interface/IProfile';
+import { ICategoriaVacante } from '../Vacancies/InterfaceVacantes/ICateogriaVacante';
+import { ITipoContrato, IVacante } from '../Vacancies/InterfaceVacantes/ivacante';
+import { VacanteServices } from '../Vacancies/ServicesVacantes/vacante-services';
+import { Router, RouterModule } from '@angular/router';
+import { SharedService } from '../GeneralServices/SharedService';
 
 
 @Component({
-  selector: 'app-vacante',
+  selector: 'app-pagevacante',
   standalone: true,
-  imports: [CommonModule, LucideAngularModule, FormsModule, ReactiveFormsModule, ToastModule, FiltroComponent, VacanteListComponent, Dialog, ButtonModule, StyleClassModule],
-  templateUrl: './vacante.component.html',
-  styleUrl: './vacante.component.css',
-  providers: [MessageService],
-  encapsulation: ViewEncapsulation.None, // opcional
+  imports: [CommonModule, LucideAngularModule, FormsModule, ReactiveFormsModule, ToastModule, ButtonModule, StyleClassModule],
+  templateUrl: './page-vacante-component.html',
+  styleUrl: './page-vacante-component.css'
 })
-export class VacanteComponent implements OnInit {
+export class PageVacanteComponent {
   // variables
+  ArrowLeft=ArrowLeft;
   Briefcase = Briefcase;
   vacanteForm!: FormGroup;
   logoPreview: string | null = null;
@@ -51,7 +51,9 @@ export class VacanteComponent implements OnInit {
     private vacanteService: VacanteServices,
     private messageService: MessageService,
     private servicioGeneral: ServiciosGenerales,
-    private institucionService: InstitucionService
+    private institucionService: InstitucionService,
+    private router:Router,
+    private shared:SharedService
 
   ) { }
   ngOnInit(): void {
@@ -90,6 +92,13 @@ export class VacanteComponent implements OnInit {
       isActive: [true, Validators.required]
     });
 
+  }
+
+  goDetails()
+  {
+
+  // Navega con el ID como parámetro
+  this.router.navigate(['/jobs']);
   }
 
 onFiltersChanged(filters: any) {
@@ -182,8 +191,9 @@ const formValue:IVacante = this.vacanteForm.value;
       this.vacanteService.newVacante(payload).subscribe({
         next: (res: DataResponse<boolean>) => {
           if (res.success) {
-            this.visible=false;
             this.limpiarFormulario();
+            this.router.navigate(['/inicio/jobs']);
+
 
             return this.messageService.add({ severity: 'success', summary: "Nueva Vacante", detail: res.message });
 
@@ -242,10 +252,10 @@ limpiarFormulario(): void {
       next: (res: DataResponse<IProvincia[]>) => {
         if (res.success) {
           this.provinciaList = res.data;
-          this.messageService.add({ severity: 'info', summary: "Information", detail: "Obteniendo Provincias" });
+          // this.messageService.add({ severity: 'info', summary: "Information", detail: "Obteniendo Provincias" });
 
         }
-        this.messageService.add({ severity: 'warn', summary: 'Warning', detail: "No se Encontraron Registros" });
+        // this.messageService.add({ severity: 'warn', summary: 'Warning', detail: "No se Encontraron Registros" });
 
       },
       error: (err: any) => {
@@ -259,10 +269,10 @@ limpiarFormulario(): void {
       next: (res: DataResponse<ICategoriaVacante[]>) => {
         if (res.success) {
           this.vacanteCategoriaList = res.data;
-          this.messageService.add({ severity: 'info', summary: "Information", detail: "Obteniendo Categorias Vacantes" });
+          // this.messageService.add({ severity: 'info', summary: "Information", detail: "Obteniendo Categorias Vacantes" });
 
         }
-        this.messageService.add({ severity: 'warn', summary: 'Warning', detail: "No se Encontraron Registros" });
+        // this.messageService.add({ severity: 'warn', summary: 'Warning', detail: "No se Encontraron Registros" });
 
       },
       error: (err: any) => {

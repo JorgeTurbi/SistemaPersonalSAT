@@ -5,6 +5,7 @@ import { IVacanteDto } from '../Vacancies/InterfaceVacantes/IVacanteDto';
 import { VacanteServices } from '../Vacancies/ServicesVacantes/vacante-services';
 import { MessageService } from 'primeng/api';
 import { DataResponse } from '../../Interface/Response';
+import { UserProfile } from '../Auth/login/InterfaceLogin/UserProfile';
 
 @Component({
   selector: 'app-vacante-list',
@@ -18,6 +19,7 @@ export class VacanteListComponent implements OnInit {
 
   originalJobsData: IVacanteDto[] = [];
   jobsData: IVacanteDto[] = [];
+  perfilUsuario:UserProfile={} as UserProfile;
 constructor(
   private vacanteservice:VacanteServices,
 
@@ -25,6 +27,12 @@ constructor(
 ) {}
 
   ngOnInit(): void {
+  const data = localStorage.getItem('user');
+
+    if (data) {
+      this.perfilUsuario = JSON.parse(data);
+
+    }
     this.consultarListaVacante();
 
   }
@@ -43,8 +51,18 @@ private normalizeText(text: string): string {
     this.vacanteservice.getList().subscribe({
       next: (res: DataResponse<IVacanteDto[]>) => {
         if (res.success) {
-          this.originalJobsData = res.data;
-          this.jobsData = [...res.data];
+
+              if (this.perfilUsuario.role=="Admin") {
+                  this.originalJobsData = res.data.filter(a=>a.userId==this.perfilUsuario.id);
+
+                this.jobsData = [...res.data.filter(a=>a.userId==this.perfilUsuario.id)];
+              }
+              else{
+                 this.originalJobsData = res.data;
+
+                this.jobsData = [...res.data];
+              }
+
           this.applyLocalFilter(); // aplica si ya hay filtros
         }
       }

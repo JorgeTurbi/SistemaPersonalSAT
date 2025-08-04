@@ -68,7 +68,7 @@
           </div>
           <h3 class="text-xl font-bold mb-2">Crea tu Perfil</h3>
           <p class="text-gray-600">
-            Destaca tu experiencia militar, formación y habilidades para aumentar tus oportunidades.
+            Destaca tu experiencia, formación y habilidades para aumentar tus oportunidades.
           </p>
         </div>
       </a>
@@ -81,20 +81,20 @@
           </div>
           <h3 class="text-xl font-bold mb-2">Explora Vacantes</h3>
           <p class="text-gray-600">
-            Encuentra oportunidades que valoran tu experiencia militar y aplica fácilmente.
+            Encuentra oportunidades que valoran tu perfil y aplica fácilmente.
           </p>
         </div>
       </a>
 
       <!-- Publica Vacantes -->
-      <a routerLink="/create-job" class="block">
+      <a routerLink="/vacante" class="block">
         <div class="flex flex-col items-center text-center p-6 card-military hover:shadow-lg transition-shadow cursor-pointer">
           <div class="bg-military-navy rounded-full p-4 mb-4">
             <lucide-angular [img]="graduationcap" class="h-8 w-8 text-military-gold"></lucide-angular>
           </div>
           <h3 class="text-xl font-bold mb-2">Publica Vacantes</h3>
           <p class="text-gray-600">
-            Instituciones pueden publicar vacantes específicas para perfiles militares.
+            Directores pueden publicar vacantes específicas para perfiles militares.
           </p>
         </div>
       </a>
@@ -126,8 +126,8 @@
             <lucide-angular [img]="users" class="h-6 w-6 text-military-gold"></lucide-angular>
           </div>
         </div>
-        <h3 class="text-2xl font-bold text-military-navy mb-2">2,500+</h3>
-        <p class="text-gray-600">Militares Registrados</p>
+        <h3 class="text-2xl font-bold text-military-navy mb-2">{{PerfilDashboard.usuarioRegistrados}}+</h3>
+        <p class="text-gray-600">Usuarios Registrados</p>
       </div>
 
       <div class="bg-white p-6 rounded-lg shadow-md text-center">
@@ -136,7 +136,7 @@
             <lucide-angular [img]="briefcase" class="h-6 w-6 text-military-gold"></lucide-angular>
           </div>
         </div>
-        <h3 class="text-2xl font-bold text-military-navy mb-2">350+</h3>
+        <h3 class="text-2xl font-bold text-military-navy mb-2">{{PerfilDashboard.vacantesActivas}}+</h3>
         <p class="text-gray-600">Vacantes Activas</p>
       </div>
 
@@ -146,8 +146,8 @@
             <lucide-angular [img]="shield" class="h-6 w-6 text-military-gold"></lucide-angular>
           </div>
         </div>
-        <h3 class="text-2xl font-bold text-military-navy mb-2">45+</h3>
-        <p class="text-gray-600">Instituciones Aliadas</p>
+        <h3 class="text-2xl font-bold text-military-navy mb-2">{{PerfilDashboard.totalAplicaciones}}+</h3>
+        <p class="text-gray-600">Aplicaciones Realizadas</p>
       </div>
 
       <div class="bg-white p-6 rounded-lg shadow-md text-center">
@@ -156,7 +156,7 @@
             <lucide-angular [img]="award" class="h-6 w-6 text-military-gold"></lucide-angular>
           </div>
         </div>
-        <h3 class="text-2xl font-bold text-military-navy mb-2">1,200+</h3>
+        <h3 class="text-2xl font-bold text-military-navy mb-2">{{PerfilDashboard.totalAsignaciones}}+</h3>
         <p class="text-gray-600">Asignaciones Exitosas</p>
       </div>
     </div>
@@ -166,11 +166,11 @@
 <section class="bg-military-navy text-white py-16 text-center">
   <div class="max-w-7xl mx-auto px-4 md:px-6">
     <h2 class="text-3xl md:text-4xl font-bold mb-6">
-      ¿Listo para avanzar en tu carrera militar?
+      ¿Listo para avanzar en tu carrera?
     </h2>
 
     <p class="text-xl mb-8 max-w-2xl mx-auto">
-      Únete a miles de profesionales militares que ya encontraron la oportunidad perfecta para su experiencia.
+      Únete a miles de profesionales que ya encontraron la oportunidad perfecta para su experiencia.
     </p>
 
     <a
