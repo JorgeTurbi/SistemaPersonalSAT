@@ -1,39 +1,55 @@
 <div class="max-w-5xl mx-auto px-4 py-6 bg-white rounded shadow">
-
   <!-- Encabezado del puesto -->
-  <h2 class="text-xl font-bold text-military-navy">{{ dataVacante.titulo! }}</h2>
+  <h2 class="text-xl font-bold text-military-navy">{{ dataVacante?.titulo || '—'
+    }}</h2>
   <div class="flex flex-wrap items-center text-sm text-gray-600 mt-1 gap-2">
-    <lucide-angular [img]="Building" class="w-4 h-4 text-gray-500"></lucide-angular>
-    <span>{{ dataVacante.institucionNombre }}</span>
+    <lucide-angular [img]="Building"
+      class="w-4 h-4 text-gray-500"></lucide-angular>
+    <span>{{ dataVacante?.institucionNombre || '—' }}</span>
 
-    <lucide-angular [img]="MapPin" class="w-4 h-4 text-gray-500 ml-4"></lucide-angular>
-     <span></span>
-    <span>{{ dataVacante.provinciaNombre }}</span>
+    <lucide-angular [img]="MapPin"
+      class="w-4 h-4 text-gray-500 ml-4"></lucide-angular>
+    <span>{{ dataVacante?.provinciaNombre || '—' }}</span>
   </div>
 
   <!-- Badges -->
   <div class="mt-2 flex flex-wrap gap-2 text-sm">
     <span class="bg-military-navy text-white px-2 py-1 rounded">
-      {{ dataVacante.tipoContrato==1?"Tiempo Completo":dataVacante.tipoContrato==2?"Medio Tiempo": dataVacante.tipoContrato==3?"Contrato":"Temporal" }}
+      {{
+      dataVacante?.tipoContrato == 1
+      ? 'Tiempo Completo'
+      : dataVacante?.tipoContrato == 2
+      ? 'Medio Tiempo'
+      : dataVacante?.tipoContrato == 3
+      ? 'Contrato'
+      : 'Temporal'
+      }}
     </span>
-    <span class="border border-gray-300 px-2 py-1 rounded text-gray-600">Experiencia: {{ dataVacante.experienciaRequerida }}</span>
+    <span class="border border-gray-300 px-2 py-1 rounded text-gray-600">
+      Experiencia: {{ dataVacante?.experienciaRequerida || 'No especificado' }}
+    </span>
   </div>
 
-  <!-- Detalles del puesto -->
+  <!-- Detalles -->
   <h3 class="text-lg font-semibold mt-6">Detalles del puesto</h3>
-<hr class="my-4 border-t-2 border-gray-300" />
+  <hr class="my-4 border-t-2 border-gray-300" />
   <div class="grid sm:grid-cols-2 gap-4 text-sm">
     <div class="flex items-center gap-2">
-      <lucide-angular [img]="Calendar" class="w-4 h-4 text-gray-500"></lucide-angular>
-      <span>Fecha de publicación: {{ dataVacante.createdAt | date: 'dd/MM/yyyy' }}</span>
+      <lucide-angular [img]="Calendar"
+        class="w-4 h-4 text-gray-500"></lucide-angular>
+      <span>Fecha de publicación: {{ dataVacante?.createdAt | date: 'dd/MM/yyyy'
+        }}</span>
     </div>
     <div class="flex items-center gap-2">
-      <lucide-angular [img]="DollarSign" class="w-4 h-4 text-gray-500"></lucide-angular>
-      <span>Salario: {{ dataVacante.salarioCompensacion }}</span>
+      <lucide-angular [img]="DollarSign"
+        class="w-4 h-4 text-gray-500"></lucide-angular>
+      <span>Salario: {{ dataVacante?.salarioCompensacion || 'No especificado'
+        }}</span>
     </div>
     <div class="flex items-center gap-2">
-      <lucide-angular [img]="Users" class="w-4 h-4 text-gray-500"></lucide-angular>
-      <span>Tamaño del equipo: {{ "No Especificado"}}</span>
+      <lucide-angular [img]="Users"
+        class="w-4 h-4 text-gray-500"></lucide-angular>
+      <span>Tamaño del equipo: No Especificado</span>
     </div>
   </div>
 
@@ -41,11 +57,13 @@
   <div class="mt-6">
     <h3 class="text-lg font-semibold">Descripción del puesto</h3>
     <hr class="my-4 border-t-2 border-gray-300" />
-    <p class="mt-2 text-sm text-gray-700">{{ dataVacante.descripcionPuesto }}</p>
+    <p class="mt-2 text-sm text-gray-700">{{ dataVacante?.descripcionPuesto ||
+      '—' }}</p>
   </div>
 
-  <!-- Secciones -->
-  <div class="mt-6">
+  <!-- Sección: Responsabilidades -->
+ <!-- Responsabilidades -->
+<div class="mt-6">
   <div class="flex justify-between items-center cursor-pointer" (click)="toggleSection('showResponsibilities')">
     <h3 class="text-lg font-semibold">Responsabilidades</h3>
     <span>
@@ -54,58 +72,96 @@
     </span>
   </div>
   <hr class="my-2 border-t-2 border-gray-300" />
-  <ul *ngIf="showResponsibilities" @accordionAnimation class="list-disc pl-5 mt-1 text-sm">
-    <li *ngFor="let item of dataVacante.responsabilidadesEspecificas">{{ item }}</li>
-  </ul>
+  @if (showResponsibilities) {
+    <ul @accordionAnimation class="list-disc pl-5 mt-1 text-sm">
+      @for (item of (dataVacante?.responsabilidadesEspecificas ?? []); track $index) {
+        <li>{{ item }}</li>
+      }
+    </ul>
+  }
 </div>
 
-<div class="mt-6">
-  <div class="flex justify-between items-center cursor-pointer" (click)="toggleSection('showQualifications')">
-    <h3 class="text-lg font-semibold">Cualificaciones</h3>
+  <!-- Sección: Cualificaciones -->
+  <div class="mt-6">
+    <div class="flex justify-between items-center cursor-pointer"
+      (click)="toggleSection('showQualifications')">
+      <h3 class="text-lg font-semibold">Cualificaciones</h3>
       <span>
-      <lucide-angular *ngIf="showQualifications" [img]="ChevronUp"></lucide-angular>
-      <lucide-angular *ngIf="!showQualifications" [img]="ChevronDown"></lucide-angular>
-    </span>
+        @if(showQualifications)
+        {
+        <lucide-angular
+          [img]="ChevronUp"></lucide-angular>
+        }@else {
+        <lucide-angular
+          [img]="ChevronDown"></lucide-angular>
+        }
+
+      </span>
+    </div>
+    <hr class="my-2 border-t-2 border-gray-300" />
+    @if (showQualifications) {
+    <ul @accordionAnimation class="list-disc pl-5 mt-1 text-sm">
+      @for (item of (dataVacante?.habilidadesCompetencias ?? []); track $index)
+      {
+      <li>{{ item }}</li>
+      }
+    </ul>
+    }
+
   </div>
-  <hr class="my-2 border-t-2 border-gray-300" />
-  <ul *ngIf="showQualifications" @accordionAnimation class="list-disc pl-5 mt-1 text-sm">
-    <li *ngFor="let item of dataVacante.habilidadesCompetencias">{{ item }}</li>
-  </ul>
-</div>
 
+  <!-- Sección: Beneficios -->
+  <div class="mt-6">
+    <div class="flex justify-between items-center cursor-pointer"
+      (click)="toggleSection('showBenefits')">
+      <h3 class="text-lg font-semibold">Beneficios</h3>
+      <span>
+        @if(showBenefits)
+        {
+        <lucide-angular [img]="ChevronUp"></lucide-angular>
+        }@else {
+        <lucide-angular
+          [img]="ChevronDown"></lucide-angular>
+        }
 
-<div class="mt-6">
-  <div class="flex justify-between items-center cursor-pointer" (click)="toggleSection('showBenefits')">
-    <h3 class="text-lg font-semibold">Beneficios</h3>
-        <span>
-      <lucide-angular *ngIf="showBenefits" [img]="ChevronUp"></lucide-angular>
-      <lucide-angular *ngIf="!showBenefits" [img]="ChevronDown"></lucide-angular>
-    </span>
+      </span>
+    </div>
+    <hr class="my-2 border-t-2 border-gray-300" />
+    @if(showBenefits)
+    {
+ <ul  @accordionAnimation
+      class="list-disc pl-5 mt-1 text-sm">
+      @for (item of (dataVacante?.beneficiosCompensaciones??[]); track $index) {
+      <li>{{ item }}</li>
+      }
+
+    </ul>
+    }
+
   </div>
-  <hr class="my-2 border-t-2 border-gray-300" />
-  <ul *ngIf="showBenefits" @accordionAnimation class="list-disc pl-5 mt-1 text-sm">
-    <li *ngFor="let item of dataVacante.beneficiosCompensaciones">{{ item }}</li>
-  </ul>
-</div>
-
 
   <!-- Contacto -->
   <div class="mt-6">
     <h3 class="text-lg font-semibold">Contacto</h3>
     <div class="grid sm:grid-cols-2 gap-4 text-sm mt-2">
       <div class="flex items-center gap-2">
-        <lucide-angular [img]="Phone" class="w-4 h-4 text-gray-500"></lucide-angular>
-        <span>{{ dataVacante.telefono }}</span>
+        <lucide-angular [img]="Phone"
+          class="w-4 h-4 text-gray-500"></lucide-angular>
+        <span>{{ dataVacante?.telefono || '—' }}</span>
       </div>
       <div class="flex items-center gap-2">
-        <lucide-angular [img]="Mail" class="w-4 h-4 text-gray-500"></lucide-angular>
-        <span>{{ dataVacante.email}}</span>
+        <lucide-angular [img]="Mail"
+          class="w-4 h-4 text-gray-500"></lucide-angular>
+        <span>{{ dataVacante?.email || '—' }}</span>
       </div>
     </div>
   </div>
 
-  <!-- Botón -->
-  <button *ngIf="perfilUsuario.role!='Admin'" (click)="aplicar()" class="w-full bg-military-gold text-black hover:bg-amber-500 px-4 py-2 rounded mt-6">
+  <!-- Botón aplicar (oculto a Admin) -->
+@if (isLogin && !isAdmin) {
+  <button (click)="aplicar()" class="w-full bg-military-gold text-black hover:bg-amber-500 px-4 py-2 rounded mt-6">
     Aplicar a este puesto
   </button>
+}
+
 </div>

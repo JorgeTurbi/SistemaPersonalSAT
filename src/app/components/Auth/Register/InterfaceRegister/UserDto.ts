@@ -1,5 +1,6 @@
+// (opcional) UserDto – sin cambios necesarios
 export interface UserDto {
-  id?: number; // opcional porque es Identity
+  id?: number;
   institutionId: number;
   departamentoId: number;
   nombres: string;
@@ -10,4 +11,3 @@ export interface UserDto {
   passwordHash: string;
   cedula: string;
 }
-

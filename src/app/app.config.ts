@@ -17,7 +17,7 @@ import { authInterceptor } from './Interceptos/auth-interceptor';
 export const appConfig: ApplicationConfig = {
   providers: [
     importProvidersFrom(NgxSpinnerModule),
-    provideHttpClient(withInterceptors([authInterceptor])),
+     provideHttpClient(withInterceptors([authInterceptor])),
     provideNgxMask(),
     importProvidersFrom(ToastModule),
     MessageService,

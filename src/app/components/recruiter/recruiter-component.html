@@ -147,7 +147,12 @@
             </span>
           </td>
           <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-            <button (click)="handleExportProfilePDF(app.name?.toString()!)" class="text-blue-600 hover:text-blue-900 flex items-center gap-1">
+            <button (click)="mensaje(app.aplicanteId)" class="text-blue-600 hover:text-blue-900 flex items-center gap-1">
+
+                      <lucide-angular [img]="Chat" class="w-4 h-4"></lucide-angular>
+              mensajes
+            </button>
+              <button (click)="handleExportProfilePDF(app.name?.toString()!)" class="text-blue-600 hover:text-blue-900 flex items-center gap-1">
 
                       <lucide-angular [img]="Eye" class="w-4 h-4"></lucide-angular>
               Ver Perfil

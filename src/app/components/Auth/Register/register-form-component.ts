@@ -41,7 +41,7 @@ export class RegisterFormComponent implements OnInit {
   showPassword: boolean = false;
   showConfirmPassword: boolean = false;
   regUser!: UserDto;
-
+  cedulaValida:boolean=false;
   constructor(private auth: AuthService,
     private serviceGeneral: ServiciosGenerales,
     private router: Router, private _InstitucionService: InstitucionService, private fb: FormBuilder, private messageService: MessageService) { }
@@ -143,17 +143,17 @@ export class RegisterFormComponent implements OnInit {
 
   buscarCedula() {
 
-    localStorage.removeItem('dataToken');
-    const userData: IUserDataService = { username: 'jturbi', password: 'Brittany040238.' }
+
+    const userData: IUserDataService = { username: 'jturbi', password: 'xxxxxxxxxxxx.' }
     this.serviceGeneral.getTokendATA(userData).subscribe({
       next: (res: IResponseTokenDataService) => {
         if (res.token != null || res.token != undefined) {
           localStorage.setItem('dataToken', res.token);
+
           const cedula: string = this.registerForm.get("cedula")?.value;
           if (cedula == null || cedula == undefined) {
             this.messageService.add({ severity: 'info', summary: 'Information', detail: 'Digite su numero de cédula' });
           }
-
           const token = localStorage.getItem("dataToken");
           if (token != null) {
             this.serviceGeneral.getUserData(cedula).subscribe({
@@ -166,6 +166,11 @@ export class RegisterFormComponent implements OnInit {
                     apellidos: res.apellido1 + " " + res.apellido2,
                     fullName: res.nombres + "  " + res.apellido1 + " " + res.apellido2
                   });
+                  this.cedulaValida=true;
+                }
+                else{
+                       this.messageService.add({ severity: 'error', summary: 'Error', detail: ' cedula invalida' });
+                       return;
                 }
               },
               error: (err: any) => {
@@ -197,14 +202,16 @@ export class RegisterFormComponent implements OnInit {
       return;
 
     }
-    this.regUser = this.registerForm.value;
+
+    if (this.cedulaValida) {
+         this.regUser = this.registerForm.value;
     this.auth.registerUser(this.regUser).subscribe({
       next: (res: DataResponse<boolean>) => {
         if (res.success) {
 
           this.messageService.add({ severity: 'success', summary: "Registro", detail: res.message });
           this.messageService.add({ severity: 'info', summary: "Information", detail: "Redigiriendo" });
-          return this.router.navigateByUrl("/login")
+          return this.router.navigateByUrl("/very")
         }
         return this.messageService.add({ severity: 'error', summary: 'Error', detail: res.message });
 
@@ -228,6 +235,12 @@ export class RegisterFormComponent implements OnInit {
 
       }
     });
+
+    }
+    else
+    {
+       return this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Cedula Invalida' });
+    }
 
   }
 }

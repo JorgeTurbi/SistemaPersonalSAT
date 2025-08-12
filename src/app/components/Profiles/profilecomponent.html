@@ -1,26 +1,26 @@
-<!-- src/app/profile/profile.component.html -->
 <div class="container mx-auto px-4 py-8">
   <!-- Encabezado -->
   <div class="flex justify-between items-center mb-6">
     <h1 class="text-3xl font-bold text-[#001F3F]">Mi Perfil</h1>
-    <!-- <button (click)="abrirEditor()"
-      class="bg-[#D4AF37] hover:bg-amber-500 text-black px-4 py-2 rounded flex items-center gap-2 text-sm font-semibold"
-    >
-      ✏️ Editar Perfil
-    </button> -->
-    <button *ngIf="Aplicante==null || undefined" (click)="abrirEditor()"
-  class="bg-[#D4AF37] hover:bg-amber-500 text-black px-4 py-2 rounded flex items-center gap-2 text-sm font-semibold"
->
+
+<!-- Agregar Perfil -->
+ @if (!Aplicante?.id) {
+<button  (click)="abrirEditor()"
+  class="bg-[#D4AF37] hover:bg-amber-500 text-black px-4 py-2 rounded flex items-center gap-2 text-sm font-semibold">
   <lucide-angular [img]="Plus" class="w-4 h-4"></lucide-angular>
   Agregar Perfil
 </button>
-
-    <button (click)="abrirEditor()"
-  class="bg-[#D4AF37] hover:bg-amber-500 text-black px-4 py-2 rounded flex items-center gap-2 text-sm font-semibold"
->
-  <!-- <lucide-angular [img]="Plus" class="w-4 h-4"></lucide-angular> -->
- ✏️ Editar Perfil
+ }
+ @else {
+<!-- Editar Perfil -->
+<button  (click)="abrirEditor()"
+  class="bg-[#D4AF37] hover:bg-amber-500 text-black px-4 py-2 rounded flex items-center gap-2 text-sm font-semibold">
+  ✏️ Editar Perfil
 </button>
+ }
+
+
+
   </div>
 
   <!-- Tabs -->
@@ -33,13 +33,17 @@
     </nav>
   </div>
 
-  <!-- Contenido del Tab: Perfil -->
-  <div *ngIf="activeTab === 'profile'" class="bg-white rounded-lg shadow overflow-hidden">
+<!-- Tab: Perfil -->
+@if (activeTab === 'profile') {
+  <div class="bg-white rounded-lg shadow overflow-hidden">
     <div class="bg-[#001F3F] text-white p-6 flex items-center gap-4">
-      <img [src]="Aplicante.profileImage" alt="Foto de perfil" class="h-20 w-20 rounded-full border-2 border-[#D4AF37]" />
+      <img
+        [src]="Aplicante?.profileImage || '/assets/avatar-placeholder.png'"
+        alt="Foto de perfil"
+        class="h-20 w-20 rounded-full border-2 border-[#D4AF37]" />
       <div>
-        <h2 class="text-2xl font-bold">{{Aplicante.name}}</h2>
-        <p>{{Aplicante.rank}} • {{Aplicante.specialization}}</p>
+        <h2 class="text-2xl font-bold">{{ Aplicante?.name || 'Sin nombre' }}</h2>
+        <p>{{ Aplicante?.rank || '—' }} • {{ Aplicante?.specialization || '—' }}</p>
       </div>
     </div>
 
@@ -48,12 +52,15 @@
       <div>
         <h3 class="text-lg font-semibold mb-2">📌 Información Personal</h3>
         <div class="grid md:grid-cols-2 gap-4">
-          <p><strong>País/Nacionalidad:</strong>{{Aplicante.country}}</p>
-          <p><strong>Fecha de Nacimiento:</strong> {{Aplicante.birthDate | date:'dd/MM/yyyy'}}</p>
-          <p><strong>Estado Civil:</strong>{{Aplicante.maritalStatus}}</p>
-          <p><strong>Teléfono:</strong>{{Aplicante.phone}}</p>
-          <p><strong>Correo:</strong> {{Aplicante.email}}</p>
-          <p><strong>Dirección:</strong> {{Aplicante.address}}</p>
+          <p><strong>País/Nacionalidad:</strong> {{ Aplicante?.country || '—' }}</p>
+          <p>
+            <strong>Fecha de Nacimiento:</strong>
+            {{ Aplicante?.birthDate ? (Aplicante?.birthDate | date:'dd/MM/yyyy') : '—' }}
+          </p>
+          <p><strong>Estado Civil:</strong> {{ Aplicante?.maritalStatus || '—' }}</p>
+          <p><strong>Teléfono:</strong> {{ Aplicante?.phone || '—' }}</p>
+          <p><strong>Correo:</strong> {{ Aplicante?.email || '—' }}</p>
+          <p><strong>Dirección:</strong> {{ Aplicante?.address || '—' }}</p>
         </div>
       </div>
 
@@ -61,15 +68,18 @@
       <div>
         <h3 class="text-lg font-semibold mb-2">💼 Experiencia</h3>
         <div class="space-y-4">
-          <div *ngFor="let item of Aplicante.experience">
+          @for (item of (Aplicante?.experience ?? []); track $index) {
             <div class="flex justify-between font-medium">
-              <p>{{item.position}}</p>
-              <span>{{item.startDate | date:'yyyy'}}- {{item.endDate | date:'yyyy'}}</span>
+              <p>{{ item?.position || '—' }}</p>
+              <span>
+                {{ item?.startDate ? (item.startDate | date:'yyyy') : '—' }}
+                -
+                {{ item?.endDate ? (item.endDate | date:'yyyy') : '—' }}
+              </span>
             </div>
-            <p class="text-sm text-gray-600">{{item.company}}</p>
-            <p class="text-gray-700">{{item.description}}</p>
-          </div>
-
+            <p class="text-sm text-gray-600">{{ item?.company || '—' }}</p>
+            <p class="text-gray-700">{{ item?.description || '' }}</p>
+          }
         </div>
       </div>
 
@@ -77,17 +87,24 @@
       <div>
         <h3 class="text-lg font-semibold mb-2">🎓 Educación</h3>
         <div class="space-y-4">
-          <div *ngFor="let item of Aplicante.education" class="flex justify-between items-center">
-            <div>
-              <p class="font-medium">{{item.degree}}</p>
-              <p class="text-sm text-gray-600">{{item.institution}}</p>
+          @for (item of (Aplicante?.education ?? []); track $index) {
+            <div class="flex justify-between items-center">
+              <div>
+                <p class="font-medium">{{ item?.degree || '—' }}</p>
+                <p class="text-sm text-gray-600">{{ item?.institution || '—' }}</p>
+              </div>
+              <div class="flex gap-2 items-center text-sm">
+                <span>
+                  {{ item?.startDate ? (item.startDate | date:'yyyy') : '—' }}
+                  -
+                  {{ item?.endDate ? (item.endDate | date:'yyyy') : '—' }}
+                </span>
+                @if (item?.certificatePdf) {
+                  <button class="text-blue-600 hover:underline" (click)="descargarPdf(item.certificatePdf!)">📄 PDF</button>
+                }
+              </div>
             </div>
-            <div class="flex gap-2 items-center text-sm">
-              <span>{{item.startDate | date:'yyyy'}}- {{item.endDate | date:'yyyy'}}</span>
-              <button class="text-blue-600 hover:underline" (click)="descargarPdf(item.certificatePdf!)">📄 PDF</button>
-            </div>
-          </div>
-
+          }
         </div>
       </div>
 
@@ -95,178 +112,157 @@
       <div>
         <h3 class="text-lg font-semibold mb-2">🧠 Habilidades</h3>
         <div class="flex flex-wrap gap-2 text-xs">
-          <span *ngFor="let item of Aplicante.skills?.split(',')" class="bg-gray-200 px-3 py-1 rounded-full">{{item}}</span>
-          <!-- <span class="bg-gray-200 px-3 py-1 rounded-full">Operaciones marítimas</span>
-          <span class="bg-gray-200 px-3 py-1 rounded-full">Gestión de personal</span>
-          <span class="bg-gray-200 px-3 py-1 rounded-full">Derecho internacional</span>
-          <span class="bg-gray-200 px-3 py-1 rounded-full">Inglés y francés</span>
-          <span class="bg-gray-200 px-3 py-1 rounded-full">Microsoft Office</span>
-          <span class="bg-gray-200 px-3 py-1 rounded-full">Ciberseguridad</span>
-          <span class="bg-gray-200 px-3 py-1 rounded-full">Resolución de conflictos</span> -->
+          @for (item of (Aplicante?.skills ? Aplicante?.skills?.split(',') : []); track $index) {
+            <span class="bg-gray-200 px-3 py-1 rounded-full">{{ item }}</span>
+          }
         </div>
       </div>
     </div>
   </div>
+}
 
-  <!-- Aquí puedes implementar los otros tabs en el futuro -->
-
-  <!-- Contenido del Tab: Aplicaciones -->
-<div *ngIf="activeTab === 'applications'" class="space-y-4">
-  <h2 class="text-2xl font-bold text-[#001F3F]">Aplicaciones</h2>
-
+<!-- Tab: Aplicaciones -->
+@if (activeTab === 'applications') {
   <div class="space-y-4">
-    <div *ngFor="let item of listadoAplicaciones"  class="bg-white border border-gray-200 rounded-lg p-4 shadow-sm">
-      <div class="flex justify-between items-start mb-3">
-        <div>
-          <h3 class="text-lg font-semibold text-gray-900">{{item.tituloVacante}}</h3>
-          <p class="text-sm text-gray-600">{{item.departamento}}</p>
-          <div class="text-sm text-gray-500 flex items-center mt-1">
-            📍 {{item.ubicacion}}
-          </div>
-        </div>
-        <div class="text-right space-y-2">
-          <span *ngIf="item.estadoId==5" class="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-medium">{{item.estado}}</span>
-          <span *ngIf="item.estadoId==1" class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-medium">{{item.estado}}</span>
-           <span *ngIf="item.estadoId==2"class="bg-gray-100 text-gray-800 px-3 py-1 rounded-full text-sm font-medium">{{item.estado}}</span>
-           <span *ngIf="item.estadoId==4"class="bg-red-600 text-white px-3 py-1 rounded-full text-sm font-medium">{{item.estado}}</span>
-           <span *ngIf="item.estadoId==3"class="bg-green-600 text-white px-3 py-1 rounded-full text-sm font-medium">{{item.estado}}</span>
+    <h2 class="text-2xl font-bold text-[#001F3F]">Aplicaciones</h2>
 
-          <div class="flex gap-2 justify-end">
-            <button class="text-blue-600 text-sm hover:underline">👁 Ver Detalles</button>
-            <button class="text-blue-600 text-sm hover:underline" (click)=" consultaVacantes(item.vacanteId)">🔗 Ver vacante</button>
-          </div>
-        </div>
-      </div>
-      <div class="flex justify-between text-sm text-gray-500">
-        <div>📅 Aplicado: {{item.fechaAplicacion | date: "dd/MM/yyyy"}}</div>
-        <div *ngIf="item.fechaentrevista" class="text-green-600">📅 Entrevista: {{item.fechaentrevista | date: "dd/MM/yyyy"}}</div>
-      </div>
-    </div>
-
-
-  </div>
-</div>
-
-<!-- Contenido del Tab: Documentos -->
-<div *ngIf="activeTab === 'documents'" class="space-y-6">
-  <h2 class="text-2xl font-bold text-[#001F3F]">Documentos</h2>
-
-  <!-- Subir nuevo documento -->
-  <div class="border border-dashed border-gray-300 rounded-lg p-6">
-    <h3 class="text-lg font-semibold mb-4">📤 Subir nuevo documento</h3>
-
-    <div class="grid md:grid-cols-2 gap-4 mb-4">
-      <div>
-        <label for="document-name" class="block text-sm font-medium mb-1">Nombre del documento</label>
-        <input type="text" id="document-name" class="w-full border-gray-300 rounded-md shadow-sm focus:ring focus:ring-[#D4AF37]" placeholder="Ej: Certificado de inglés" />
-      </div>
-      <div>
-        <label for="document-file" class="block text-sm font-medium mb-1">Archivo</label>
-        <input type="file" id="document-file" class="w-full" accept=".pdf,.doc,.jpg,.png" />
-      </div>
-    </div>
-
-    <button class="w-full bg-[#D4AF37] hover:bg-amber-500 text-black px-4 py-2 rounded font-semibold">
-      ➕ Agregar Documento
-    </button>
-  </div>
-
-  <!-- Lista de documentos subidos -->
-  <div class="space-y-4">
-    <h3 class="text-lg font-semibold">📚 Documentos Subidos</h3>
-
-    <div class="bg-white border border-gray-200 rounded-lg p-4 flex justify-between items-center">
-      <div>
-        <p class="font-medium">Licenciatura en Ciencias Navales</p>
-        <p class="text-sm text-gray-500">PDF • 2.3 MB • Subido: 10/05/2025</p>
-        <span class="inline-block mt-1 px-3 py-1 text-sm rounded-full bg-blue-100 text-blue-800">Diploma</span>
-      </div>
-      <div class="flex gap-2">
-        <button class="bg-white border px-3 py-1 rounded hover:bg-gray-100">⬇️</button>
-        <button class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600">🗑</button>
-      </div>
-    </div>
-
-    <div class="bg-white border border-gray-200 rounded-lg p-4 flex justify-between items-center">
-      <div>
-        <p class="font-medium">Certificado de Francés - Canadá</p>
-        <p class="text-sm text-gray-500">PDF • 1.1 MB • Subido: 08/05/2025</p>
-        <span class="inline-block mt-1 px-3 py-1 text-sm rounded-full bg-green-100 text-green-800">Certificado</span>
-      </div>
-      <div class="flex gap-2">
-        <button class="bg-white border px-3 py-1 rounded hover:bg-gray-100">⬇️</button>
-        <button class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600">🗑</button>
-      </div>
-    </div>
-
-    <div class="bg-white border border-gray-200 rounded-lg p-4 flex justify-between items-center">
-      <div>
-        <p class="font-medium">Curso de Ciberseguridad CISSP</p>
-        <p class="text-sm text-gray-500">PDF • 850 KB • Subido: 05/05/2025</p>
-        <span class="inline-block mt-1 px-3 py-1 text-sm rounded-full bg-green-100 text-green-800">Certificado</span>
-      </div>
-      <div class="flex gap-2">
-        <button class="bg-white border px-3 py-1 rounded hover:bg-gray-100">⬇️</button>
-        <button class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600">🗑</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- Contenido del Tab: Configuración -->
-<div *ngIf="activeTab === 'settings'" class="space-y-6">
-  <h2 class="text-2xl font-bold text-[#001F3F]">Configuración</h2>
-
-  <!-- Idioma -->
-  <div class="border border-gray-200 rounded-lg p-6 bg-white">
-    <h3 class="text-lg font-semibold mb-4">🌐 Idioma</h3>
-    <select class="w-full border-gray-300 rounded-md shadow-sm focus:ring focus:ring-[#D4AF37]">
-      <option value="es">Español</option>
-      <option value="en">English</option>
-      <option value="fr">Français</option>
-    </select>
-  </div>
-
-  <!-- Notificaciones -->
-  <div class="border border-gray-200 rounded-lg p-6 bg-white">
-    <h3 class="text-lg font-semibold mb-4">🔔 Notificaciones</h3>
     <div class="space-y-4">
-      <div class="flex justify-between items-center">
-        <label class="text-sm font-medium">Recibir notificaciones por correo</label>
-        <input type="checkbox" class="form-checkbox h-5 w-5 text-green-600" checked />
+      @for (item of (listadoAplicaciones); track $index) {
+        <div class="bg-white border border-gray-200 rounded-lg p-4 shadow-sm">
+          <div class="flex justify-between items-start mb-3">
+            <div>
+              <h3 class="text-lg font-semibold text-gray-900">{{ item.tituloVacante }}</h3>
+              <p class="text-sm text-gray-600">{{ item.departamento }}</p>
+              <div class="text-sm text-gray-500 flex items-center mt-1">
+                📍 {{ item.ubicacion }}
+              </div>
+            </div>
+
+            <div class="text-right space-y-2">
+              @if (item.estadoId == 5) { <span class="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-medium">{{ item.estado }}</span> }
+              @if (item.estadoId == 1) { <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-medium">{{ item.estado }}</span> }
+              @if (item.estadoId == 2) { <span class="bg-gray-100 text-gray-800 px-3 py-1 rounded-full text-sm font-medium">{{ item.estado }}</span> }
+              @if (item.estadoId == 4) { <span class="bg-red-600 text-white px-3 py-1 rounded-full text-sm font-medium">{{ item.estado }}</span> }
+              @if (item.estadoId == 3) { <span class="bg-green-600 text-white px-3 py-1 rounded-full text-sm font-medium">{{ item.estado }}</span> }
+
+              <div class="flex gap-2 justify-end">
+                <button class="text-blue-600 text-sm hover:underline" (click)="consultaVacantes(item.vacanteId)">
+                  🔗 Ver vacante
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="flex justify-between text-sm text-gray-500">
+            <div>📅 Aplicado: {{ item.fechaAplicacion | date:'dd/MM/yyyy' }}</div>
+            @if (item.fechaentrevista) {
+              <div class="text-green-600">📅 Entrevista: {{ item.fechaentrevista | date:'dd/MM/yyyy' }}</div>
+            }
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+}
+
+<!-- Tab: Documentos -->
+@if (activeTab === 'documents') {
+  <div class="space-y-6">
+    <h2 class="text-2xl font-bold text-[#001F3F]">Documentos</h2>
+
+    <div class="border border-dashed border-gray-300 rounded-lg p-6">
+      <h3 class="text-lg font-semibold mb-4">📤 Subir nuevo documento</h3>
+
+      <div class="grid md:grid-cols-2 gap-4 mb-4">
+        <div>
+          <label for="document-name" class="block text-sm font-medium mb-1">Nombre del documento</label>
+          <input id="document-name" type="text" class="w-full border-gray-300 rounded-md shadow-sm focus:ring focus:ring-[#D4AF37]" placeholder="Ej: Certificado de inglés" />
+        </div>
+        <div>
+          <label for="document-file" class="block text-sm font-medium mb-1">Archivo</label>
+          <input id="document-file" type="file" class="w-full" accept=".pdf,.doc,.jpg,.png" />
+        </div>
       </div>
+
+      <button class="w-full bg-[#D4AF37] hover:bg-amber-500 text-black px-4 py-2 rounded font-semibold">
+        ➕ Agregar Documento
+      </button>
+    </div>
+
+    <div class="space-y-4">
+      <h3 class="text-lg font-semibold">📚 Documentos Subidos</h3>
+
+      @for (doc of [
+        { titulo: 'Licenciatura en Ciencias Navales', info: 'PDF • 2.3 MB • Subido: 10/05/2025', tipo: 'Diploma', color: 'bg-blue-100 text-blue-800' },
+        { titulo: 'Certificado de Francés - Canadá', info: 'PDF • 1.1 MB • Subido: 08/05/2025', tipo: 'Certificado', color: 'bg-green-100 text-green-800' },
+        { titulo: 'Curso de Ciberseguridad CISSP', info: 'PDF • 850 KB • Subido: 05/05/2025', tipo: 'Certificado', color: 'bg-green-100 text-green-800' }
+      ]; track $index) {
+        <div class="bg-white border border-gray-200 rounded-lg p-4 flex justify-between items-center">
+          <div>
+            <p class="font-medium">{{ doc.titulo }}</p>
+            <p class="text-sm text-gray-500">{{ doc.info }}</p>
+            <span class="inline-block mt-1 px-3 py-1 text-sm rounded-full {{ doc.color }}">{{ doc.tipo }}</span>
+          </div>
+          <div class="flex gap-2">
+            <button class="bg-white border px-3 py-1 rounded hover:bg-gray-100">⬇️</button>
+            <button class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600">🗑</button>
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+}
+
+<!-- Tab: Configuración -->
+@if (activeTab === 'settings') {
+  <div class="space-y-6">
+    <h2 class="text-2xl font-bold text-[#001F3F]">Configuración</h2>
+
+    <div class="border border-gray-200 rounded-lg p-6 bg-white">
+      <h3 class="text-lg font-semibold mb-4">🌐 Idioma</h3>
+      <select class="w-full border-gray-300 rounded-md shadow-sm focus:ring focus:ring-[#D4AF37]">
+        <option value="es">Español</option>
+        <option value="en">English</option>
+        <option value="fr">Français</option>
+      </select>
+    </div>
+
+    <div class="border border-gray-200 rounded-lg p-6 bg-white">
+      <h3 class="text-lg font-semibold mb-4">🔔 Notificaciones</h3>
+      <div class="space-y-4">
+        <div class="flex justify-between items-center">
+          <label class="text-sm font-medium">Recibir notificaciones por correo</label>
+          <input type="checkbox" class="form-checkbox h-5 w-5 text-green-600" checked />
+        </div>
+        <div class="flex justify-between items-center">
+          <label class="text-sm font-medium">Alertas sobre nuevas vacantes</label>
+          <input type="checkbox" class="form-checkbox h-5 w-5 text-green-600" checked />
+        </div>
+      </div>
+    </div>
+
+    <div class="border border-gray-200 rounded-lg p-6 bg-white">
+      <h3 class="text-lg font-semibold mb-4">🔒 Privacidad</h3>
       <div class="flex justify-between items-center">
-        <label class="text-sm font-medium">Alertas sobre nuevas vacantes</label>
+        <label class="text-sm font-medium">Mostrar mi perfil públicamente</label>
         <input type="checkbox" class="form-checkbox h-5 w-5 text-green-600" checked />
       </div>
     </div>
-  </div>
 
-  <!-- Privacidad -->
-  <div class="border border-gray-200 rounded-lg p-6 bg-white">
-    <h3 class="text-lg font-semibold mb-4">🔒 Privacidad</h3>
-    <div class="flex justify-between items-center">
-      <label class="text-sm font-medium">Mostrar mi perfil públicamente</label>
-      <input type="checkbox" class="form-checkbox h-5 w-5 text-green-600" checked />
+    <div class="border border-gray-200 rounded-lg p-6 bg-white">
+      <h3 class="text-lg font-semibold mb-4">🛡 Seguridad</h3>
+      <button class="w-full border border-gray-300 px-4 py-2 rounded-md hover:bg-gray-100 font-medium">
+        Cambiar Contraseña
+      </button>
+    </div>
+
+    <div class="text-right">
+      <button class="bg-[#3A5311] hover:bg-green-700 text-white px-6 py-2 rounded font-semibold">
+        Guardar Cambios
+      </button>
     </div>
   </div>
+}
 
-  <!-- Seguridad -->
-  <div class="border border-gray-200 rounded-lg p-6 bg-white">
-    <h3 class="text-lg font-semibold mb-4">🛡 Seguridad</h3>
-    <button class="w-full border border-gray-300 px-4 py-2 rounded-md hover:bg-gray-100 font-medium">
-      Cambiar Contraseña
-    </button>
-  </div>
-
-  <!-- Guardar -->
-  <div class="text-right">
-    <button class="bg-[#3A5311] hover:bg-green-700 text-white px-6 py-2 rounded font-semibold">
-      Guardar Cambios
-    </button>
-  </div>
-</div>
-
-
-</div>
+<!-- Dialog de edición -->
 <app-editprofile [visible]="showEditDialog" (closed)="showEditDialog = false"></app-editprofile>

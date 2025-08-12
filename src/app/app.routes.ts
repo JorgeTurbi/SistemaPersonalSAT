@@ -16,12 +16,13 @@ export const routes: Routes = [
     children: [
       {
         path: 'inicio',
+        data: { public: true },
         loadComponent: () => import('./components/Pages/main-page').then(m => m.MainPage)
 
       },
       {
         path: 'vacante',
-        loadComponent: () => import('./components/VacanteComponente/page-vacante-component').then(a=>a.PageVacanteComponent),
+        loadComponent: () => import('./components/VacanteComponente/page-vacante-component').then(a => a.PageVacanteComponent),
         canActivate: [authGuard],
         data: { roles: ['Admin'] } // 🔹 Director pueden entrar
 
@@ -45,33 +46,46 @@ export const routes: Routes = [
         path: 'profile', loadComponent: () => import('./components/Profiles/profilecomponent').then(m => m.Profilecomponent),
         canActivate: [authGuard],
         data: { roles: ['Admin', 'User'] } // 🔹 Todos pueden entrar
-      }
+      },
+      // {
+      //   path: "send",
+      //   data: { public: true },
+      //   loadComponent: () => import('./components/Comunicaciones/MensajeForms/application-message-form-component').then(a => a.ApplicationMessageFormComponent)
+      // },
+      {
+        path: 'mensaje/:id',
+
+        loadComponent: () => import('./components/Comunicaciones/mensaje').then(m => m.Mensaje)
+      },
+      // {
+      //   path: "respuesta",
+      //   data: { public: true },
+      //   loadComponent: () => import('./components/Respuestas/applicant-response-component').then(m => m.ApplicantResponseComponent)
+      // },
+
+      {
+        path: 'login',
+        data: { public: true },
+        loadComponent: () => import('./components/Auth/login/login-form-component').then(m => m.LoginFormComponent)
+      },
+      {
+        path: 'verify',
+        data: { public: true },
+        loadComponent: () => import('./components/Email/otpverify').then(a => a.Otpverify)
+      },
+      {
+        path: 'register',
+        data: { public: true },
+        loadComponent: () => import('./components/Auth/Register/register-form-component').then(m => m.RegisterFormComponent)
+      },
 
 
     ]
   },
-  // {
-  //   path: "mensaje",
-  //   loadComponent: ()=>import('./components/Comunicaciones/mensaje').then(m=>m.Mensaje)
-  // },
-  //   {
-  //   path: "respuesta",
-  //   loadComponent: ()=>import('./components/Respuestas/applicant-response-component').then(m=>m.ApplicantResponseComponent)
-  // },
-  // {
-  //   path:"send",
-  //  component:ApplicationMessageFormComponent
-  // },
+
 
   // Estas rutas deben ir fuera del layout principal
-  {
-    path: 'login',
-    loadComponent: () => import('./components/Auth/login/login-form-component').then(m => m.LoginFormComponent)
-  },
-  {
-    path: 'register',
-    loadComponent: () => import('./components/Auth/Register/register-form-component').then(m => m.RegisterFormComponent)
-  },
+
 
   // Esta debe ir siempre al final
   {

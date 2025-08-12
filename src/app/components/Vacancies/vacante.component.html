@@ -5,12 +5,16 @@
     <h1 class="text-3xl font-bold text-military-navy mb-4 md:mb-0">
       Vacantes Disponibles
     </h1>
-    <button *ngIf="perfilUsuario?.role=='Admin'"
+
+    @if(perfilUsuario?.role === 'Admin') {
+    <button
       (click)="showDialog()"
       class="bg-military-gold text-black hover:bg-amber-500 px-6 py-2 rounded font-medium shadow">
       Publicar Nueva Vacante
     </button>
+    }
   </div>
+
   <app-filtro (filtersChanged)="onFiltersChanged($event)"></app-filtro>
   <app-vacante-list [filters]="currentFilters"></app-vacante-list>
 </div>
@@ -43,11 +47,11 @@
         <input type="text" formControlName="titulo"
           placeholder="Ej: Especialista en Ciberseguridad"
           class="mt-1 block w-full rounded border-gray-300" />
-        <span
-          class="text-red-500 text-sm"
-          *ngIf="vacanteForm.get('titulo')?.invalid && (vacanteForm.get('titulo')?.touched || vacanteForm)">
-          Este campo es obligatorio
-        </span>
+        @if (vacanteForm.get('titulo')?.invalid &&
+        (vacanteForm.get('titulo')?.touched || vacanteForm)) {
+        <span class="text-red-500 text-sm">Este campo es obligatorio</span>
+        }
+
       </label>
 
       <label class="block">
@@ -59,11 +63,14 @@
             [value]="item.id">{{item.codigoNombre}}</option>
 
         </select>
-        <span
-          class="text-red-500 text-sm"
-          *ngIf="vacanteForm.get('institucionId')?.invalid && (vacanteForm.get('institucionId')?.touched || vacanteForm)">
+
+        @if (vacanteForm.get('institucionId')?.invalid &&
+        (vacanteForm.get('institucionId')?.touched || vacanteForm)) {
+        <span class="text-red-500 text-sm">
           Seleccione una Institución
         </span>
+        }
+
       </label>
     </div>
 
@@ -77,29 +84,17 @@
             [value]="item.id">{{item.nombre}}</option>
 
         </select>
-        <span
+        @if(vacanteForm.get('provinciaId')?.invalid && (vacanteForm.get('provinciaId')?.touched || vacanteForm))
+        {
+                <span
           class="text-red-500 text-sm"
-          *ngIf="vacanteForm.get('provinciaId')?.invalid && (vacanteForm.get('provinciaId')?.touched || vacanteForm)">
+          >
           Seleccione una Ubicación
         </span>
+
+        }
+
       </label>
-<!--
-      <label class="block">
-        <span class="font-medium">Tipo de Contrato *</span>
-        <select formControlName="tipoContrato"
-          class="mt-1 block w-full rounded border-gray-300">
-          <option [value]="null" disabled>Tipo de empleo</option>
-          <option *ngFor="let tipo of tipoContratoOpciones"
-            [value]="tipo.value">
-            {{ tipo.label }}
-          </option>
-        </select>
-        <span
-          class="text-red-500 text-sm"
-          *ngIf="vacanteForm.get('tipoContrato')?.invalid && (vacanteForm.get('tipoContrato')?.touched || vacanteForm)">
-          Seleccione el tipo de contrato
-        </span>
-      </label> -->
 
       <label class="block">
         <span class="font-medium">Categoría *</span>
@@ -258,7 +253,7 @@
       <span class="font-medium">telefono de Contacto *</span>
       <input type="text" formControlName="telefono"
         placeholder="Tel:(000) 000-0000"
-        class="mt-1 block w-full rounded border-gray-300 min-h-[80px]"/>
+        class="mt-1 block w-full rounded border-gray-300 min-h-[80px]" />
       <span
         class="text-red-500 text-sm"
         *ngIf="vacanteForm.get('telefono')?.invalid && (vacanteForm.get('telefono')?.touched || vacanteForm)">
@@ -266,12 +261,12 @@
       </span>
     </label>
 
-        <label class="block">
+    <label class="block">
       <span class="font-medium">correo de Contacto *</span>
       <input type="text" formControlName="email"
         placeholder="Email: rrhh@institucion.gob.do
 Dirección: Ave. 27 de Febrero, Distrito Nacional"
-        class="mt-1 block w-full rounded border-gray-300 min-h-[80px]"/>
+        class="mt-1 block w-full rounded border-gray-300 min-h-[80px]" />
       <span
         class="text-red-500 text-sm"
         *ngIf="vacanteForm.get('email')?.invalid && (vacanteForm.get('email')?.touched || vacanteForm)">
@@ -279,7 +274,7 @@ Dirección: Ave. 27 de Febrero, Distrito Nacional"
       </span>
     </label>
 
-         <label class="block">
+    <label class="block">
       <span class="font-medium">Dirección</span>
       <textarea formControlName="direccion"
         placeholder="Dirección: Ave. 27 de Febrero, Distrito Nacional"

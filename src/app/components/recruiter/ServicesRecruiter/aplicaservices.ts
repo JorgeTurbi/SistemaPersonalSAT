@@ -5,15 +5,15 @@ import { DataResponse } from '../../../Interface/Response';
 import { IAplicacionVacante } from '../InterfaceRecruiter/IAplicacionVacante';
 import { environment } from '../../../../Enviroments/enviroment';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable({ providedIn: 'root' })
 export class Aplicaservices {
+  private http = inject(HttpClient);
 
-  http:HttpClient =inject(HttpClient);
-
-  crearAplicacionVacante(send: IAplicacionVacante):Observable<DataResponse<Boolean>>
-  {
-    return this.http.post<DataResponse<Boolean>>(`${environment.apiUrl}/Aplicaciones/CrearAplicacion`,send);
+  // 👇 usa boolean (primitivo) en todo
+  crearAplicacionVacante(send: IAplicacionVacante): Observable<DataResponse<boolean>> {
+    return this.http.post<DataResponse<boolean>>(
+      `${environment.apiUrl}/Aplicaciones/CrearAplicacion`,
+      send
+    );
   }
 }

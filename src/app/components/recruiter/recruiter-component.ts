@@ -1,12 +1,13 @@
 import { CommonModule } from '@angular/common';
 import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { ActivatedRoute, RouterModule } from '@angular/router';
-import { LucideAngularModule, FileDown, Eye, Users, TrendingUp, Filter } from 'lucide-angular';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
+import { LucideAngularModule, FileDown, Eye, Users, TrendingUp, Filter,MessageCircleMore } from 'lucide-angular';
 import { IAplicanteReclutadorDto } from './InterfaceRecruiter/IAplicanteReclutadorDto';
 import { VacanteServices } from '../Vacancies/ServicesVacantes/vacante-services';
 import { DataResponse } from '../../Interface/Response';
 import { IVacanteResumen } from './InterfaceRecruiter/IVacanteResumen';
+import { ResumenVacanteStore } from '../Vacancies/ServicesVacantes/resumen-vacante.store';
 
 interface Applicant {
   id: string;
@@ -38,6 +39,7 @@ export class RecruiterComponent implements OnInit {
   FileDown = FileDown;
   Eye = Eye;
   Users = Users;
+  Chat=MessageCircleMore;
   TrendingUp = TrendingUp;
   Filter = Filter;
   private route = inject(ActivatedRoute);
@@ -63,7 +65,10 @@ export class RecruiterComponent implements OnInit {
   /**
    *
    */
-  constructor(private vacatenService: VacanteServices) {
+  constructor(private vacatenService: VacanteServices,
+      private resumenStore: ResumenVacanteStore,   // <-- inyectado
+      private router :Router
+      ) {
 
 
   }
@@ -74,6 +79,8 @@ export class RecruiterComponent implements OnInit {
       next: (res: DataResponse<IVacanteResumen[]>) => {
         if (res.success) {
           this.resumenVacantes = res.data;
+          // 👉 compartir con otros componentes
+          this.resumenStore.setResumenVacantes(res.data);
         }
       },
       error: (err: any) => {
@@ -86,7 +93,10 @@ export class RecruiterComponent implements OnInit {
 
 
   }
-
+mensaje(idAplicante:number)
+{
+    this.router.navigate(['/mensaje',idAplicante]);
+}
   applicants = signal<Applicant[]>([
 
     {

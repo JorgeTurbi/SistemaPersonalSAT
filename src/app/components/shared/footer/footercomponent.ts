@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
-import { Component, ViewEncapsulation } from '@angular/core';
+import { Component, inject, OnInit, ViewEncapsulation } from '@angular/core';
 import { RouterModule } from '@angular/router';
+import { AuthService } from '../../Auth/Services/auth-service';
 
 @Component({
   selector: 'app-footer',
@@ -10,6 +11,15 @@ import { RouterModule } from '@angular/router';
   styleUrl: './footercomponent.css',
   encapsulation: ViewEncapsulation.None, // opcional
 })
-export class Footercomponent {
+export class Footercomponent implements OnInit {
   year = new Date().getFullYear();
+  isLogin=false;
+
+  auth=inject(AuthService);
+
+  ngOnInit():void{
+    this.auth.isLoggedIn$.subscribe(isLogged => {
+      this.isLogin = isLogged;
+    });
+  }
 }

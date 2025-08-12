@@ -1,33 +1,25 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { IProfileMilitar } from '../../EditProfile/InterfaceProfile/IProfileMilitar';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable({ providedIn: 'root' })
 export class AplicanteProfileService {
-  private aplicanteProfileSubject = new BehaviorSubject<IProfileMilitar>(null!);
-  aplicanteProfile$ = this.aplicanteProfileSubject.asObservable();
+  // ✅ Ahora el estado permite null de forma segura
+  private readonly aplicanteProfileSubject = new BehaviorSubject<IProfileMilitar | null>(null);
+  readonly aplicanteProfile$: Observable<IProfileMilitar | null> = this.aplicanteProfileSubject.asObservable();
 
-  constructor() {
-    // Si hay data guardada en localStorage, la cargamos al iniciar la app
-    const storedProfile = localStorage.getItem('AplicanteProfile');
-    if (storedProfile) {
-      this.aplicanteProfileSubject.next(JSON.parse(storedProfile));
-    }
-  }
+  // ✅ Sin constructor: ya no cargamos nada de localStorage
 
-  setAplicanteProfile(profile: IProfileMilitar) {
+  setAplicanteProfile(profile: IProfileMilitar | null): void {
     this.aplicanteProfileSubject.next(profile);
-    localStorage.setItem('AplicanteProfile', JSON.stringify(profile));
   }
 
-  getAplicanteProfile() {
+  getAplicanteProfile(): IProfileMilitar | null {
     return this.aplicanteProfileSubject.value;
   }
 
-  clearAplicanteProfile() {
-    this.aplicanteProfileSubject.next(null!);
-    localStorage.removeItem('AplicanteProfile');
+  // ✅ Renombrado para coincidir con el uso en el componente
+  clear(): void {
+    this.aplicanteProfileSubject.next(null);
   }
 }

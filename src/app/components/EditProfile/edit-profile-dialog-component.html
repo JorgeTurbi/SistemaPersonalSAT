@@ -10,7 +10,6 @@
     [contentStyle]="{ 'background-color': '#f9fafb', 'padding': '1rem', 'border-radius': '0.75rem', 'max-height': '90vh', 'overflow-y': 'auto' }"
   >
     <form [formGroup]="form" class="space-y-4 w-full">
-
       <!-- Imagen de perfil -->
       <div>
         <label class="block text-sm font-medium mb-1">Foto de Perfil</label>
@@ -28,25 +27,16 @@
         <input id="name" type="text" formControlName="name" class="w-full border border-gray-300 rounded-md px-3 py-2" />
       </div>
 
-      <!-- Cédula con botón de búsqueda responsivo -->
+      <!-- Cédula (sin botón de búsqueda) -->
       <div>
         <label for="cedula" class="block text-sm font-medium mb-1">Cédula</label>
-        <div class="flex flex-col sm:flex-row sm:items-center gap-2 w-full">
-          <input
-            id="cedula"
-            type="text"
-            formControlName="cedula"
-            class="flex-1 w-full border border-gray-300 rounded-md px-3 py-2"
-            placeholder="Ingrese cédula"
-          />
-          <button
-            type="button"
-            class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 w-full sm:w-auto"
-            (click)="buscarPorCedula()"
-          >
-            Buscar
-          </button>
-        </div>
+        <input
+          id="cedula"
+          type="text"
+          formControlName="cedula"
+          class="flex-1 w-full border border-gray-300 rounded-md px-3 py-2"
+          placeholder="Ingrese cédula"
+        />
       </div>
 
       <!-- Fecha de nacimiento -->
@@ -93,7 +83,8 @@
         <label for="address" class="block text-sm font-medium mb-1">Dirección</label>
         <input id="address" type="text" formControlName="address" class="w-full border border-gray-300 rounded-md px-3 py-2" />
       </div>
-           <!-- institucion -->
+
+      <!-- Institución -->
       <div>
         <label for="institution" class="block text-sm font-medium mb-1">Institución</label>
         <select id="institution" formControlName="institution" (change)="SelectedInstitucion($event)" class="w-full border border-gray-300 rounded-md px-3 py-2">
@@ -134,9 +125,7 @@
         <input id="emergencyPhone" type="text" formControlName="emergencyPhone" class="w-full border border-gray-300 rounded-md px-3 py-2" />
       </div>
 
-      <!-- ========================== -->
       <!-- EXPERIENCIA LABORAL -->
-      <!-- ========================== -->
       <div formArrayName="experience" class="max-h-[300px] overflow-y-auto border rounded p-2">
         <label class="block text-sm font-medium mb-2">Experiencia Laboral</label>
         <div *ngFor="let exp of experience.controls; let i = index" [formGroupName]="i" class="border p-3 mb-2 rounded bg-white">
@@ -152,9 +141,7 @@
         <button type="button" (click)="addExperience()" class="mt-2 bg-green-600 text-white px-3 py-1 rounded w-full sm:w-auto">+ Agregar Experiencia</button>
       </div>
 
-      <!-- ========================== -->
       <!-- EDUCACIÓN -->
-      <!-- ========================== -->
       <div formArrayName="education" class="max-h-[300px] overflow-y-auto border rounded p-2">
         <label class="block text-sm font-medium mb-2">Educación</label>
         <div *ngFor="let edu of education.controls; let i = index" [formGroupName]="i" class="border p-3 mb-2 rounded bg-white">
@@ -170,9 +157,7 @@
         <button type="button" (click)="addEducation()" class="mt-2 bg-green-600 text-white px-3 py-1 rounded w-full sm:w-auto">+ Agregar Educación</button>
       </div>
 
-      <!-- ========================== -->
       <!-- HABILIDADES -->
-      <!-- ========================== -->
       <div>
         <label class="block text-sm font-medium mb-1">Habilidades / Competencias</label>
         <textarea formControlName="skills" rows="3" class="w-full border border-gray-300 rounded-md px-3 py-2"></textarea>

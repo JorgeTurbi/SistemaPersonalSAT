@@ -1,147 +1,98 @@
+// src/app/components/Profiles/profilecomponent.ts
 import { CommonModule } from '@angular/common';
-import { Component, inject, OnInit } from '@angular/core';
-import { EditProfileDialogComponent } from "../EditProfile/edit-profile-dialog-component";
+import { Component, OnInit, inject } from '@angular/core';
+import { RouterModule, Router } from '@angular/router';
 import { LucideAngularModule, PlusCircleIcon } from 'lucide-angular';
-import { ServicioGenericoComponent } from '../EditProfile/ServicioGenerico/servicio-generico.component';
 import { MessageService } from 'primeng/api';
-import { IProfileMilitar } from '../EditProfile/InterfaceProfile/IProfileMilitar';
-import { DataResponse } from '../../Interface/Response';
-import { IProfile } from '../../Interface/IProfile';
-import { IAplicacionesDTO } from './InterfaceAplicaciones/IAplicacionesDTO';
-import { VacanteServices } from '../Vacancies/ServicesVacantes/vacante-services';
+
+import { EditProfileDialogComponent } from '../EditProfile/edit-profile-dialog-component';
 import { SharedService } from '../GeneralServices/SharedService';
+import { AuthService } from '../Auth/Services/auth-service';
+
+import { IProfileMilitar } from '../EditProfile/InterfaceProfile/IProfileMilitar';
+import { IAplicacionesDTO } from './InterfaceAplicaciones/IAplicacionesDTO';
 import { IVacanteDto } from '../Vacancies/InterfaceVacantes/IVacanteDto';
-import { Router, RouterModule } from '@angular/router';
-import { AplicanteProfileService } from './ServiceProfile/aplicante-profile-service';
+import { ProfileCacheService } from './ServiceProfile/profile-cache.service';
+
 
 @Component({
   selector: 'app-profilecomponent',
   standalone: true,
-  imports: [CommonModule, EditProfileDialogComponent, LucideAngularModule,RouterModule],
+  imports: [CommonModule, EditProfileDialogComponent, LucideAngularModule, RouterModule],
   templateUrl: './profilecomponent.html',
   styleUrl: './profilecomponent.css'
 })
-
 export class Profilecomponent implements OnInit {
-  activeTab = 'profile';
+  activeTab: 'profile' | 'applications' | 'documents' | 'settings' = 'profile';
   showEditDialog = false;
   Plus = PlusCircleIcon;
-  perfilUsuario?: IProfile;
-  crearPerfilMilitar!: IProfileMilitar;
-  Aplicante: IProfileMilitar = {} as IProfileMilitar;
-  listadoAplicaciones:IAplicacionesDTO[]=[];
-  vacanteDetalle!:IVacanteDto;
-   job :IVacanteDto={} as IVacanteDto;
-   jobList: IVacanteDto[]=[];
-    router =inject(Router)
 
-  /**
-   *
-   */
-  constructor(private servicioGenerico: ServicioGenericoComponent,
+  Aplicante: IProfileMilitar | null = null;
+  listadoAplicaciones: IAplicacionesDTO[] = [];
+  vacanteDetalle?: IVacanteDto;
+  job?: IVacanteDto;
+
+  private router = inject(Router);
+
+  constructor(
     private messageService: MessageService,
-    private shared:SharedService,
-    private aplicanteProfileService: AplicanteProfileService
+    private shared: SharedService,
+    private auth: AuthService,
+    private profileCache: ProfileCacheService,
+    ) {}
 
-  ) {
-
-
-  }
   ngOnInit(): void {
-
-    const data = localStorage.getItem('user');
-    if (data) {
-      this.perfilUsuario = JSON.parse(data);
-     // this.getPerfilAplicante(this.perfilUsuario?.id!);
-    }
-    this.aplicanteProfileService.aplicanteProfile$.subscribe(profile => {
-    if (profile) {
-
-      this.Aplicante= profile;
-    }
-  });
-    this.getAllAplicaciones();
-      this.shared.currentVacante.subscribe(datos=>this.vacanteDetalle=datos);
-        this.job=this.vacanteDetalle;
-  }
-
-  abrirEditor() {
-    this.showEditDialog = !this.showEditDialog;
-  }
-
-  setTab(tab: string) {
-    this.activeTab = tab;
-  }
-    goDetails()
-  {
-    this.router.navigate(['/jobs']);
-  }
-verDetalles(dataVancante:IVacanteDto)
-{
-  this.shared.changeMessage(dataVancante);
-              this.messageService.add({ severity: 'info', summary: 'Information', detail: 'Regidiriengo...' });
-
-  this.router.navigate(['/jobsdetails']);
-}
-
-consultaVacantes(idVacante:number)
-{
+    // 1) Usar la sesión para obtener el userId
+    this.auth.sessionInfo$.subscribe(session => {
+      const userId = Number(session?.userId);
+      if (!session?.isAuthenticated || Number.isNaN(userId)) return;
 
 
-    this.router.navigate(['/jobsdetails', idVacante]);
+      // 2) Suscribirse a streams cacheados
+      this.profileCache.getProfile(userId).subscribe(p => this.Aplicante = p);
+      this.profileCache.getApplications(userId).subscribe(apps => this.listadoAplicaciones = apps);
+    });
 
-  this.messageService.add({
-    severity: 'info',
-    summary: 'Información',
-    detail: 'Redirigiendo a detalles de la vacante...'
-  })
-}
-  getPerfilAplicante(iduser: number) {
-    this.servicioGenerico.GetAplicacion(iduser).subscribe({
-      //inicio
-      next: (res: DataResponse<IProfileMilitar>) => {
-        if (res.success) {
-          this.Aplicante = res.data;
-          console.log(`===> ${this.Aplicante.cedula}`);
+    // Verificación inicial de sesión (si no está ya poblada)
+    this.auth.checkSession().subscribe();
 
-          this.messageService.add({ severity: 'success', summary: "Perfil", detail: res.message });
-
-        }
-      },
-      error: (err: any) => {
-        console.log(err)
-      }
-      //fin
-
+    // Estado compartido de la vacante seleccionada
+    this.shared.currentVacante.subscribe(v => {
+      this.vacanteDetalle = v;
+      this.job = v;
     });
   }
 
+  abrirEditor() { this.showEditDialog = !this.showEditDialog; }
+  setTab(tab: 'profile' | 'applications' | 'documents' | 'settings') { this.activeTab = tab; }
+  goDetails() { this.router.navigate(['/jobs']); }
+
+  // Cuando termines de editar en el modal, refresca el caché:
+  onProfileSaved() {
+    const userId = Number(this.auth.currentSession?.userId);
+    if (!Number.isNaN(userId)) {
+      this.profileCache.refreshProfile(userId);
+      this.messageService.add({ severity: 'success', summary: 'Perfil', detail: 'Perfil actualizado' });
+    }
+  }
+
+  // Si aplicas a una vacante, refresca solo la lista de aplicaciones:
+  onApplied() {
+    const userId = Number(this.auth.currentSession?.userId);
+    if (!Number.isNaN(userId)) this.profileCache.refreshApplications(userId);
+  }
+
+  consultaVacantes(idVacante: number) {
+    this.router.navigate(['/jobsdetails', idVacante]);
+    this.messageService.add({ severity: 'info', summary: 'Información', detail: 'Redirigiendo a detalles de la vacante...' });
+  }
+
   descargarPdf(base64Pdf: string) {
-
-
-    // Crear un enlace temporal para forzar la descarga
     const link = document.createElement('a');
     link.href = base64Pdf;
-    link.download = 'documento.pdf'; // Nombre del archivo
+    link.download = 'documento.pdf';
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
-  }
-
-  getAllAplicaciones()
-  {
-      this.servicioGenerico.getAplicaionesbyUserId(this.perfilUsuario?.id!).subscribe({
-        next:(res:DataResponse<IAplicacionesDTO[]>)=>{
-          if (res.success) {
-            this.listadoAplicaciones=res.data;
-            this.messageService.add({ severity: 'success', summary: "Perfil", detail: res.message });
-          }
-          return;
-
-        },
-        error:(err:any)=>{
-          console.error(err);
-        }
-      })
   }
 }

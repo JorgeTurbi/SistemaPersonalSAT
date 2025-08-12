@@ -13,8 +13,15 @@
       </div>
       <div class="flex space-x-6">
         <a routerLink="/inicio" class="hover:text-military-gold transition-colors">Inicio</a>
-        <a routerLink="/jobs" class="hover:text-military-gold transition-colors">Vacantes</a>
-        <a routerLink="/register" class="hover:text-military-gold transition-colors">Registrarse</a>
+        @if(isLogin)
+        {
+   <a routerLink="/jobs" class="hover:text-military-gold transition-colors">Vacantes</a>
+        }
+        @else {
+     <a routerLink="/register" class="hover:text-military-gold transition-colors">Registrarse</a>
+        }
+
+
       </div>
     </div>
     <div class="mt-8 pt-6 border-t border-gray-800 text-center text-sm">

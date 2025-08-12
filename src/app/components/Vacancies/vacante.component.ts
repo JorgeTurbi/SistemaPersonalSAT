@@ -1,6 +1,6 @@
 
-import { CommonModule } from '@angular/common';
-import { Component, inject, OnInit, ViewEncapsulation } from '@angular/core';
+import { CommonModule, NgFor, NgIf } from '@angular/common';
+import { Component,  OnInit, ViewEncapsulation } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { LucideAngularModule, Search, Filter, MapPin, Building, Briefcase } from 'lucide-angular';
 import { MessageService } from 'primeng/api';
@@ -18,13 +18,18 @@ import { ServiciosGenerales } from '../GeneralServices/servicios-generales';
 import { IProvincia } from '../../Interface/IProvincia';
 import { InstitucionService } from '../Services/institucion-service';
 import { IInstitucion } from '../../Interface/IInstitucion';
-import { IProfile } from '../../Interface/IProfile';
+
+import { ProfileCacheService } from '../Profiles/ServiceProfile/profile-cache.service';
+import { UserSessionService } from '../Auth/Services/user-session.service';
+import { UserProfile } from '../Auth/login/InterfaceLogin/UserProfile';
 
 
 @Component({
   selector: 'app-vacante',
   standalone: true,
-  imports: [CommonModule, LucideAngularModule, FormsModule, ReactiveFormsModule, ToastModule, FiltroComponent, VacanteListComponent, Dialog, ButtonModule, StyleClassModule],
+  imports: [CommonModule, LucideAngularModule, FormsModule, ReactiveFormsModule, ToastModule, FiltroComponent, VacanteListComponent, Dialog, ButtonModule, StyleClassModule,
+
+  ],
   templateUrl: './vacante.component.html',
   styleUrl: './vacante.component.css',
   providers: [MessageService],
@@ -42,7 +47,7 @@ export class VacanteComponent implements OnInit {
   provinciaList: IProvincia[] = [];
   institutions: IInstitucion[] = [];
   selectedInstitution: string = '';
-  perfilUsuario?: IProfile;
+  perfilUsuario?:UserProfile;
   createVacante!: IVacante;
     currentFilters: any = {};
   //constructor
@@ -51,7 +56,8 @@ export class VacanteComponent implements OnInit {
     private vacanteService: VacanteServices,
     private messageService: MessageService,
     private servicioGeneral: ServiciosGenerales,
-    private institucionService: InstitucionService
+    private institucionService: InstitucionService,
+    private session: UserSessionService
 
   ) { }
   ngOnInit(): void {
@@ -60,7 +66,17 @@ export class VacanteComponent implements OnInit {
     this.provincias();
     this.getListInstitucion();
     const data = localStorage.getItem('user');
+   // reactivo
 
+  this.session.session$.subscribe({
+    next:(info:UserProfile | null)=>{
+            if (info!=null) {
+              this.perfilUsuario=info;
+
+            }
+    },
+    error:(err:any)=>console.error(err)
+  });
     if (data) {
       this.perfilUsuario = JSON.parse(data);
 
